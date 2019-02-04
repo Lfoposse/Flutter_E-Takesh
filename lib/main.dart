@@ -7,6 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -31,51 +32,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return PageView(
+      scrollDirection: Axis.horizontal,
       children: <Widget>[
         Container(
-          color: Colors.lightGreen[300],
-          child: new Center(
-              child: new Text('Presentation1'),
-          ),
-//          decoration: new BoxDecoration(
-//              image: new DecorationImage(
-//                image: new AssetImage('assets/images/presentation/Present1.png'),
-//                fit: BoxFit.cover,
-//              )
-//          ),
+          decoration: new BoxDecoration(
+              image: new DecorationImage(
+            image: new AssetImage('assets/images/presentation/Present1.png'),
+            fit: BoxFit.cover,
+          )),
         ),
         Container(
-          color: Colors.deepPurpleAccent[100],
-            child: new Center(
-              child: new Text('Presentation2'),
-            )
-//          decoration: new BoxDecoration(
-//              image: new DecorationImage(
-//            image: new AssetImage('assets/images/presentation/Present2.png'),
-//            fit: BoxFit.cover,
-//          )),
+          decoration: new BoxDecoration(
+              image: new DecorationImage(
+            image: new AssetImage('assets/images/presentation/Present2.png'),
+            fit: BoxFit.cover,
+          )),
         ),
         Container(
-          color: Colors.white70,
-            child: new Center(
-              child: new Text('Presentation3'),
-            )
-//          decoration: new BoxDecoration(
-//              image: new DecorationImage(
-//            image: new AssetImage('assets/images/presentation/Present3.png'),
-//            fit: BoxFit.cover,
-//          )),
+          decoration: new BoxDecoration(
+              image: new DecorationImage(
+            image: new AssetImage('assets/images/presentation/Present3.png'),
+            fit: BoxFit.cover,
+          )),
         ),
         Container(
-          color: Colors.white,
-            child: new Center(
-              child: new Text('Presentation4'),
-            )
-//          decoration: new BoxDecoration(
-//              image: new DecorationImage(
-//            image: new AssetImage('assets/images/presentation/Present4.png'),
-//            fit: BoxFit.cover,
-//          )),
+          decoration: new BoxDecoration(
+              image: new DecorationImage(
+            image: new AssetImage('assets/images/presentation/Present4.png'),
+            fit: BoxFit.cover,
+          )),
         ),
       ],
     );
