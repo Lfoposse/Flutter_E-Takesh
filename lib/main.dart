@@ -5,6 +5,7 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +33,51 @@ class _MyHomePageState extends State<MyHomePage> {
   final controler = PageController(
     initialPage: 0,
   );
+
+//  element of login page
+  final logo = Container(
+    margin: EdgeInsets.only(top: 0.0, left: 0.0, right: 0.0),
+    padding: EdgeInsets.only(top: 0.0),
+//    color: Colors.blue,
+    child: Image.asset(
+      'assets/images/login_icon.jpeg',
+      height: 100.0,
+      width: 90.0,
+    ),
+  );
+
+  final email = TextFormField(
+    keyboardType: TextInputType.emailAddress,
+    autofocus: false,
+    initialValue: 'wilfried@rainbowcl.net',
+    decoration: InputDecoration(
+      hintText: 'Email',
+      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+    ),
+  );
+
+  final password = TextFormField(
+    autofocus: false,
+    initialValue: '123456789',
+    obscureText: true,
+    decoration: InputDecoration(
+      hintText: 'Password',
+      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+    ),
+  );
+
+
+  final forgotLabel = FlatButton(
+    child: Text(
+      "Si vous n'avez pas encore de compte cliquez ici",
+      style: TextStyle(color: Colors.blueAccent),
+    ),
+    onPressed: () {},
+  );
+
+//  end elts login
   @override
   Widget build(BuildContext context) {
     return PageView(
@@ -70,40 +116,44 @@ class _MyHomePageState extends State<MyHomePage> {
             fit: BoxFit.cover,
           )),
         ),
-        Container(
-          color: Colors.white,
-          child: ListView(
-            children: <Widget>[
-             new Image.asset(
-                'assets/images/login.png',
-                width: 600,
-                height: 240,
-                fit: BoxFit.cover,
-              ),
-            new RaisedButton(
-                color: Colors.orange,
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Text(
-                  'CONNEXION',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 19.0),
+        Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.only(left: 24.0, right: 24.0),
+              children: <Widget>[
+                logo,
+                SizedBox(height: 60.0),
+                email,
+                SizedBox(height: 8.0),
+                password,
+                SizedBox(height: 24.0),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                            HomePage()));
+                  },
+                  padding: EdgeInsets.all(12),
+                  color: Colors.orange,
+                  child: Text('CONEXION', style: TextStyle(color: Colors.white)),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    new MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                },
               ),
-            new Text(
-                "si vous n'aveez pas encore de compte cliquez ici",
-                style: TextStyle(color: Colors.lightBlue, fontSize: 12.0),
-              )
-            ],
+
+              forgotLabel
+              ],
+            ),
           ),
-        )
+        ),
+
       ],
     );
   }

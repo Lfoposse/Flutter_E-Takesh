@@ -21,6 +21,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   google_maps_flutter: ^0.2.0
   location: ^1.4.1
+  http:
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +49,8 @@ flutter:
    - assets/images/presentation/Present3.png
    - assets/images/presentation/Present4.png
    - assets/images/avatar.jpg
-   - assets/images/login.png
+   - assets/images/login_icon.jpeg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
