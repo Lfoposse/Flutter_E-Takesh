@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:etakesh_client/pages/home_page.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:etakesh_client/model/services.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -20,6 +24,60 @@ class MyApp extends StatelessWidget {
   }
 }
 
+void showDialogSingleButton(BuildContext context, String title, String message, String buttonLabel) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text(title),
+        content: new Text(message),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text(buttonLabel),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<Login> requestLoginAPI(BuildContext context, String email, String password) async {
+  final url = "http://api.e-takesh.com:26960/api/Users/login";
+
+  Map<String, String> body = {
+    'email': email,
+    'password': password,
+  };
+
+  final response = await http.post(
+    url,
+    body: body,
+  );
+
+  if (response.statusCode == 200) {
+    final responseJson = json.decode(response.body);
+   Login datas = Login.fromJson(responseJson);
+//   navigation avec le passage de donne en params
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                HomePage()));
+
+    return Login.fromJson(responseJson);
+  } else {
+
+    showDialogSingleButton(context, "Impossible de se connecter", "La combinaison de votre 'Email'/'Mot de passe' est invalide. Veillez reessayer ou contacter notre equipe support", "OK");
+    return null;
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -30,6 +88,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   final controler = PageController(
     initialPage: 0,
   );
@@ -140,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                            HomePage()));
+                                HomePage()));
                   },
                   padding: EdgeInsets.all(12),
                   color: Colors.orange,

@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
     return new Scaffold(
       appBar: new AppBar(
         backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: Colors.black),
         title: Text(
             'Lat/Lng:${currentLocation['latitude']}/${currentLocation['longitude']}',
           overflow: TextOverflow.fade,),
@@ -49,6 +50,8 @@ class _HomePageState extends State<HomePage> {
       drawer: new Drawer(
         child: ListView(
           children: <Widget>[
+        new DrawerHeader(
+            child:
             new UserAccountsDrawerHeader(
               accountName: new Text('Rainbow Cl'),
               accountEmail: new Text('wilfried@rainbowcl.net'),
@@ -61,9 +64,10 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.black87,
 //               shape: BoxShape.rectangle
               ),
-            ),
+            )
+        ),
             new ListTile(
-              title: new Text('Vos courses',style: TextStyle(fontSize: 22.0),),
+              title: new Text('Vos courses',style: TextStyle(fontSize: 18.0),),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -73,7 +77,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             new ListTile(
-              title: new Text('Consulter les tarifs',style: TextStyle(fontSize: 22.0),),
+              title: new Text('Consulter les tarifs',style: TextStyle(fontSize: 18.0),),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -83,11 +87,11 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             new ListTile(
-              title: new Text('Paiements',style: TextStyle(fontSize: 22.0),),
+              title: new Text('Paiements',style: TextStyle(fontSize: 18.0),),
               onTap: () {},
             ),
             new ListTile(
-              title: new Text('Parametres',style: TextStyle(fontSize: 22.0),),
+              title: new Text('Parametres',style: TextStyle(fontSize: 18.0),),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(

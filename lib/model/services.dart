@@ -17,3 +17,22 @@ class Service {
   }
 
 }
+
+class Login {
+  final String id;
+  final String ttl;
+  final String created;
+  final int userId;
+
+  Login({this.id, this.created, this.userId,this.ttl});
+
+  factory Login.fromJson(Map<String, dynamic> json) {
+    return Login(
+      id: json['id'],
+        ttl: json['ttl'],
+      created: json['created'],
+      userId: json['userId']
+    );
+  }
+
+}
