@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:etakesh_client/pages/home_page.dart';
-
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:etakesh_client/model/services.dart';
+import 'package:etakesh_client/pages/login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,60 +20,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void showDialogSingleButton(BuildContext context, String title, String message, String buttonLabel) {
-  // flutter defined function
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // return object of type Dialog
-      return AlertDialog(
-        title: new Text(title),
-        content: new Text(message),
-        actions: <Widget>[
-          // usually buttons at the bottom of the dialog
-          new FlatButton(
-            child: new Text(buttonLabel),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
-Future<Login> requestLoginAPI(BuildContext context, String email, String password) async {
-  final url = "http://api.e-takesh.com:26960/api/Users/login";
-
-  Map<String, String> body = {
-    'email': email,
-    'password': password,
-  };
-
-  final response = await http.post(
-    url,
-    body: body,
-  );
-
-  if (response.statusCode == 200) {
-    final responseJson = json.decode(response.body);
-   Login datas = Login.fromJson(responseJson);
-//   navigation avec le passage de donne en params
-    Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (BuildContext context) =>
-                HomePage()));
-
-    return Login.fromJson(responseJson);
-  } else {
-
-    showDialogSingleButton(context, "Impossible de se connecter", "La combinaison de votre 'Email'/'Mot de passe' est invalide. Veillez reessayer ou contacter notre equipe support", "OK");
-    return null;
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -88,55 +30,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
   final controler = PageController(
     initialPage: 0,
-  );
-
-//  element of login page
-  final logo = Container(
-    margin: EdgeInsets.only(top: 0.0, left: 0.0, right: 0.0),
-    padding: EdgeInsets.only(top: 0.0),
-//    color: Colors.blue,
-    child: Image.asset(
-      'assets/images/login_icon.jpeg',
-      height: 100.0,
-      width: 90.0,
-    ),
-  );
-
-  final email = TextFormField(
-    keyboardType: TextInputType.emailAddress,
-    autofocus: false,
-    initialValue: 'wilfried@rainbowcl.net',
-    decoration: InputDecoration(
-      hintText: 'Email',
-      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-    ),
-  );
-
-  final password = TextFormField(
-    autofocus: false,
-    initialValue: '123456789',
-    obscureText: true,
-    decoration: InputDecoration(
-      hintText: 'Password',
-      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-    ),
-  );
-
-
-  final forgotLabel = FlatButton(
-    child: Text(
-      "Si vous n'avez pas encore de compte cliquez ici",
-      style: TextStyle(color: Colors.blueAccent),
-    ),
-    onPressed: () {},
   );
 
 //  end elts login
@@ -170,52 +65,30 @@ class _MyHomePageState extends State<MyHomePage> {
             fit: BoxFit.cover,
           )),
         ),
-        Container(
-//          color: Colors.lightGreen,
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            image: new AssetImage('assets/images/presentation/Present4.png'),
-            fit: BoxFit.cover,
-          )),
-        ),
         Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(left: 24.0, right: 24.0),
-              children: <Widget>[
-                logo,
-                SizedBox(height: 60.0),
-                email,
-                SizedBox(height: 8.0),
-                password,
-                SizedBox(height: 24.0),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                HomePage()));
-                  },
-                  padding: EdgeInsets.all(12),
-                  color: Colors.orange,
-                  child: Text('CONEXION', style: TextStyle(color: Colors.white)),
-                ),
-              ),
-
-              forgotLabel
-              ],
+          body: Padding(
+            padding: EdgeInsets.all(0.0),
+            child: Container(
+              decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                image:
+                    new AssetImage('assets/images/presentation/Present4.png'),
+                fit: BoxFit.cover,
+              )),
             ),
           ),
-        ),
-
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.orange,
+            mini: true,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) => LoginPage()));
+            },
+            child: Icon(Icons.play_circle_filled),
+          ),
+        )
       ],
     );
   }

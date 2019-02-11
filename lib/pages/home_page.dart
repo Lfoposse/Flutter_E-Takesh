@@ -11,11 +11,15 @@ import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 
 class HomePage extends StatefulWidget {
+
+
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
+
   GoogleMapController mapController;
   Map<String, double> currentLocation = new Map();
   StreamSubscription<Map<String, double>> locationSubscription;
