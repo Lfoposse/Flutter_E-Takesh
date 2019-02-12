@@ -4,7 +4,7 @@ import 'package:etakesh_client/pages/home_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
-import 'package:etakesh_client/model/services.dart';
+import 'package:etakesh_client/Models/services.dart';
 
 class LoginPage extends StatefulWidget {
   @override
