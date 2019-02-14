@@ -1,10 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:etakesh_client/Models/services.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:etakesh_client/model/services.dart';
-
 
 class TarifsPage extends StatefulWidget {
   @override
@@ -13,26 +12,30 @@ class TarifsPage extends StatefulWidget {
 
 class TarifsPageState extends State<TarifsPage> {
   final String url = "http://api.e-takesh.com:26960/api/services";
-  final String token = "?access_token=uZzQiR1abvuQqVBoQV1SRp3uVxhQ65CNU3QfSSr2rQZWJieP59c5CUpyhjfbB8p1";
+  final String token =
+      "?access_token=uZzQiR1abvuQqVBoQV1SRp3uVxhQ65CNU3QfSSr2rQZWJieP59c5CUpyhjfbB8p1";
 
-  Future<List<Service>> getPost() async {
-    final response = await http
-        .get(Uri.encodeFull(url+token), headers: {HttpHeaders.acceptHeader: "application/json"},);
+  Future<List<Service1>> getPost() async {
+    final response = await http.get(
+      Uri.encodeFull(url + token),
+      headers: {HttpHeaders.acceptHeader: "application/json"},
+    );
 
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
 
       var convertDataToJson = json.decode(response.body);
-      List<Service> services = [];
+      List<Service1> services = [];
 
-      for (var p in convertDataToJson){
-        Service post = Service.fromJson(p);
-        services.add(post);
+      for (var p in convertDataToJson) {
+        Service1 serv = Service1.fromJson(p);
+        services.add(serv);
       }
       return services;
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load services error'+response.statusCode.toString());
+      throw Exception(
+          'Failed to load services error' + response.statusCode.toString());
     }
   }
 
@@ -59,7 +62,10 @@ class TarifsPageState extends State<TarifsPage> {
                             child: new Container(
                               child: new ListTile(
                                 title: Text(snapshot.data[index].intitule),
-                              subtitle: Text(snapshot.data[index].prix.toString()+' XAF'),),
+                                subtitle: Text(
+                                    snapshot.data[index].prix.toString() +
+                                        ' XAF'),
+                              ),
                               padding: const EdgeInsets.all(20.0),
                             ),
                           )
@@ -78,8 +84,6 @@ class TarifsPageState extends State<TarifsPage> {
           },
         ),
       ),
-
     );
   }
-
 }

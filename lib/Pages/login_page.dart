@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:etakesh_client/pages/home_page.dart';
-
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:etakesh_client/Models/services.dart';
+import 'package:etakesh_client/Utils/SelectCountryWidget.dart';
+import 'package:etakesh_client/pages/home_page.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,9 +15,14 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  SelectCountry _selectContry;
 
   final String url = "http://api.e-takesh.com:26960/api/Users/login";
 
+  LoginPageState() {
+    _selectContry = SelectCountry(false, "cm");
+  }
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
@@ -79,17 +85,55 @@ class LoginPageState extends State<LoginPage> {
       return null;
     }
   }
+//pas de compte
+
+  Widget sinscrire = Container(
+      padding: EdgeInsets.only(left: 24.0, right: 24.0),
+      child: Row(children: <Widget>[
+        new RichText(
+          text: new TextSpan(
+            children: [
+              new TextSpan(
+                  text: "Si vous n avez pas encore de compte creer",
+                  style: new TextStyle(
+                    color: Colors.lightBlue,
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w300,
+                  )),
+            ],
+          ),
+        ),
+        Flexible(
+          child: Text("ici",
+              style: new TextStyle(
+                color: Colors.yellow,
+                decoration: TextDecoration.underline,
+                fontSize: 13.0,
+                fontWeight: FontWeight.bold,
+              )),
+          flex: 6,
+        ),
+      ]));
 
 //  element of login page
   Widget logo = Container(
+    height: 350.0,
     margin: EdgeInsets.only(top: 0.0, left: 0.0, right: 0.0),
-    padding: EdgeInsets.only(top: 0.0),
-//    color: Colors.blue,
-    child: Image.asset(
-      'assets/images/login_icon.jpeg',
-      height: 100.0,
-      width: 90.0,
-    ),
+    padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+    color: Colors.blue,
+    child:
+        Image.asset('assets/images/login_icon.jpeg', height: 15.0, width: 15.0),
+  );
+
+  Widget textheader = Container(
+    margin: EdgeInsets.only(top: 20.0, bottom: 20.0, right: 20.0, left: 20.0),
+//    padding: EdgeInsets.only(left: 24.0, right: 24.0),
+    child: new Text('Deplacez-vous avec e-Takesh',
+        style: new TextStyle(
+          color: Colors.black54,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+        )),
   );
 
   Widget forgotLabel = FlatButton(
@@ -106,54 +150,79 @@ class LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: Center(
         child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
             logo,
-            SizedBox(height: 60.0),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              controller: _emailController,
-              autofocus: false,
-              decoration: InputDecoration(
-                hintText: 'Email',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)),
-              ),
-            ),
-            SizedBox(height: 8.0),
-            TextFormField(
-              controller: _passwordController,
-              autofocus: false,
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)),
-              ),
-            ),
-            SizedBox(height: 24.0),
+            textheader,
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: EdgeInsets.only(left: 24.0, right: 24.0),
+              child: Row(children: <Widget>[
+                new Flexible(
+                  child: _selectContry,
+                  flex: 5,
+                ),
+                SizedBox(width: 8.0),
+                new Flexible(
+                  child: TextFormField(
+                    controller: _phoneController,
+                    autofocus: false,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Telephone",
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    ),
+                  ),
+                  flex: 6,
+                ),
+              ]),
+            ),
+            SizedBox(height: 10.0),
+            Padding(
+              padding: EdgeInsets.only(left: 24.0, right: 24.0),
+//              padding: EdgeInsets.symmetric(vertical: 16.0),
               child: RaisedButton(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(2),
                 ),
                 onPressed: () {
-                  requestLoginAPI(
-                      context, _emailController.text, _passwordController.text);
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) => HomePage()));
                 },
                 padding: EdgeInsets.all(12),
                 color: Colors.orange,
                 child: Text('CONEXION', style: TextStyle(color: Colors.white)),
               ),
             ),
-            forgotLabel
+            SizedBox(height: 20.0),
+            sinscrire
           ],
         ),
       ),
     );
   }
 }
+//            TextFormField(
+//              keyboardType: TextInputType.emailAddress,
+//              controller: _emailController,
+//              autofocus: false,
+//              decoration: InputDecoration(
+//                hintText: 'Email',
+//                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+//                border: OutlineInputBorder(
+//                    borderRadius: BorderRadius.circular(32.0)),
+//              ),
+//            ),
+//            SizedBox(height: 8.0),
+//            TextFormField(
+//              controller: _passwordController,
+//              autofocus: false,
+//              obscureText: true,
+//              decoration: InputDecoration(
+//                hintText: 'Password',
+//                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+//                border: OutlineInputBorder(
+//                    borderRadius: BorderRadius.circular(32.0)),
+//              ),
+//            ),
