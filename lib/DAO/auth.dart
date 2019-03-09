@@ -44,10 +44,6 @@ class _AuthScreenState extends State<AuthScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  final controler = PageController(
-    initialPage: 0,
-  );
-
   GoogleSignInAccount _googleUser;
 
   // PhoneVerificationCompleted
@@ -278,8 +274,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
         Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (context) => HomePage(
-                googleUser: _googleUser,
-                firebaseUser: user,
+//                googleUser: _googleUser,
+//                firebaseUser: user,
               ),
         ));
       } else {
@@ -295,44 +291,8 @@ class _AuthScreenState extends State<AuthScreen> {
   // Widgets
 
   Widget _buildSocialLoginBody() {
-    return PageView(
-      controller: controler,
-      scrollDirection: Axis.horizontal,
-      children: <Widget>[
-        Container(
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            image: new AssetImage('assets/images/presentation/Present1.png'),
-            fit: BoxFit.cover,
-          )),
-        ),
-        Container(
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            image: new AssetImage('assets/images/presentation/Present2.png'),
-            fit: BoxFit.cover,
-          )),
-        ),
-        Container(
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            image: new AssetImage('assets/images/presentation/Present3.png'),
-            fit: BoxFit.cover,
-          )),
-        ),
-        Container(
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            image: new AssetImage('assets/images/presentation/Present4.png'),
-            fit: BoxFit.cover,
-          )),
-        ),
-        Container(
-          child: GoogleSignInButton(
-            onPressed: () => _updateRefreshing(true),
-          ),
-        ),
-      ],
+    return GoogleSignInButton(
+      onPressed: () => _updateRefreshing(true),
     );
   }
 

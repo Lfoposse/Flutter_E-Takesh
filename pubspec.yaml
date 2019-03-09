@@ -55,8 +55,10 @@ flutter:
    - assets/images/presentation/Present3.png
    - assets/images/presentation/Present4.png
    - assets/images/avatar.png
-   - assets/images/login_icon.jpeg
+   - assets/images/login_icon.png
    - assets/images/google.png
+   - assets/images/facebook.png
+   - assets/images/cameroun_flag.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

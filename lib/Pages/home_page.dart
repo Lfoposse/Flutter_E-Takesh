@@ -1,20 +1,19 @@
 import 'package:etakesh_client/pages/courses_page.dart';
+import 'package:etakesh_client/pages/paiements_page.dart';
 import 'package:etakesh_client/pages/parameters_page.dart';
 import 'package:etakesh_client/pages/tarifs_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatelessWidget {
-  final GoogleSignInAccount googleUser;
-  final FirebaseUser firebaseUser;
+//  final GoogleSignInAccount googleUser;
+//  final FirebaseUser firebaseUser;
 
-  const HomePage(
-      {Key key, @required this.googleUser, @required this.firebaseUser})
-      : assert(googleUser != null),
-        assert(firebaseUser != null),
-        super(key: key);
+//  const HomePage(
+//      {Key key, @required this.googleUser, @required this.firebaseUser})
+//      : assert(googleUser != null),
+//        assert(firebaseUser != null),
+//        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,8 @@ class HomePage extends StatelessWidget {
 //        backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
-          firebaseUser.phoneNumber,
+          "E-Takesh",
+//          firebaseUser.phoneNumber,
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -34,20 +34,24 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             new DrawerHeader(
               child: Container(
+                color: Colors.black,
                 margin: EdgeInsets.all(0.0),
 //                decoration: BoxDecoration(color: Colors.black),
                 child: new UserAccountsDrawerHeader(
                   accountName: new Text(
-                    googleUser.displayName,
+                    "Rainbow-Cl",
+//                    googleUser.displayName,
                     style: TextStyle(color: Colors.white),
                   ),
-                  accountEmail: new Text(googleUser.email,
+                  accountEmail: new Text("team@rainbowcl.net",
+//                      googleUser.email,
                       style: TextStyle(color: Colors.white)),
                   currentAccountPicture: new GestureDetector(
                     child: Offstage(
-                      offstage: googleUser.photoUrl == null,
+//                      offstage: googleUser.photoUrl == null,
                       child: CircleAvatar(
-                          backgroundImage: NetworkImage(googleUser.photoUrl)),
+                          backgroundImage:
+                              NetworkImage('assets/assets/images/avatar.png')),
                     ),
 //                    new CircleAvatar(
 //                      backgroundColor: Colors.white,
@@ -90,7 +94,13 @@ class HomePage extends StatelessWidget {
                 'Paiements',
                 style: TextStyle(fontSize: 18.0),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(builder: (context) => PaiementPage()),
+                );
+              },
             ),
             new ListTile(
               title: new Text(

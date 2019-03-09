@@ -15,7 +15,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="etakesh_client"
+        android:label="etakesh"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyACQUQ3bBUBnWKqr1lwZA8j9s6obY9oPTQ"/>

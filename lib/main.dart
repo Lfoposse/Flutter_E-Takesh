@@ -1,7 +1,17 @@
-import 'package:etakesh_client/DAO/auth.dart';
+import 'package:etakesh_client/Presentation/presentation.dart';
+import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
+import 'package:etakesh_client/pages/FirstLaunch/main_page.dart';
+import 'package:etakesh_client/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+import 'theme.dart';
+
+//
+void main() {
+  runApp(MyApp());
+  SystemChrome.setSystemUIOverlayStyle(lightSystemUiOverlayStyle);
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -11,12 +21,60 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Etakesh Client',
-      theme: ThemeData.light().copyWith(
-        primaryColor: Colors.white,
-        accentColor: Colors.white70,
-      ),
-      home: AuthScreen(),
+      theme: buildThemeData(),
+      home: MainPage(),
     );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => new _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    AppSharedPreferences().isAppFirstLaunch().then((bool1) {
+      if (bool1 == true) {
+        // on presente l'appli
+        Navigator.pushReplacement(context,
+            new MaterialPageRoute(builder: (BuildContext context) {
+          return Presentation();
+        }));
+      } else {
+//        Navigator.pushReplacement(context,
+//            new MaterialPageRoute(builder: (BuildContext context) {
+//          return LoginPage();
+//        }));
+
+        AppSharedPreferences().isAppLoggedIn().then((bool2) {
+          if (bool2 == false) {
+            Navigator.pushReplacement(context,
+                new MaterialPageRoute(builder: (BuildContext context) {
+              return MainLaunchPage();
+            }));
+          } else {
+            Navigator.pushReplacement(context,
+                new MaterialPageRoute(builder: (BuildContext context) {
+              return HomePage();
+            }));
+          }
+        }, onError: (e) {});
+      }
+    }, onError: (e) {
+      AppSharedPreferences().setAppFirstLaunch(true);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+//    return new AnimatedBuilder(builder: (context, _) {
+    return Material(
+      color: Colors.white,
+    );
+//    });
   }
 }
 

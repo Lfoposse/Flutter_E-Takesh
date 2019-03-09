@@ -13,7 +13,7 @@ class TarifsPage extends StatefulWidget {
 class TarifsPageState extends State<TarifsPage> {
   final String url = "http://api.e-takesh.com:26960/api/services";
   final String token =
-      "?access_token=ZU622AuXXgidgDmWE2KUPp3jnoPq8KhB0SPnsj9F5US1uttjijqMGKDh4R7NqG8m";
+      "?access_token=qo4zzroXKByPdTX7AsAdZNOORyTlJ60FSFcHRqmXK9DTgigallXgCMCHLV29j8hp";
 
   Future<List<Service1>> getPost() async {
     final response = await http.get(

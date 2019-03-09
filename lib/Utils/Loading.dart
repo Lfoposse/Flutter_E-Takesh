@@ -13,7 +13,9 @@ class ShowLoadingView extends StatelessWidget {
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(20.0),
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                backgroundColor: Color(0xFF0C60A8),
+              ),
             ),
             Text(
               "Chargement",
@@ -49,7 +51,7 @@ class ShowConnectionErrorView extends StatelessWidget {
                   child: Icon(
                     Icons.refresh,
                     size: 50.0,
-                    color: Colors.blue,
+                    color: Color(0xFF0C60A8),
                   )),
             ),
             Text(
@@ -87,7 +89,7 @@ class ShowLoadingErrorView extends StatelessWidget {
                   child: Icon(
                     Icons.refresh,
                     size: 50.0,
-                    color: Colors.blue,
+                    color: Color(0xFF0C60A8),
                   )),
             ),
             Text(
