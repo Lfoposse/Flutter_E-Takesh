@@ -2,6 +2,7 @@ import 'package:etakesh_client/Presentation/presentation.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:etakesh_client/pages/FirstLaunch/main_page.dart';
 import 'package:etakesh_client/pages/home_page.dart';
+import 'package:etakesh_client/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -43,22 +44,26 @@ class _MainPageState extends State<MainPage> {
           return Presentation();
         }));
       } else {
-//        Navigator.pushReplacement(context,
-//            new MaterialPageRoute(builder: (BuildContext context) {
-//          return LoginPage();
-//        }));
-
-        AppSharedPreferences().isAppLoggedIn().then((bool2) {
+        AppSharedPreferences().isAccountCreate().then((bool2) {
           if (bool2 == false) {
             Navigator.pushReplacement(context,
                 new MaterialPageRoute(builder: (BuildContext context) {
               return MainLaunchPage();
             }));
           } else {
-            Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (BuildContext context) {
-              return HomePage();
-            }));
+            AppSharedPreferences().isAppLoggedIn().then((bool3) {
+              if (bool3 == false) {
+                Navigator.pushReplacement(context,
+                    new MaterialPageRoute(builder: (BuildContext context) {
+                  return LoginPage();
+                }));
+              } else {
+                Navigator.pushReplacement(context,
+                    new MaterialPageRoute(builder: (BuildContext context) {
+                  return HomePage();
+                }));
+              }
+            }, onError: (e) {});
           }
         }, onError: (e) {});
       }

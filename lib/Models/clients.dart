@@ -1,9 +1,7 @@
 class Client {
   int _client_id;
-
   String _email;
   String _password;
-
   String _username;
   String _lastname;
   String _phone;

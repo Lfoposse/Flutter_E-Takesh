@@ -1,4 +1,3 @@
-
 class Service1 {
   final int serviceid;
   final String code;
@@ -15,7 +14,6 @@ class Service1 {
       prix: json['prix'],
     );
   }
-
 }
 
 class Login {
@@ -24,17 +22,29 @@ class Login {
   final String created;
   final int userId;
 
-  Login({this.id, this.created, this.userId,this.ttl});
+  Login({this.id, this.created, this.userId, this.ttl});
 
   factory Login.fromJson(Map<String, dynamic> json) {
     return Login(
-      id: json['id'],
+        id: json['id'],
         ttl: json['ttl'],
-      created: json['created'],
-      userId: json['userId']
-    );
+        created: json['created'],
+        userId: json['userId']);
   }
+}
 
+class UserCreate {
+  final int id;
+  final String email;
+
+  UserCreate({
+    this.id,
+    this.email,
+  });
+
+  factory UserCreate.fromJson(Map<String, dynamic> json) {
+    return UserCreate(id: json['id'], email: json['ttl']);
+  }
 }
 
 class Service {

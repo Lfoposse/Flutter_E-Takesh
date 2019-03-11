@@ -12,6 +12,7 @@ class RestDatasource {
       "uZzQiR1abvuQqVBoQV1SRp3uVxhQ65CNU3QfSSr2rQZWJieP59c5CUpyhjfbB8p1";
   static final LOGIN_URL = BASE_URL + "users/login";
   static final SERVICE_URL = BASE_URL + "services";
+  static final CREATE_USER = BASE_URL + "Users";
 
   ///retourne les informations d'un compte client a partir de ses identifiants
   Future<Client> login(
@@ -29,6 +30,17 @@ class RestDatasource {
     }).catchError(
         (onError) => new Future.error(new Exception(onError.toString())));
   }
+
+//  Future<UserCreate> createUser(String username, String password) {
+//    return _netUtil.post(CREATE_USER,
+//        body: {"email": username, "password": password}).then((dynamic res) {
+//      if (res["code"] == 200)
+//        return UserCreate.map(res["data"]);
+//      else
+//        return null;
+//    }).catchError(
+//        (onError) => new Future.error(new Exception(onError.toString())));
+//  }
 
   Future<List<Service>> getService() {
     return _netUtil
