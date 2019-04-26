@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 final pages = [
   new PageViewModel(
 //      const Color(0xFF548CFF),
-      'assets/images/presentation/Present1.png',
-      'assets/images/plane.png'),
+    'assets/images/presentation/Present1.png',
+//      'assets/images/plane.png'
+  ),
   new PageViewModel(
 //      const Color(0xFFE4534D),
-      'assets/images/presentation/Present2.png',
-      'assets/images/calendar.png'),
+    'assets/images/presentation/Present2.png',
+//      'assets/images/calendar.png'
+  ),
   new PageViewModel(
 //    const Color(0xFFFF682D),
     'assets/images/presentation/Present3.png',
-    'assets/images/house.png',
+//    'assets/images/house.png',
   ),
   new PageViewModel(
 //    const Color(0xFFFF682D),
     'assets/images/presentation/Present4.png',
-    'assets/images/house.png',
+//    'assets/images/house.png',
   ),
 ];
 
@@ -92,10 +94,10 @@ class Page extends StatelessWidget {
 
 class PageViewModel {
   final String heroAssetPath;
-  final String iconAssetPath;
+//  final String iconAssetPath;
 
   PageViewModel(
     this.heroAssetPath,
-    this.iconAssetPath,
+//    this.iconAssetPath,
   );
 }

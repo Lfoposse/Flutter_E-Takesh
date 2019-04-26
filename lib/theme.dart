@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 
 ThemeData buildThemeData() {
   return ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.white,
-    accentColor: Colors.white,
-    scaffoldBackgroundColor: Colors.white,
+//    brightness: Brightness.light,
+//    primaryColor: Colors.white,
+//    accentColor: Colors.white,
+//    scaffoldBackgroundColor: Colors.white,
     textSelectionHandleColor: Colors.black,
     textSelectionColor: Colors.black12,
     cursorColor: Colors.black,
@@ -22,8 +22,8 @@ ThemeData buildThemeData() {
 }
 
 const SystemUiOverlayStyle lightSystemUiOverlayStyle = SystemUiOverlayStyle(
-  statusBarColor: Colors.white,
-  systemNavigationBarColor: Colors.white,
+//  statusBarColor: Colors.white,
+//  systemNavigationBarColor: Colors.white,
   systemNavigationBarDividerColor: Colors.black,
   systemNavigationBarIconBrightness: Brightness.dark,
 );

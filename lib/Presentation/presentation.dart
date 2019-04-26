@@ -88,10 +88,13 @@ class _PresentationState extends State<Presentation>
           }));
         },
         tooltip: "Passer les pages de presentation",
-        child: Text("Passer"),
+        child: Text(
+          "Passer",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         foregroundColor: Colors.black,
-        backgroundColor: Colors.yellowAccent,
-        shape: _DiamondBorder(),
+        backgroundColor: Color(0xFFDEAC17),
+//        shape: _DiamondBorder(),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -132,35 +135,35 @@ class _PresentationState extends State<Presentation>
   }
 }
 
-class _DiamondBorder extends ShapeBorder {
-  const _DiamondBorder();
-
-  @override
-  EdgeInsetsGeometry get dimensions {
-    return const EdgeInsets.only();
-  }
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
-    return getOuterPath(rect, textDirection: textDirection);
-  }
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
-    return Path()
-      ..moveTo(rect.left + rect.width / 2.0, rect.top)
-      ..lineTo(rect.right, rect.top + rect.height / 2.0)
-      ..lineTo(rect.left + rect.width / 2.0, rect.bottom)
-      ..lineTo(rect.left, rect.top + rect.height / 2.0)
-      ..close();
-  }
-
-  @override
-  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {}
-
-  // This border doesn't support scaling.
-  @override
-  ShapeBorder scale(double t) {
-    return null;
-  }
-}
+//class _DiamondBorder extends ShapeBorder {
+//  const _DiamondBorder();
+//
+//  @override
+//  EdgeInsetsGeometry get dimensions {
+//    return const EdgeInsets.only();
+//  }
+//
+//  @override
+//  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
+//    return getOuterPath(rect, textDirection: textDirection);
+//  }
+//
+//  @override
+//  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
+//    return Path()
+//      ..moveTo(rect.left + rect.width / 2.0, rect.top)
+//      ..lineTo(rect.right, rect.top + rect.height / 2.0)
+//      ..lineTo(rect.left + rect.width / 2.0, rect.bottom)
+//      ..lineTo(rect.left, rect.top + rect.height / 2.0)
+//      ..close();
+//  }
+//
+//  @override
+//  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {}
+//
+//  // This border doesn't support scaling.
+//  @override
+//  ShapeBorder scale(double t) {
+//    return null;
+//  }
+//}

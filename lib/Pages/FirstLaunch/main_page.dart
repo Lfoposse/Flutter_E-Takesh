@@ -110,8 +110,7 @@ class MainLaunchPage extends StatelessWidget {
                       flex: 1,
                       child: InkWell(
                         child: Container(
-                            padding: EdgeInsets.only(
-                                left: 20.0, right: 20.0, bottom: 20.0),
+                            padding: EdgeInsets.only(left: 20.0, right: 20.0),
                             alignment: Alignment.center,
                             child: new Text(
                               "Ou connectez-vous a l'aide des reseaux sociaux",
@@ -123,8 +122,29 @@ class MainLaunchPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) =>LoginPage()),
-//                              SocialMediaPage
+                                builder: (context) => SocialMediaPage()),
+//
+                          );
+                        },
+                      )),
+                  new Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        child: Container(
+                            padding: EdgeInsets.only(
+                                left: 20.0, right: 20.0, bottom: 20.0),
+                            alignment: Alignment.center,
+                            child: new Text(
+                              "Pocedez-vous deja un compte ?",
+                              style: new TextStyle(
+                                  fontSize: 18.0, color: backColor),
+                            ) //variable above
+                            ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => LoginPage()),
                           );
                         },
                       )),

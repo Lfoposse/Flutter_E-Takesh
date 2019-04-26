@@ -13,11 +13,8 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
   bool _agreedToTOS = true;
   var _phoneController = new TextEditingController();
   String verificationId;
-  bool loading = false;
-//  final String ververId
 
   Widget form() {
-    _formKey.currentState?.validate();
     return SafeArea(
       top: false,
       bottom: false,
@@ -125,9 +122,6 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
 
   _submit() {
     if (_formKey.currentState.validate()) {
-      setState(() {
-        loading = true;
-      });
       verifyPhone(context);
     }
   }

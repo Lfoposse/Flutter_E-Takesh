@@ -1,9 +1,8 @@
 import 'package:etakesh_client/DAO/Rest_dt.dart';
-import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
 
 abstract class LoginContract {
-  void onLoginSuccess(Client client);
+  void onLoginSuccess(ClientLognin dataloglin);
   void onLoginError();
   void onConnectionError();
 }
@@ -13,15 +12,15 @@ class LoginPresenter {
   RestDatasource api = new RestDatasource();
   LoginPresenter(this._view);
 
-  doLogin(String username, String password, bool checkAccountExists) {
-    api.login(username, password, checkAccountExists).then((Client client) {
-      if (client != null) {
-        new DatabaseHelper().addClient(client);
-        _view.onLoginSuccess(client);
+  doLogin(String email, String password) {
+    api.login(email, password).then((ClientLognin dataloglin) {
+      if (dataloglin != null) {
+        print("dataclient " + dataloglin.toString());
+        _view.onLoginSuccess(dataloglin);
       } else
-        _view.onLoginError();
+        _view.onConnectionError();
     }).catchError((onError) {
-      _view.onConnectionError();
+      _view.onLoginError();
     });
   }
 }

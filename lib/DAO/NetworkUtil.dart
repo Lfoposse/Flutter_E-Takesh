@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class NetworkUtil {
@@ -15,7 +16,6 @@ class NetworkUtil {
 
     return http.get(url).then((http.Response response) {
       final String res = response.body;
-      final int statusCode = response.statusCode;
 
       print(res);
       if (/*statusCode < 200 || statusCode > 400 ||*/ json == null) {
@@ -31,15 +31,13 @@ class NetworkUtil {
     return http
         .post(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
-      final String res = response.body;
-      // final int statusCode = response.statusCode;
-
-      // print(res);
-
-      if (/*statusCode < 200 || statusCode > 400 ||*/ json == null) {
+      print("response " + response.body);
+      print("status " + response.statusCode.toString());
+//      final String res = response.body;
+      if (response.statusCode != 200) {
         return new Future.error(new Exception("Erreur de connexion"));
       }
-      return _decoder.convert(res);
+      return response.body;
     }).catchError(
             (onError) => new Future.error(new Exception(onError.toString())));
   }
@@ -50,7 +48,6 @@ class NetworkUtil {
         .put(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
       final String res = response.body;
-      final int statusCode = response.statusCode;
 
       print(res);
 

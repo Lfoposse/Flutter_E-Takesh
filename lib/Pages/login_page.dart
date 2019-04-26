@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
+import 'package:etakesh_client/pages/home_page.dart';
 import "package:flutter/material.dart";
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   BoxDecoration decoration = BoxDecoration(
@@ -40,8 +45,14 @@ class LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool loading = false;
+  var _passwordController = TextEditingController();
+  var _emailController = TextEditingController();
   FocusNode emailNode;
   FocusNode passawordNode;
+
+//  LoginState() {
+//    _presenter = new LoginPresenter(this);
+//  }
 
   @override
   void initState() {
@@ -61,13 +72,13 @@ class LoginState extends State<Login> {
 
   InputDecoration CustomTextDecoration({String text, IconData icon}) {
     return InputDecoration(
-      labelStyle: TextStyle(color: Colors.white30),
+      labelStyle: TextStyle(color: Colors.black87),
       labelText: text,
       prefixIcon: Icon(icon, color: Colors.black),
       enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blueGrey[700])),
       focusedBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+          UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
       errorBorder:
           UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
     );
@@ -95,13 +106,53 @@ class LoginState extends State<Login> {
             setState(() {
               loading = true;
             });
-            Future.delayed(Duration(seconds: 2), () {
-              setState(() {
-                loading = false;
-              });
-              Scaffold.of(context).showSnackBar(new SnackBar(
-                content: new Text("Connexion reuissite ..."),
-              ));
+//            _presenter.doLogin(_emailController.text, _passwordController.text);
+            Future.delayed(Duration(seconds: 7), () async {
+              //connecte le user
+              final response1 = await http.post(
+                Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+                body: {
+                  "email": _emailController.text,
+                  "password": _passwordController.text
+                },
+                headers: {HttpHeaders.acceptHeader: "application/json"},
+              );
+              if (response1.statusCode == 200) {
+//                var convertDataToJson1 = json.decode(response1.body);
+                AppSharedPreferences().setAccountCreate(true);
+                AppSharedPreferences().setAppLoggedIn(true);
+                setState(() {
+                  loading = false;
+                });
+                Scaffold.of(context).showSnackBar(new SnackBar(
+                  content: new Text(
+                    "Connexion reussite",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ));
+                Navigator.of(context).pushAndRemoveUntil(
+                    new MaterialPageRoute(builder: (context) => HomePage()),
+                    ModalRoute.withName(Navigator.defaultRouteName));
+
+//                Navigator.push(
+//                  context,
+//                  new MaterialPageRoute(builder: (context) => HomePage()),
+//                );
+
+              } else {
+                setState(() {
+                  loading = false;
+                });
+                Scaffold.of(context).showSnackBar(new SnackBar(
+                  content: new Text(
+                    "Indentifiants non valides",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ));
+                // If that call was not successful, throw an error.
+                throw Exception('Erreur de connexion du client' +
+                    response1.body.toString());
+              }
             });
           } else {
             setState(() {
@@ -134,6 +185,7 @@ class LoginState extends State<Login> {
               children: <Widget>[
                 Container(decoration: decoration),
                 TextFormField(
+                  controller: _emailController,
                   enabled: true,
                   enableInteractiveSelection: true,
                   focusNode: emailNode,
@@ -158,6 +210,7 @@ class LoginState extends State<Login> {
                   },
                 ),
                 TextFormField(
+                  controller: _passwordController,
                   enabled: true,
                   enableInteractiveSelection: true,
                   obscureText: true,
@@ -175,17 +228,32 @@ class LoginState extends State<Login> {
                   },
                 ),
                 CustomSizeBox(height: 20.0),
-                LoginButton(context),
-                CustomSizeBox(height: 30.0),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Mot de passe oubliez ?",
-                    style: TextStyle(
-                      color: Color(0xFF0C60A8),
-                    ),
-                  ),
-                ),
+                loading
+                    ? Container(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, top: 30.0, bottom: 15.0),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.all(1.0),
+                        child: Column(
+                          children: <Widget>[
+                            LoginButton(context),
+                            CustomSizeBox(height: 30.0),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Mot de passe oubliez ?",
+                                style: TextStyle(
+                                  color: Color(0xFF0C60A8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
               ],
             ),
           )
@@ -199,7 +267,7 @@ class LoginState extends State<Login> {
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.blueGrey,
+        color: Colors.grey[700],
         child: Center(
           child: SizedBox(
             height: 50.0,
@@ -218,7 +286,41 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Stack(
-      children: <Widget>[LoginUi(), loading ? LoadingIndicator() : Container()],
+      children: <Widget>[LoginUi()],
     );
   }
+
+//  @override
+//  void onLoginError() {
+//    setState(() {
+//      loading = false;
+//    });
+//    Scaffold.of(context).showSnackBar(new SnackBar(
+//      content: new Text(
+//        "Indentifiants non valides",
+//        style: TextStyle(color: Colors.red),
+//      ),
+//    ));
+//  }
+//
+//  @override
+//  void onConnectionError() {
+//    setState(() {
+//      loading = false;
+//    });
+//    Scaffold.of(context).showSnackBar(new SnackBar(
+//      content: new Text(
+//        "Verifiez votre connexion internet",
+//        style: TextStyle(color: Colors.orange),
+//      ),
+//    ));
+//  }
+//
+//  @override
+//  void onLoginSuccess(ClientLognin datas) async {
+//    setState(() => loading = false);
+//    if (datas != null) {
+//      print("sucess login " + datas.toString());
+//    }
+//  }
 }

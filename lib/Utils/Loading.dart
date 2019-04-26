@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class ShowLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Material(
+        child: Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.white,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -19,12 +21,15 @@ class ShowLoadingView extends StatelessWidget {
             ),
             Text(
               "Chargement",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  color: Colors.black),
             )
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -34,9 +39,11 @@ class ShowConnectionErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Material(
+        child: Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.white,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -62,7 +69,7 @@ class ShowConnectionErrorView extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -72,9 +79,11 @@ class ShowLoadingErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Material(
+        child: Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.white,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -99,6 +108,6 @@ class ShowLoadingErrorView extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

@@ -14,11 +14,11 @@ class ServicePresenter {
 
   ServicePresenter(this._view);
 
-  loadTarif() {
-    api.getService().then((List<Service> service) {
-      print(service);
-      if (service != null) {
-        _view.onLoadingSuccess(service);
+  loadServices() {
+    api.getService().then((List<Service> services) {
+      print(services);
+      if (services != null) {
+        _view.onLoadingSuccess(services);
       } else
         _view.onLoadingError();
     }).catchError((onError) {

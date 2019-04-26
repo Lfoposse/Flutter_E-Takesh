@@ -14,8 +14,6 @@ class PagerIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     List<PageBubble> bubbles = [];
     for (var i = 0; i < viewModel.pages.length; ++i) {
-      final page = viewModel.pages[i];
-
       var percentActive;
 
       if (i == viewModel.activeIndex) {
@@ -37,7 +35,7 @@ class PagerIndicator extends StatelessWidget {
       bubbles.add(
         new PageBubble(
           viewModel: new PageBubbleViewModel(
-            page.iconAssetPath,
+//            page.iconAssetPath,
             isHollow,
             percentActive,
           ),
@@ -45,7 +43,7 @@ class PagerIndicator extends StatelessWidget {
       );
     }
 
-    final BUBBLE_WIDHT = 55.0;
+    final BUBBLE_WIDHT = 35.0;
     final baseTranslation =
         ((viewModel.pages.length * BUBBLE_WIDHT) / 2) - (BUBBLE_WIDHT / 2);
     var translation = baseTranslation - (viewModel.activeIndex * BUBBLE_WIDHT);
@@ -95,32 +93,32 @@ class PageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      width: 55.0,
-      height: 65.0,
+      width: 35.0,
+      height: 45.0,
       child: new Center(
         child: new Container(
-          width: lerpDouble(20.0, 45.0, viewModel.activePercent),
-          height: lerpDouble(20.0, 45.0, viewModel.activePercent),
+          width: lerpDouble(15.0, 40.0, viewModel.activePercent),
+          height: lerpDouble(15.0, 40.0, viewModel.activePercent),
           decoration: new BoxDecoration(
             shape: BoxShape.circle,
             color: viewModel.isHollow
-                ? const Color(0x880C60A8)
+                ? const Color(0xFF0C60A8)
                     .withAlpha(0x88 * viewModel.activePercent.round())
-                : const Color(0x880C60A8),
+                : const Color(0xFF0C60A8),
             border: new Border.all(
               color: viewModel.isHollow
-                  ? const Color(0x88FFFFFF).withAlpha(
-                      (0x88 * (1.0 - viewModel.activePercent)).round())
+                  ? const Color(0x77FFFFFF).withAlpha(
+                      (0x88 * (0.2 - viewModel.activePercent)).round())
                   : Colors.transparent,
               width: 3.0,
             ),
           ),
           child: new Opacity(
             opacity: viewModel.activePercent,
-            child: Image.asset(
-              viewModel.iconAssetPath,
+//            child: Image.asset(
+//              viewModel.iconAssetPath,
 //              color: viewModel.color,
-            ),
+//            ),
           ),
         ),
       ),
@@ -129,12 +127,12 @@ class PageBubble extends StatelessWidget {
 }
 
 class PageBubbleViewModel {
-  final String iconAssetPath;
+//  final String iconAssetPath;
   final bool isHollow;
   final double activePercent;
 
   PageBubbleViewModel(
-    this.iconAssetPath,
+//    this.iconAssetPath,
     this.isHollow,
     this.activePercent,
   );

@@ -1,89 +1,220 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:etakesh_client/DAO/Presenters/ServicePresenter.dart';
 import 'package:etakesh_client/Models/services.dart';
+import 'package:etakesh_client/Utils/Loading.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class TarifsPage extends StatefulWidget {
   @override
   State createState() => TarifsPageState();
 }
 
-class TarifsPageState extends State<TarifsPage> {
-  final String url = "http://api.e-takesh.com:26960/api/services";
-  final String token =
-      "?access_token=qo4zzroXKByPdTX7AsAdZNOORyTlJ60FSFcHRqmXK9DTgigallXgCMCHLV29j8hp";
+class TarifsPageState extends State<TarifsPage> implements ServiceContract {
+  int stateIndex;
+  List<Service> services;
+  ServicePresenter _presenter;
 
-  Future<List<Service1>> getPost() async {
-    final response = await http.get(
-      Uri.encodeFull(url + token),
-      headers: {HttpHeaders.acceptHeader: "application/json"},
-    );
+  @override
+  void initState() {
+    stateIndex = 0;
+    _presenter = new ServicePresenter(this);
+    _presenter.loadServices();
+    super.initState();
+  }
 
-    if (response.statusCode == 200) {
-      // If the call to the server was successful, parse the JSON
-
-      var convertDataToJson = json.decode(response.body);
-      List<Service1> services = [];
-
-      for (var p in convertDataToJson) {
-        Service1 serv = Service1.fromJson(p);
-        services.add(serv);
-      }
-      return services;
-    } else {
-      // If that call was not successful, throw an error.
-      throw Exception(
-          'Failed to load services error' + response.statusCode.toString());
-    }
+  Widget header() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              new Padding(
+                padding: new EdgeInsets.only(left: 16.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Text(
+                      "Services",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                  ],
+                ),
+              ),
+              new Padding(
+                padding: new EdgeInsets.only(left: 22.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Text(
+                      "Yaounde",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                  ],
+                ),
+              ),
+              new Padding(
+                padding: const EdgeInsets.only(right: 36.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      "Douala",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Tarifs des services'),
-        backgroundColor: Colors.black87,
-      ),
-      body: Container(
-        child: FutureBuilder(
-          future: getPost(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return new Center(
+    Card getItem(indexItem) {
+      return Card(
+          child: Padding(
+              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Padding(
+                      padding: new EdgeInsets.only(left: 16.0),
                       child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          new Card(
-                            child: new Container(
-                              child: new ListTile(
-                                title: Text(snapshot.data[index].intitule),
-                                subtitle: Text(
-                                    snapshot.data[index].prix.toString() +
-                                        ' XAF'),
-                              ),
-                              padding: const EdgeInsets.all(20.0),
-                            ),
-                          )
+                          new Text(services[indexItem].intitule,
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.w400)),
+                          new Text(
+                            "Facture par heure",
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                          ),
                         ],
                       ),
-                    );
-                  });
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
+                    ),
+                    new Padding(
+                      padding: new EdgeInsets.only(left: 1.0),
+                      child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(
+                            services[indexItem].prix.toString() + " XAF",
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.w400),
+                          ),
+                          new Text(
+                            "l'heure",
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(
+                            services[indexItem].prix.toString() + " XAF",
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.w400),
+                          ),
+                          new Text(
+                            "l'heure",
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )));
+    }
 
-            // By default, show a loading spinner
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
-      ),
-    );
+    switch (stateIndex) {
+      case 0:
+        return ShowLoadingView();
+
+      case 2:
+        return ShowConnectionErrorView(_onRetryClick);
+
+      default:
+        return new Scaffold(
+          appBar: new AppBar(
+            title: new Text(
+              'Tarifs des services',
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.black,
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+          body: Container(
+              child: SingleChildScrollView(
+                  child: Column(
+            children: <Widget>[
+              header(),
+              Divider(),
+              ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(0.0),
+                  scrollDirection: Axis.vertical,
+                  itemCount: services.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    return getItem(index);
+                  }),
+            ],
+          ))),
+        );
+    }
+  }
+
+  ///relance le service en cas d'echec de connexion internet
+  void _onRetryClick() {
+    setState(() {
+      stateIndex = 0;
+      _presenter.loadServices();
+    });
+  }
+
+  ///soucis de connexion internet
+  @override
+  void onConnectionError() {
+    setState(() {
+      stateIndex = 2;
+    });
+  }
+
+  ///en cas de soucis
+  @override
+  void onLoadingError() {
+    setState(() {
+      stateIndex = 1;
+    });
+  }
+
+  ///si tout ce passe bien
+  @override
+  void onLoadingSuccess(List<Service> services) {
+    setState(() {
+      this.services = services;
+      stateIndex = 3;
+    });
   }
 }

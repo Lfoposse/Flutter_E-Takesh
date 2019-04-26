@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:etakesh_client/DAO/Rest_dt.dart';
+import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
+import 'package:etakesh_client/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class CreatePassWordPage extends StatefulWidget {
   final String phone_n;
@@ -24,7 +31,9 @@ class CreatePassWordPage extends StatefulWidget {
 class _CreatePassWordPageState extends State<CreatePassWordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _agreedToTOS = true;
-
+  var _passwordController = TextEditingController();
+  var _confirmPassController = TextEditingController();
+  RestDatasource api = new RestDatasource();
   @override
   void initState() {
     // TODO: implement initState
@@ -59,27 +68,6 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
-              Center(
-                child: Text(
-                    this.widget.phone_n +
-                        '' +
-                        this.widget.email +
-                        '' +
-                        this.widget.nom +
-                        '' +
-                        this.widget.prenom +
-                        '' +
-                        this.widget.d_naissance +
-                        '' +
-                        this.widget.ville,
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold)),
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Container(
@@ -95,6 +83,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                     )),
               ),
               new TextFormField(
+                controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Mot de passe',
                   icon: Icon(
@@ -104,13 +93,10 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                 ),
                 obscureText: true,
                 keyboardType: TextInputType.text,
-                validator: (String value) {
-                  if (value.trim().isEmpty) {
-                    return 'Mot de passe obligatoire';
-                  }
-                },
+                validator: validatePassword,
               ),
               new TextFormField(
+                controller: _confirmPassController,
                 decoration: const InputDecoration(
                   labelText: 'Confirmer votre mot de passe',
                   icon: Icon(
@@ -120,11 +106,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                 ),
                 obscureText: true,
                 keyboardType: TextInputType.text,
-                validator: (String value) {
-                  if (value.trim().isEmpty) {
-                    return 'Confirmation vide';
-                  }
-                },
+                validator: validatePasswordMatching,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -152,15 +134,102 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
     );
   }
 
+  String validatePassword(String value) {
+    if (value.length == 0) {
+      return "Mot de passe obligatoire";
+    } else if (value.length < 6) {
+      return "Le Mot de passe doit comporter au moins 6 caracteres";
+    }
+    return null;
+  }
+
+  String validatePasswordMatching(String value) {
+    if (value.length == 0) {
+      return "Confirmation vide";
+    } else if (value != _passwordController.text) {
+      return 'Ne correspond pas avec le mot de passe entre precdement';
+    }
+    return null;
+  }
+
   bool _submittable() {
     return _agreedToTOS;
   }
 
   void _submit() {
     if (_formKey.currentState.validate()) {
-      const SnackBar snackBar = SnackBar(content: Text('Form submitted'));
+      createUser();
+    }
+  }
 
-      Scaffold.of(context).showSnackBar(snackBar);
+  Future createUser() async {
+//    on creer le User
+    final response1 = await http.post(
+      Uri.encodeFull("http://api.e-takesh.com:26960/api/Users"),
+      body: {"email": this.widget.email, "password": _passwordController.text},
+      headers: {HttpHeaders.acceptHeader: "application/json"},
+    );
+
+    if (response1.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      var convertDataToJson1 = json.decode(response1.body);
+      print(convertDataToJson1["email"]);
+      print(convertDataToJson1["id"]);
+//    on connecte le User pour avoir le Token
+      final response2 = await http.post(
+        Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+        body: {
+          "email": this.widget.email,
+          "password": _passwordController.text
+        },
+        headers: {HttpHeaders.acceptHeader: "application/json"},
+      );
+
+      if (response2.statusCode == 200) {
+//        on utilise le token pour creer le client en question
+
+        var convertDataToJson2 = json.decode(response2.body);
+        print("Token");
+        print(convertDataToJson2["id"]);
+        final response3 = await http.post(
+          Uri.encodeFull(
+              "http://api.e-takesh.com:26960/api/clients?access_token=" +
+                  convertDataToJson2["id"]),
+          body: {
+            "UserId": convertDataToJson1["id"].toString(),
+            "email": this.widget.email,
+            "password": _passwordController.text,
+            "nom": this.widget.nom,
+            "prenom": this.widget.prenom,
+            "telephone": this.widget.phone_n,
+            "ville": this.widget.ville,
+            "date_naissance": "1990-01-02",
+            "status": "Creer",
+            "pays": "Cameroun"
+          },
+          headers: {HttpHeaders.acceptHeader: "application/json"},
+        );
+        if (response3.statusCode == 200) {
+//          redirige a la page de connexion
+          AppSharedPreferences().setAccountCreate(true);
+          Navigator.push(
+            context,
+            new MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        } else {
+          // If that call was not successful, throw an error.
+          throw Exception(
+              'Erreur de creation du client' + response3.body.toString());
+        }
+      } else {
+        // If that call was not successful, throw an error.
+        throw Exception(
+            'Erreur de connexion du User' + response2.body.toString());
+      }
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception(
+          'Erreur de creation du User' + response1.statusCode.toString());
     }
   }
 
