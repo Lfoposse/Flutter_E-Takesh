@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:etakesh_client/DAO/Presenters/LoginPresenter.dart';
+import 'package:etakesh_client/Database/DatabaseHelper.dart';
+import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:etakesh_client/pages/home_page.dart';
 import "package:flutter/material.dart";
@@ -41,7 +45,7 @@ class Login extends StatefulWidget {
   createState() => LoginState();
 }
 
-class LoginState extends State<Login> {
+class LoginState extends State<Login> implements LoginContract {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool loading = false;
@@ -49,10 +53,11 @@ class LoginState extends State<Login> {
   var _emailController = TextEditingController();
   FocusNode emailNode;
   FocusNode passawordNode;
+  LoginPresenter _presenter;
 
-//  LoginState() {
-//    _presenter = new LoginPresenter(this);
-//  }
+  LoginState() {
+    _presenter = new LoginPresenter(this);
+  }
 
   @override
   void initState() {
@@ -90,6 +95,74 @@ class LoginState extends State<Login> {
     );
   }
 
+  Future login() async {
+    //    on creer le User
+    final response1 = await http.post(
+      Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+      body: {
+        "email": _emailController.text,
+        "password": _passwordController.text
+      },
+      headers: {HttpHeaders.acceptHeader: "application/json"},
+    );
+
+    if (response1.statusCode == 200) {
+      Login2 data = Login2.fromJson(json.decode(response1.body));
+      setState(() {
+        loading = false;
+      });
+      _presenter.detailClient(data.userId, data.token);
+    } else {
+      setState(() {
+        loading = false;
+      });
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text(
+          "Indentifiants non valides",
+          style: TextStyle(color: Colors.orange),
+        ),
+      ));
+    }
+//    _presenter
+//        .doLogin(_emailController.text, _passwordController.text)
+//        .then((Login2 credentials) {
+//      if (credentials != null) {
+//        var queryParameters = {
+//          "where": {
+//            "UserId": credentials.userId,
+//          }
+//        };
+////                +JSON.stringify(this.date_cmd)+`&access_token=`+token;
+//        final response2 = await http.get(
+//          Uri.encodeFull(
+//              "http://api.e-takesh.com:26960/api/clients/findOne?filter=" +
+//                  queryParameters.toString() +
+//                  "&access_token=" +
+//                  credentials.token),
+//          headers: {HttpHeaders.acceptHeader: "application/json"},
+//        );
+////                +JSON.stringify(this.date_cmd)+`&access_token=`+token
+//        if (response2.statusCode == 200) {
+//          print("User " + response2.body);
+//        } else {
+//          throw Exception('Erreur de connexion du client' +
+//              response2.body.toString());
+//        }
+//      }
+//    }).catchError((onError) {
+//      print("Pb " + onError.toString());
+//      setState(() {
+//        loading = false;
+//      });
+//      Scaffold.of(context).showSnackBar(new SnackBar(
+//        content: new Text(
+//          "Indentifiants non valides",
+//          style: TextStyle(color: Colors.red),
+//        ),
+//      ));
+//    });
+  }
+
   Widget LoginButton(BuildContext context) {
     return new SizedBox(
       height: 45.0,
@@ -106,24 +179,30 @@ class LoginState extends State<Login> {
             setState(() {
               loading = true;
             });
-//            _presenter.doLogin(_emailController.text, _passwordController.text);
-            Future.delayed(Duration(seconds: 7), () async {
-              //connecte le user
+
+            Future.delayed(Duration(seconds: 2), () async {
+              //connecte le user 10 ans (token)
               final response1 = await http.post(
                 Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
                 body: {
                   "email": _emailController.text,
-                  "password": _passwordController.text
+                  "password": _passwordController.text,
+                  "ttl": "315360000"
                 },
                 headers: {HttpHeaders.acceptHeader: "application/json"},
               );
               if (response1.statusCode == 200) {
+                Login2 login;
+                login = Login2.fromJson(json.decode(response1.body));
+
 //                var convertDataToJson1 = json.decode(response1.body);
                 AppSharedPreferences().setAccountCreate(true);
                 AppSharedPreferences().setAppLoggedIn(true);
                 setState(() {
                   loading = false;
                 });
+                print("User" + login.token);
+                AppSharedPreferences().setUserToken(login.token);
                 Scaffold.of(context).showSnackBar(new SnackBar(
                   content: new Text(
                     "Connexion reussite",
@@ -133,12 +212,29 @@ class LoginState extends State<Login> {
                 Navigator.of(context).pushAndRemoveUntil(
                     new MaterialPageRoute(builder: (context) => HomePage()),
                     ModalRoute.withName(Navigator.defaultRouteName));
+                new DatabaseHelper().saveUser(login);
 
-//                Navigator.push(
-//                  context,
-//                  new MaterialPageRoute(builder: (context) => HomePage()),
+                ///Client by userid
+//                var queryParameters = """{"where": {"UserId": """ +
+//                    login.userId.toString() +
+//                    """}}""";
+//                final response2 = await http.get(
+//                  Uri.encodeFull(
+//                      "http://api.e-takesh.com:26960/api/clients/findOne?access_token=" +
+//                          login.token +
+//                          "&filter=" +
+//                          queryParameters),
+//                  headers: {HttpHeaders.acceptHeader: "application/json"},
 //                );
-
+//
+//                if (response2.statusCode == 200) {
+//                  Client1 client;
+//                  client = Client1.fromJson(json.decode(response2.body));
+//                  print("Good " + client.toString());
+//                } else {
+//                  throw Exception('Erreur recuperation du client' +
+//                      response1.body.toString());
+//                }
               } else {
                 setState(() {
                   loading = false;
@@ -146,7 +242,7 @@ class LoginState extends State<Login> {
                 Scaffold.of(context).showSnackBar(new SnackBar(
                   content: new Text(
                     "Indentifiants non valides",
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.deepOrange),
                   ),
                 ));
                 // If that call was not successful, throw an error.
@@ -203,7 +299,7 @@ class LoginState extends State<Login> {
                     if (value.isEmpty) {
                       return 'Veillez saisir votre email';
                     } else if (!new RegExp(
-                            r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
                         .hasMatch(value)) {
                       return "Email non valide";
                     }
@@ -290,37 +386,43 @@ class LoginState extends State<Login> {
     );
   }
 
-//  @override
-//  void onLoginError() {
-//    setState(() {
-//      loading = false;
-//    });
-//    Scaffold.of(context).showSnackBar(new SnackBar(
-//      content: new Text(
-//        "Indentifiants non valides",
-//        style: TextStyle(color: Colors.red),
-//      ),
-//    ));
-//  }
-//
-//  @override
-//  void onConnectionError() {
-//    setState(() {
-//      loading = false;
-//    });
-//    Scaffold.of(context).showSnackBar(new SnackBar(
-//      content: new Text(
-//        "Verifiez votre connexion internet",
-//        style: TextStyle(color: Colors.orange),
-//      ),
-//    ));
-//  }
-//
-//  @override
-//  void onLoginSuccess(ClientLognin datas) async {
-//    setState(() => loading = false);
-//    if (datas != null) {
-//      print("sucess login " + datas.toString());
-//    }
-//  }
+  @override
+  void onLoginError() {
+    setState(() {
+      loading = false;
+    });
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text(
+        "Indentifiants non valides",
+        style: TextStyle(color: Colors.red),
+      ),
+    ));
+  }
+
+  @override
+  void onConnectionError() {
+    setState(() {
+      loading = false;
+    });
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text(
+        "Verifiez votre connexion internet",
+        style: TextStyle(color: Colors.orange),
+      ),
+    ));
+  }
+
+  @override
+  void onLoginSuccess(Client1 datas) async {
+    setState(() => loading = false);
+    if (datas != null) {
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text(
+          "Connexion reussite",
+          style: TextStyle(color: Colors.green),
+        ),
+      ));
+      print("sucess login " + datas.toString());
+    }
+  }
 }

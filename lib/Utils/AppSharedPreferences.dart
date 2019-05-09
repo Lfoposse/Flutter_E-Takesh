@@ -9,6 +9,7 @@ class AppSharedPreferences {
   final String _IsFirstLaunch = "isFirstLaunch";
   final String _IsLoggedIn = "isLoggedIn";
   final String _IsUserCreateAccount = "isUserCreateAccount";
+  final String _Token = "token";
 
   /// ------------------------------------------------------------
   /// Method that determine if the app is launched for the first time
@@ -44,6 +45,24 @@ class AppSharedPreferences {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     return prefs.setBool(_IsLoggedIn, value);
+  }
+
+  /// ------------------------------------------------------------
+  /// Method to get the token of user
+  /// ------------------------------------------------------------
+  Future<String> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString(_Token) ?? '';
+  }
+
+  /// ----------------------------------------------------------
+  /// Method that saves the token of user when logged
+  /// ----------------------------------------------------------
+  Future<bool> setUserToken(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.setString(_Token, value);
   }
 
   /// ------------------------------------------------------------

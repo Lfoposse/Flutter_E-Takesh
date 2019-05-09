@@ -43,7 +43,7 @@ class PagerIndicator extends StatelessWidget {
       );
     }
 
-    final BUBBLE_WIDHT = 35.0;
+    final BUBBLE_WIDHT = 10.0;
     final baseTranslation =
         ((viewModel.pages.length * BUBBLE_WIDHT) / 2) - (BUBBLE_WIDHT / 2);
     var translation = baseTranslation - (viewModel.activeIndex * BUBBLE_WIDHT);
@@ -93,8 +93,9 @@ class PageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      width: 35.0,
-      height: 45.0,
+      margin: EdgeInsets.all(5.0),
+      width: 10.0,
+      height: 20.0,
       child: new Center(
         child: new Container(
           width: lerpDouble(15.0, 40.0, viewModel.activePercent),
@@ -107,7 +108,7 @@ class PageBubble extends StatelessWidget {
                 : const Color(0xFF0C60A8),
             border: new Border.all(
               color: viewModel.isHollow
-                  ? const Color(0x77FFFFFF).withAlpha(
+                  ? const Color(0xFFFFFFFF).withAlpha(
                       (0x88 * (0.2 - viewModel.activePercent)).round())
                   : Colors.transparent,
               width: 3.0,

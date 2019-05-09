@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+//class TarifsPage extends StatefulWidget {
+//  @override
+//  State createState() => TarifsPageState();
+//}
+//
+//class TarifsPageState extends State<TarifsPage> implements ServiceContract {}
+
 class CoursesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -11,17 +11,32 @@ class NetworkUtil {
 
   final JsonDecoder _decoder = new JsonDecoder();
 
-  Future<dynamic> get(String url) {
+  Future<dynamic> get(
+    String url,
+  ) {
     print(url);
 
     return http.get(url).then((http.Response response) {
       final String res = response.body;
 
-      print(res);
-      if (/*statusCode < 200 || statusCode > 400 ||*/ json == null) {
+      print("OK" + response.body);
+      if (response.statusCode != 200) {
         throw new Exception("Erreur de connexion");
       }
       return _decoder.convert(res);
+    }).catchError(
+        (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  Future<dynamic> getOne(
+    String url,
+  ) {
+    print(url);
+    return http.get(url).then((http.Response response) {
+      if (response.statusCode != 200) {
+        throw new Exception("Erreur de connexion");
+      }
+      return response.body;
     }).catchError(
         (onError) => new Future.error(new Exception(onError.toString())));
   }

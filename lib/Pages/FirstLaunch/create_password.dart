@@ -34,9 +34,15 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
   var _passwordController = TextEditingController();
   var _confirmPassController = TextEditingController();
   RestDatasource api = new RestDatasource();
+  bool existemail;
+  bool loading;
+  bool error;
   @override
   void initState() {
     // TODO: implement initState
+    existemail = false;
+    loading = false;
+    error = false;
     print(this.widget.phone_n);
     print(this.widget.email);
     print(this.widget.nom);
@@ -55,10 +61,15 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
           child: Icon(Icons.arrow_forward),
           tooltip: "Adresse email",
           onPressed: _submittable() ? _submit : null),
-      appBar: AppBar(
-        title: const Text('Mot de passe'),
+      appBar: new AppBar(
+        title: new Text(
+          'Mot de passe',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         elevation: 0.0,
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: new SafeArea(
         top: false,
@@ -71,7 +82,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Container(
-                    margin: EdgeInsets.only(bottom: 50.0, top: 50.0),
+                    margin: EdgeInsets.only(bottom: 40.0, top: 50.0),
                     alignment: Alignment.center,
                     child: Text(
                       "Creez un mot de passe pour votre compte",
@@ -82,6 +93,17 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                           fontSize: 24.0, fontWeight: FontWeight.w300),
                     )),
               ),
+              loading
+                  ? Container(
+                      height: 25.0,
+                      width: 20.0,
+//                    padding: const EdgeInsets.only(
+//                        left: 20, right: 20, top: 30.0, bottom: 15.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : Container(),
               new TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
@@ -108,6 +130,41 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                 keyboardType: TextInputType.text,
                 validator: validatePasswordMatching,
               ),
+              error
+                  ? Container(
+//              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
+                      child: Center(
+                        child: Text(
+                          'Probleme survenue , veillez reessayer.',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              existemail
+                  ? Container(
+//              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
+                      child: Center(
+                      child: new RichText(
+                          text: new TextSpan(
+                        text: 'Desole cette email : ',
+                        style: TextStyle(color: Colors.red),
+                        children: <TextSpan>[
+                          new TextSpan(
+                            text: this.widget.email,
+                            style: new TextStyle(
+                              color: Colors.black,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                          new TextSpan(
+                              text:
+                                  ' \na deja ete utiliser veuillez utiliser une autre adresse',
+                              style: TextStyle(color: Colors.red)),
+                        ],
+                      )),
+                    ))
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Row(
@@ -119,9 +176,13 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                     ),
                     GestureDetector(
                       onTap: () => _setAgreedToTOS(!_agreedToTOS),
-                      child: const Text(
+                      child: Text(
                         "J'accepte les conditions d'utilisation \nde l'application E-Takesh",
                         maxLines: 2,
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w300,
+                            color: _agreedToTOS ? Colors.black87 : Colors.red),
                       ),
                     ),
                   ],
@@ -163,6 +224,11 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
   }
 
   Future createUser() async {
+    setState(() {
+      loading = true;
+      existemail = false;
+      error = false;
+    });
 //    on creer le User
     final response1 = await http.post(
       Uri.encodeFull("http://api.e-takesh.com:26960/api/Users"),
@@ -203,7 +269,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
             "prenom": this.widget.prenom,
             "telephone": this.widget.phone_n,
             "ville": this.widget.ville,
-            "date_naissance": "1990-01-02",
+            "date_naissance": "1990-01-01",
             "status": "Creer",
             "pays": "Cameroun"
           },
@@ -217,16 +283,37 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
             new MaterialPageRoute(builder: (context) => LoginPage()),
           );
         } else {
+          setState(() {
+            loading = false;
+            existemail = false;
+            error = true;
+          });
           // If that call was not successful, throw an error.
           throw Exception(
               'Erreur de creation du client' + response3.body.toString());
         }
       } else {
+        setState(() {
+          loading = false;
+          existemail = false;
+          error = true;
+        });
         // If that call was not successful, throw an error.
         throw Exception(
             'Erreur de connexion du User' + response2.body.toString());
       }
+    } else if (response1.statusCode == 422) {
+      setState(() {
+        loading = false;
+        existemail = true;
+        error = false;
+      });
     } else {
+      setState(() {
+        loading = false;
+        existemail = false;
+        error = true;
+      });
       // If that call was not successful, throw an error.
       throw Exception(
           'Erreur de creation du User' + response1.statusCode.toString());

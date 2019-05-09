@@ -9,9 +9,11 @@ import 'package:flutter/services.dart';
 import 'theme.dart';
 
 //
-void main() {
+void main() async {
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
-  SystemChrome.setSystemUIOverlayStyle(lightSystemUiOverlayStyle);
+//  SystemChrome.setSystemUIOverlayStyle(lightSystemUiOverlayStyle);
 }
 
 class MyApp extends StatelessWidget {

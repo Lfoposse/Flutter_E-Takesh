@@ -102,7 +102,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final hintStyle = TextStyle(color: Colors.black26);
   final String url = "http://api.e-takesh.com:26960/api/clients";
   final String token =
-      "?access_token=ZU622AuXXgidgDmWE2KUPp3jnoPq8KhB0SPnsj9F5US1uttjijqMGKDh4R7NqG8m";
+      "?access_token=TmxqQVrxAKZTXjNgiOxzQVlf9gql9C3oKEYLRkTtjkoqkUD5YcHmPR6TiIaVVsAj";
   //
 
   @override

@@ -87,22 +87,19 @@ class _PresentationState extends State<Presentation>
             return MainLaunchPage();
           }));
         },
-        tooltip: "Passer les pages de presentation",
-        child: Text(
-          "Passer",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        foregroundColor: Colors.black,
-        backgroundColor: Color(0xFFDEAC17),
+        tooltip: "Passer",
+        child: Icon(Icons.arrow_forward),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF0C60A8),
 //        shape: _DiamondBorder(),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Container(
-          height: 27.0,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+//      bottomNavigationBar: BottomAppBar(
+//        color: Colors.white,
+//        child: Container(
+//          height: 20.0,
+//        ),
+//      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: new Stack(
         children: [
           new Page(

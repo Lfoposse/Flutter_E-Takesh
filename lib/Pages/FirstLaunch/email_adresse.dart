@@ -27,10 +27,15 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
           child: Icon(Icons.arrow_forward),
           tooltip: "Adresse email",
           onPressed: _submittable() ? _submit : null),
-      appBar: AppBar(
-        title: Text("Saisie de donnee"),
+      appBar: new AppBar(
+        title: new Text(
+          'Donnees personnelles',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         elevation: 0.0,
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: new SafeArea(
         top: false,
@@ -63,6 +68,10 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                 validator: (String value) {
                   if (value.trim().isEmpty) {
                     return 'Adresse email obligatoire';
+                  } else if (!new RegExp(
+                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                      .hasMatch(value)) {
+                    return "Email non valide";
                   }
                 },
               ),
@@ -90,18 +99,18 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                   }
                 },
               ),
-              new TextFormField(
-                controller: _naissanceController,
-                decoration: const InputDecoration(
-                    labelText: 'Date de naissance',
-                    icon: Icon(Icons.calendar_today, color: Colors.black)),
-                keyboardType: TextInputType.datetime,
-                validator: (String value) {
-                  if (value.trim().isEmpty) {
-                    return 'Date de naissance obligatoire';
-                  }
-                },
-              ),
+//              new TextFormField(
+//                controller: _naissanceController,
+//                decoration: const InputDecoration(
+//                    labelText: 'Date de naissance',
+//                    icon: Icon(Icons.calendar_today, color: Colors.black)),
+//                keyboardType: TextInputType.datetime,
+//                validator: (String value) {
+//                  if (value.trim().isEmpty) {
+//                    return 'Date de naissance obligatoire';
+//                  }
+//                },
+//              ),
               new TextFormField(
                 controller: _villeController,
                 decoration: const InputDecoration(
@@ -124,9 +133,13 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                     ),
                     GestureDetector(
                       onTap: () => _setAgreedToTOS(!_agreedToTOS),
-                      child: const Text(
+                      child: Text(
                         "Je certifie avoir ecris , lus \n et valide ces informations ",
                         maxLines: 2,
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w300,
+                            color: _agreedToTOS ? Colors.black87 : Colors.red),
                       ),
                     ),
                   ],
@@ -170,154 +183,3 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
     });
   }
 }
-
-//import 'package:flutter/material.dart';
-//class EnterEmailPage extends StatelessWidget {
-//  Color backColor = Colors.white;
-//  final String phone_n;
-//
-//  EnterEmailPage({Key key, this.phone_n}) : super(key: key);
-//  @override
-//  Widget build(BuildContext context) {
-//    return new Scaffold(
-//        floatingActionButton: FloatingActionButton(
-//            backgroundColor: Colors.black,
-//            foregroundColor: Colors.white,
-//            child: Icon(Icons.arrow_forward),
-//            tooltip: "Adresse email",
-//            onPressed: () {}),
-//        appBar: new AppBar(
-//          title: Text("Vos informations"),
-//          backgroundColor: Colors.black87,
-//        ),
-//        body: Container(
-//          decoration: BoxDecoration(color: backColor),
-//          child: Column(
-//            children: [
-//              new Expanded(
-//                flex: 1,
-//                child: new Container(
-//                  width: double
-//                      .infinity, // this will give you flexible width not fixed width
-//                  color: backColor, // variable
-//                  child: new Column(
-//                    children: <Widget>[
-//                      new Expanded(
-//                        flex: 1,
-//                        child: new Container(
-//                            alignment: Alignment.center,
-////                        padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
-//                            child: Text(
-//                              "Quelle est votre adresse email ?"
-//                                  "$phone_n",
-//                              overflow: TextOverflow.ellipsis,
-//                              maxLines: 2,
-//                              textAlign: TextAlign.center,
-//                              style: TextStyle(
-//                                  fontSize: 24.0, fontWeight: FontWeight.w300),
-//                            )),
-//                      ),
-//                    ],
-//                  ),
-//                ),
-//              ),
-//              new Expanded(
-//                flex: 2,
-//                child: new Container(
-//                  width: double
-//                      .infinity, // this will give you flexible width not fixed width
-//                  color: Colors.white,
-//                  child: new Column(
-//                    children: <Widget>[
-//                      new Expanded(
-//                        flex: 1,
-//                        child: new Container(
-//                            padding: EdgeInsets.only(left: 20.0, bottom: 20.0),
-//                            child: Column(
-//                              children: <Widget>[
-//                                Expanded(
-//                                  child: SizedBox(
-//                                      height: 50.0,
-//                                      child: Container(
-//                                          padding: EdgeInsets.only(
-//                                              left: 10.0, right: 10.0),
-////                                softWrap: true,
-//                                          child: TextField(
-//                                              autofocus: true,
-//                                              keyboardType:
-//                                                  TextInputType.emailAddress,
-//                                              style: TextStyle(
-//                                                  fontSize: 23.0,
-//                                                  fontWeight: FontWeight.w300,
-//                                                  color: Colors.black87),
-//                                              decoration: InputDecoration(
-//                                                  icon: Icon(Icons.email),
-//                                                  hintText: 'nom@example.com',
-//                                                  hintStyle: TextStyle(
-//                                                      fontSize: 23.0,
-//                                                      fontWeight:
-//                                                          FontWeight.w300,
-//                                                      color:
-//                                                          Colors.black87))))),
-//                                ),
-//                                Expanded(
-//                                  child: SizedBox(
-//                                      height: 50.0,
-//                                      child: Container(
-//                                          padding: EdgeInsets.only(
-//                                              left: 10.0, right: 10.0),
-//                                          child: TextField(
-//                                              autofocus: true,
-//                                              keyboardType: TextInputType.text,
-//                                              style: TextStyle(
-//                                                  fontSize: 23.0,
-//                                                  fontWeight: FontWeight.w300,
-//                                                  color: Colors.black87),
-//                                              decoration: InputDecoration(
-//                                                  icon:
-//                                                      Icon(Icons.perm_identity),
-//                                                  hintText: 'nom',
-//                                                  hintStyle: TextStyle(
-//                                                      fontSize: 23.0,
-//                                                      fontWeight:
-//                                                          FontWeight.w300,
-//                                                      color:
-//                                                          Colors.black87))))),
-//                                ),
-//                                Expanded(
-//                                  child: SizedBox(
-//                                      height: 50.0,
-//                                      child: Container(
-//                                          padding: EdgeInsets.only(
-//                                              left: 10.0, right: 10.0),
-//                                          child: TextField(
-//                                              autofocus: true,
-//                                              keyboardType: TextInputType.text,
-//                                              style: TextStyle(
-//                                                  fontSize: 23.0,
-//                                                  fontWeight: FontWeight.w300,
-//                                                  color: Colors.black87),
-//                                              decoration: InputDecoration(
-//                                                  icon:
-//                                                      Icon(Icons.perm_identity),
-//                                                  hintText: 'prenom',
-//                                                  hintStyle: TextStyle(
-//                                                      fontSize: 23.0,
-//                                                      fontWeight:
-//                                                          FontWeight.w300,
-//                                                      color:
-//                                                          Colors.black87))))),
-//                                )
-//                              ],
-//                            )),
-//                      ),
-//                    ],
-//                  ),
-//                  //variable
-//                ),
-//              ),
-//            ],
-//          ),
-//        ));
-//  }
-//}

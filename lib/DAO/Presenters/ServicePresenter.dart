@@ -14,8 +14,8 @@ class ServicePresenter {
 
   ServicePresenter(this._view);
 
-  loadServices() {
-    api.getService().then((List<Service> services) {
+  loadServices(String token) {
+    api.getService(token).then((List<Service> services) {
       print(services);
       if (services != null) {
         _view.onLoadingSuccess(services);

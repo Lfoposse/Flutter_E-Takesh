@@ -24,7 +24,7 @@ class CircleRevealClipper extends CustomClipper<Rect> {
 
   @override
   Rect getClip(Size size) {
-    final epicenter = new Offset(size.width / 2, size.height * 0.9);
+    final epicenter = new Offset(size.width / 2, size.height * 0.5);
 
     double theta = atan(epicenter.dy / epicenter.dx);
     final distanceToCorner = epicenter.dy / sin(theta);

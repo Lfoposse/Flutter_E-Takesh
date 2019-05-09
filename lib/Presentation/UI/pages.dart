@@ -39,7 +39,7 @@ class Page extends StatelessWidget {
         decoration: new BoxDecoration(
             image: new DecorationImage(
           image: new AssetImage(viewModel.heroAssetPath),
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
         )),
 //        color: viewModel.color,
         child: new Opacity(

@@ -3,13 +3,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EnterPhoneCodePage extends StatelessWidget {
-  Color backColor = Colors.white;
-  var _codeController = new TextEditingController();
+class EnterPhoneCodePage extends StatefulWidget {
   final String phone_n;
   final String ververId;
-
   EnterPhoneCodePage({Key key, this.phone_n, this.ververId}) : super(key: key);
+
+  @override
+  _EnterPhoneNumberPageState createState() => _EnterPhoneNumberPageState();
+}
+
+class _EnterPhoneNumberPageState extends State<EnterPhoneCodePage> {
+//class EnterPhoneCodePage extends StatelessWidget {
+  Color backColor = Colors.white;
+  var _codeController = new TextEditingController();
+  bool error;
+  bool loading;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loading = false;
+    error = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -24,7 +41,8 @@ class EnterPhoneCodePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => EnterEmailPage(phone_n: phone_n)),
+                        builder: (context) =>
+                            EnterEmailPage(phone_n: widget.phone_n)),
                   );
                 } else {
                   signIn(context);
@@ -32,9 +50,14 @@ class EnterPhoneCodePage extends StatelessWidget {
               });
             }),
         appBar: new AppBar(
-          title: const Text("Code de validation"),
+          title: new Text(
+            'Code de validation',
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
           elevation: 0.0,
+          backgroundColor: Colors.black,
+          iconTheme: IconThemeData(color: Colors.white),
         ),
         body: Container(
           decoration: BoxDecoration(color: backColor),
@@ -54,8 +77,8 @@ class EnterPhoneCodePage extends StatelessWidget {
                             alignment: Alignment.center,
 //                        padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
                             child: Text(
-                              "Saisissez le code a 6 chiffres recu au numero "
-                                  "$phone_n",
+                              "Saisissez le code a 6 chiffres recu au numero " +
+                                  widget.phone_n,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 3,
                               textAlign: TextAlign.center,
@@ -67,8 +90,19 @@ class EnterPhoneCodePage extends StatelessWidget {
                   ),
                 ),
               ),
+              loading
+                  ? Container(
+                      height: 25.0,
+                      width: 20.0,
+//                    padding: const EdgeInsets.only(
+//                        left: 20, right: 20, top: 30.0, bottom: 15.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : Container(),
               new Expanded(
-                flex: 2,
+                flex: 1,
                 child: new Container(
                   width: double
                       .infinity, // this will give you flexible width not fixed width
@@ -78,7 +112,7 @@ class EnterPhoneCodePage extends StatelessWidget {
                       new Expanded(
                         flex: 1,
                         child: new Container(
-                            padding: EdgeInsets.only(left: 20.0, bottom: 20.0),
+                            padding: EdgeInsets.only(left: 20.0, bottom: 10.0),
                             child: Row(
                               children: <Widget>[
                                 Expanded(
@@ -118,23 +152,55 @@ class EnterPhoneCodePage extends StatelessWidget {
                   //variable
                 ),
               ),
+              error
+                  ? Container(
+//              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
+                      child: Center(
+                        child: Text(
+                          'Code invalide , veillez reessayer.',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ));
   }
 
   signIn(BuildContext context) {
+    setState(() {
+      loading = true;
+      error = false;
+    });
     FirebaseAuth.instance
         .signInWithPhoneNumber(
-            verificationId: ververId, smsCode: _codeController.text)
+            verificationId: widget.ververId, smsCode: _codeController.text)
         .then((user) {
-      Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => EnterEmailPage(phone_n: phone_n)),
-      );
+      if (user != null) {
+        print('FirebaseUser ' + user.toString());
+        setState(() {
+          loading = false;
+          error = false;
+        });
+        Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => EnterEmailPage(phone_n: widget.phone_n)),
+        );
+      } else {
+        print('Bad code' + user.toString());
+        setState(() {
+          loading = false;
+          error = true;
+        });
+      }
     }).catchError((e) {
-      print(e);
+      setState(() {
+        loading = false;
+        error = true;
+      });
+      print('Bad code' + e);
     });
   }
 }

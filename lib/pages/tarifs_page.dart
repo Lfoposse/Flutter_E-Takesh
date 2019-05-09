@@ -1,5 +1,6 @@
 import 'package:etakesh_client/DAO/Presenters/ServicePresenter.dart';
 import 'package:etakesh_client/Models/services.dart';
+import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +13,20 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
   int stateIndex;
   List<Service> services;
   ServicePresenter _presenter;
-
+  String token;
   @override
   void initState() {
+    AppSharedPreferences().getToken().then((String token1) {
+      if (token1 != '') {
+        print("Get Token " + token1);
+        token = token1;
+        _presenter = new ServicePresenter(this);
+        _presenter.loadServices(token1);
+      }
+    }).catchError((err) {
+      print("Not get Token " + err.toString());
+    });
     stateIndex = 0;
-    _presenter = new ServicePresenter(this);
-    _presenter.loadServices();
     super.initState();
   }
 
@@ -189,7 +198,7 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
   void _onRetryClick() {
     setState(() {
       stateIndex = 0;
-      _presenter.loadServices();
+      _presenter.loadServices(token);
     });
   }
 

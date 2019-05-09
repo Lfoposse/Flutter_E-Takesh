@@ -13,6 +13,16 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
   bool _agreedToTOS = true;
   var _phoneController = new TextEditingController();
   String verificationId;
+  bool loading;
+  bool error;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loading = false;
+    error = false;
+  }
 
   Widget form() {
     return SafeArea(
@@ -26,7 +36,8 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Container(
-                  margin: EdgeInsets.only(bottom: 50.0, top: 50.0),
+                  margin: EdgeInsets.only(bottom: 30.0, top: 50.0),
+                  padding: EdgeInsets.only(right: 18.0, left: 18.0),
                   alignment: Alignment.center,
                   child: Text(
                     "Saisissez votre numero de telephone portable",
@@ -37,6 +48,17 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
                         TextStyle(fontSize: 24.0, fontWeight: FontWeight.w300),
                   )),
             ),
+            loading
+                ? Container(
+                    height: 25.0,
+                    width: 20.0,
+//                    padding: const EdgeInsets.only(
+//                        left: 20, right: 20, top: 30.0, bottom: 15.0),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Container(),
             TextFormField(
               controller: _phoneController,
               decoration: InputDecoration(
@@ -63,12 +85,23 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
               ],
               validator: (String value) {
                 if (value.trim().isEmpty) {
-                  return "Vous n'avez pas renseigne le numero de telephone ";
+                  return "Vous n'avez pas renseigne le numero \n de telephone ";
                 } else if (value.length < 9) {
                   return 'Numero de telephone non valide';
                 }
               },
             ),
+            error
+                ? Container(
+//              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
+                    child: Center(
+                      child: Text(
+                        'Probleme survenue , veillez reessayer.',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  )
+                : Container(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
@@ -87,7 +120,9 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
                         maxLines: 4,
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.w300),
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w300,
+                            color: _agreedToTOS ? Colors.black87 : Colors.red),
                       )),
                 ],
               ),
@@ -107,10 +142,15 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
           child: Icon(Icons.arrow_forward),
           tooltip: "Adresse email",
           onPressed: _submittable() ? _submit : null),
-      appBar: AppBar(
-        title: Text('Nouveau chez E-Takesh ?'),
+      appBar: new AppBar(
+        title: new Text(
+          'Nouveau chez E-Takesh ?',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         elevation: 0.0,
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: form(),
     );
@@ -127,12 +167,21 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
   }
 
   Future verifyPhone(context) async {
+    setState(() {
+      loading = true;
+      error = false;
+    });
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
       this.verificationId = verId;
     };
 
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
+      setState(() {
+        loading = false;
+        error = false;
+      });
+
       Navigator.push(
         context,
         new MaterialPageRoute(
@@ -143,10 +192,15 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
     };
 
     final PhoneVerificationCompleted verifiedSuccess = (FirebaseUser user) {
-      print('verified');
+      print('User ' + user.toString());
     };
 
     final PhoneVerificationFailed veriFailed = (AuthException exception) {
+      setState(() {
+        loading = false;
+        error = true;
+      });
+
       print('${exception.message}');
     };
 
@@ -154,7 +208,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
         phoneNumber: "+237" + _phoneController.text,
         codeAutoRetrievalTimeout: autoRetrieve,
         codeSent: smsCodeSent,
-        timeout: const Duration(seconds: 5),
+        timeout: const Duration(seconds: 9),
         verificationCompleted: verifiedSuccess,
         verificationFailed: veriFailed);
   }

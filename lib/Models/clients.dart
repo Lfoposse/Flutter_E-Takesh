@@ -111,25 +111,110 @@ class Client {
   }
 }
 
+class Client1 {
+  int client_id;
+  int user_id;
+  String email;
+  String username;
+  String lastname;
+  String phone;
+  String date_naissance;
+  String pays;
+  String ville;
+
+  Client1({
+    this.client_id,
+    this.user_id,
+    this.email,
+    this.username,
+    this.lastname,
+    this.phone,
+    this.date_naissance,
+    this.pays,
+    this.ville,
+  });
+  factory Client1.fromJson(Map<String, dynamic> obj) {
+    return Client1(
+        client_id: obj["clientid"],
+        user_id: obj["UserId"],
+        email: obj["email"],
+        username: obj["nom"],
+        lastname: obj["prenom"],
+        phone: obj["telephone"],
+        date_naissance: obj["date_naissance"],
+        pays: obj["pays"],
+        ville: obj["ville"]);
+  }
+
+  factory Client1.fromJson2(Map<String, dynamic> obj) {
+    return Client1(
+      client_id: obj["client_id"],
+      user_id: obj["user_id"],
+      email: obj["email"],
+      username: obj["username"],
+      lastname: obj["lastname"],
+      phone: obj["phone"],
+      date_naissance: obj["date_naissance"],
+      pays: obj["pays"],
+      ville: obj["ville"],
+    );
+  }
+}
+
+class Login2 {
+  String token;
+  int ttl;
+  String date;
+  int userId;
+  Login2({this.token, this.ttl, this.date, this.userId});
+
+  factory Login2.fromJson(Map<String, dynamic> obj) {
+    return Login2(
+      token: obj["id"],
+      ttl: obj["ttl"],
+      date: obj["created"],
+      userId: obj["userId"],
+    );
+  }
+  factory Login2.fromJson2(Map<String, dynamic> obj) {
+    return Login2(
+      token: obj["token"],
+      ttl: obj["ttl"],
+      date: obj["date"],
+      userId: obj["userId"],
+    );
+  }
+}
+
 class ClientLognin {
   String _token;
+  int _ttl;
   String _date;
   int _userId;
 
   ClientLognin.empty() {
     this._token = null;
+    this._ttl = -1;
     this._date = null;
+    this._userId = -1;
   }
 
-  ClientLognin(this._token, this._date, this._userId);
+  ClientLognin(
+    this._token,
+    this._ttl,
+    this._date,
+    this._userId,
+  );
 
   ClientLognin.map(dynamic obj) {
     this._token = obj["id"];
+    this._ttl = obj["ttl"];
     this._date = obj["created"];
     this._userId = obj["userId"];
   }
 
   String get token => _token;
+  int get ttl => _ttl;
   String get date => _date;
   int get userId => _userId;
 
@@ -147,6 +232,10 @@ class ClientLognin {
     _token = value;
   }
 
+  set ttl(int value) {
+    _ttl = value;
+  }
+
   set userId(int value) {
     _userId = value;
   }
@@ -157,6 +246,6 @@ class ClientLognin {
 
   @override
   String toString() {
-    return 'ClientLognin{_token: $_token, _date: $_date, _userId: $_userId}';
+    return 'ClientLognin{_ttl: $_ttl,_token: $_token, _date: $_date, _userId: $_userId}';
   }
 }
