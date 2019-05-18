@@ -3,8 +3,11 @@ import 'dart:convert';
 
 import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Models/services.dart';
+import 'package:http/http.dart' as http;
 
 import 'NetworkUtil.dart';
+
+const kGoogleApiKey = "AIzaSyBNm8cnYw5inbqzgw8LjXyt3rMhFhEVTjY";
 
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
@@ -13,6 +16,8 @@ class RestDatasource {
   static final ONE_USER = BASE_URL + "clients/findOne";
   static final SERVICE_URL = BASE_URL + "services";
   static final CREATE_USER = BASE_URL + "Users";
+  static final GOOGLE_MAP_URL =
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
   ///provisoire
   static final FILTER = "&filter=";
@@ -23,11 +28,6 @@ class RestDatasource {
     return _netUtil.post(LOGIN_URL,
         body: {"email": username, "password": password}).then((dynamic res) {
       if (res != null) {
-//        ClientLognin client;
-//        client.token = res["id"];
-//        client.date = res["created"];
-//        client.userId = res["userId"];
-//        print(client);
         return Login2.fromJson(json.decode(res));
       } else
         return null;
@@ -53,17 +53,6 @@ class RestDatasource {
             (onError) => new Future.error(new Exception(onError.toString())));
   }
 
-//  Future<UserCreate> createUser(String username, String password) {
-//    return _netUtil.post(CREATE_USER,
-//        body: {"email": username, "password": password}).then((dynamic res) {
-//      if (res["code"] == 200)
-//        return UserCreate.map(res["data"]);
-//      else
-//        return null;
-//    }).catchError(
-//        (onError) => new Future.error(new Exception(onError.toString())));
-//  }
-
   Future<List<Service>> getService(String token) {
     return _netUtil.get(SERVICE_URL + TOKEN1 + token).then((dynamic res) {
       if (res != null)
@@ -73,4 +62,34 @@ class RestDatasource {
     }).catchError(
         (onError) => new Future.error(new Exception(onError.toString())));
   }
+
+  Future findLocation(String keyword, String lang, double lat, double lng) {
+    var url = GOOGLE_MAP_URL +
+        "?input=" +
+        keyword +
+        "&language=" +
+        lang +
+        "&key=" +
+        kGoogleApiKey +
+        "&location=" +
+        lat.toString() +
+        "," +
+        lng.toString() +
+        "&radius=800";
+    return http.get(url);
+  }
 }
+//dio 1.0.13 package for searh nearby place
+//  Future<void> searchNearby(String keyword) async {
+//    var dio = Dio();
+//    var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+//    var params = {
+//      'key': kGoogleApiKey,
+//      'location': '$mylat,$mylng',
+//      'radius': '800',
+//      'keyword': keyword,
+//    };
+//    var response = await dio.get(url, data: params);
+//    print("Search Result");
+//    print(response.data['results'].toString());
+//  }

@@ -52,14 +52,17 @@ class Service {
   String _code;
   String _intitule;
   int _prix;
+  bool _selected;
 
-  Service(this._serviceid, this._code, this._intitule, this._prix);
+  Service(
+      this._serviceid, this._code, this._intitule, this._prix, this._selected);
 
   Service.empty() {
     this._serviceid = null;
     this._code = null;
     this._intitule = null;
     this._prix = null;
+    this._selected = false;
   }
 
   Service.map(dynamic obj) {
@@ -67,6 +70,7 @@ class Service {
     this._code = obj["code"];
     this._intitule = obj["intitule"];
     this._prix = obj["prix"];
+    this._selected = false;
   }
 
   int get prix => _prix;
@@ -91,5 +95,11 @@ class Service {
 
   set serviceid(int value) {
     _serviceid = value;
+  }
+
+  bool get selected => _selected;
+
+  set selected(bool value) {
+    _selected = value;
   }
 }

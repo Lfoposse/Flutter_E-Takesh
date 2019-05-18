@@ -5,6 +5,7 @@ import 'package:etakesh_client/DAO/Presenters/LoginPresenter.dart';
 import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
+import 'package:etakesh_client/pages/FirstLaunch/main_page.dart';
 import 'package:etakesh_client/pages/home_page.dart';
 import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
@@ -95,74 +96,6 @@ class LoginState extends State<Login> implements LoginContract {
     );
   }
 
-  Future login() async {
-    //    on creer le User
-    final response1 = await http.post(
-      Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
-      body: {
-        "email": _emailController.text,
-        "password": _passwordController.text
-      },
-      headers: {HttpHeaders.acceptHeader: "application/json"},
-    );
-
-    if (response1.statusCode == 200) {
-      Login2 data = Login2.fromJson(json.decode(response1.body));
-      setState(() {
-        loading = false;
-      });
-      _presenter.detailClient(data.userId, data.token);
-    } else {
-      setState(() {
-        loading = false;
-      });
-      Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text(
-          "Indentifiants non valides",
-          style: TextStyle(color: Colors.orange),
-        ),
-      ));
-    }
-//    _presenter
-//        .doLogin(_emailController.text, _passwordController.text)
-//        .then((Login2 credentials) {
-//      if (credentials != null) {
-//        var queryParameters = {
-//          "where": {
-//            "UserId": credentials.userId,
-//          }
-//        };
-////                +JSON.stringify(this.date_cmd)+`&access_token=`+token;
-//        final response2 = await http.get(
-//          Uri.encodeFull(
-//              "http://api.e-takesh.com:26960/api/clients/findOne?filter=" +
-//                  queryParameters.toString() +
-//                  "&access_token=" +
-//                  credentials.token),
-//          headers: {HttpHeaders.acceptHeader: "application/json"},
-//        );
-////                +JSON.stringify(this.date_cmd)+`&access_token=`+token
-//        if (response2.statusCode == 200) {
-//          print("User " + response2.body);
-//        } else {
-//          throw Exception('Erreur de connexion du client' +
-//              response2.body.toString());
-//        }
-//      }
-//    }).catchError((onError) {
-//      print("Pb " + onError.toString());
-//      setState(() {
-//        loading = false;
-//      });
-//      Scaffold.of(context).showSnackBar(new SnackBar(
-//        content: new Text(
-//          "Indentifiants non valides",
-//          style: TextStyle(color: Colors.red),
-//        ),
-//      ));
-//    });
-  }
-
   Widget LoginButton(BuildContext context) {
     return new SizedBox(
       height: 45.0,
@@ -213,28 +146,6 @@ class LoginState extends State<Login> implements LoginContract {
                     new MaterialPageRoute(builder: (context) => HomePage()),
                     ModalRoute.withName(Navigator.defaultRouteName));
                 new DatabaseHelper().saveUser(login);
-
-                ///Client by userid
-//                var queryParameters = """{"where": {"UserId": """ +
-//                    login.userId.toString() +
-//                    """}}""";
-//                final response2 = await http.get(
-//                  Uri.encodeFull(
-//                      "http://api.e-takesh.com:26960/api/clients/findOne?access_token=" +
-//                          login.token +
-//                          "&filter=" +
-//                          queryParameters),
-//                  headers: {HttpHeaders.acceptHeader: "application/json"},
-//                );
-//
-//                if (response2.statusCode == 200) {
-//                  Client1 client;
-//                  client = Client1.fromJson(json.decode(response2.body));
-//                  print("Good " + client.toString());
-//                } else {
-//                  throw Exception('Erreur recuperation du client' +
-//                      response1.body.toString());
-//                }
               } else {
                 setState(() {
                   loading = false;
@@ -337,7 +248,7 @@ class LoginState extends State<Login> implements LoginContract {
                         child: Column(
                           children: <Widget>[
                             LoginButton(context),
-                            CustomSizeBox(height: 30.0),
+                            CustomSizeBox(height: 20.0),
                             Container(
                               alignment: Alignment.center,
                               child: Text(
@@ -347,6 +258,29 @@ class LoginState extends State<Login> implements LoginContract {
                                 ),
                               ),
                             ),
+                            InkWell(
+                              child: Container(
+                                  padding: EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 20.0,
+                                      right: 20.0,
+                                      bottom: 20.0),
+                                  alignment: Alignment.center,
+                                  child: new Text(
+                                    "Vous n'avez pas compte ?",
+                                    style: new TextStyle(
+                                        fontSize: 15.0,
+                                        color: Color(0xFFDEAC17)),
+                                  ) //variable above
+                                  ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => MainLaunchPage()),
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),

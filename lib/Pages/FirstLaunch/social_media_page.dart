@@ -2,11 +2,15 @@ import 'package:etakesh_client/pages/FirstLaunch/google_phone_number.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+//Google provider
+
+// Facebook provide
 
 class SocialMediaPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> mScaffoldState =
       new GlobalKey<ScaffoldState>();
   final GoogleSignIn googleSignIn = GoogleSignIn();
+//  FacebookLogin facebookLogin = new FacebookLogin();
   GoogleSignInAccount googleAccount;
 //  final GoogleSignIn googleSignIn = new GoogleSignIn();
   FirebaseUser fUser;
@@ -125,6 +129,30 @@ class SocialMediaPage extends StatelessWidget {
                   height: 20.0, width: 60.0),
               onTap: () {
                 showSnackBar();
+//                facebookLogin.loginWithPublishPermissions(
+//                    ['email', 'public_profile']).then((result) {
+//                  print(" UserFacebook " + result.toString());
+//                  switch (result.status) {
+//                    case FacebookLoginStatus.loggedIn:
+//                      FirebaseAuth.instance
+//                          .signInWithFacebook(
+//                              accessToken: result.accessToken.token)
+//                          .then((signedInUser) {
+//                        print(" UserFirebase " + signedInUser.toString());
+//                      }).catchError((err2) {
+//                        print(" Probleme1 Firebase" + err2.toString());
+//                      });
+//                      break;
+//                    case FacebookLoginStatus.cancelledByUser:
+//                      print("Annuler par le User");
+//                      break;
+//                    case FacebookLoginStatus.error:
+//                      print(" Probleme2 " + result.errorMessage);
+//                      break;
+//                  }
+//                }).catchError((err) {
+//                  print(" Probleme1 " + err.toString());
+//                });
               },
             ),
           ],
