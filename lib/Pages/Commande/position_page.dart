@@ -139,7 +139,7 @@ class PositionPageState extends State<PositionPage> {
                             height: 5.0,
                             width: 5.0,
                             decoration: new BoxDecoration(
-                                shape: BoxShape.rectangle,
+                                shape: BoxShape.circle,
                                 color: Color(0xFFDEAC17)),
                           ),
                         ),

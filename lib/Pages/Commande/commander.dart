@@ -4,6 +4,7 @@ import 'package:etakesh_client/DAO/Presenters/LoginPresenter.dart';
 import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Models/google_place_item.dart';
+import 'package:etakesh_client/Models/services.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
 import 'package:etakesh_client/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,11 @@ import 'package:location/location.dart' as LocationManager;
 const kGoogleApiKey = "AIzaSyBNm8cnYw5inbqzgw8LjXyt3rMhFhEVTjY";
 
 class CommandePage extends StatefulWidget {
+  final GooglePlacesItem destination;
+  final GooglePlacesItem position;
+  final Service service;
+  CommandePage({Key key, this.destination, this.position, this.service})
+      : super(key: key);
   @override
   State createState() => CommandePageState();
 }
@@ -21,7 +27,7 @@ class CommandePageState extends State<CommandePage> implements LoginContract {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   LoginPresenter _presenter;
-  String destination, position;
+
   int stateIndex;
   Login2 login;
   Client1 client;
@@ -42,8 +48,9 @@ class CommandePageState extends State<CommandePage> implements LoginContract {
   void initState() {
     mylat = 4.0922421;
     mylng = 9.748265;
-    destination = "Ou allez vous ?";
-
+    print("desti " + widget.destination.description);
+    print("posit " + widget.position.description);
+    print("servic " + widget.service.serviceid.toString());
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
         print("USER " + l.userId.toString());
@@ -179,104 +186,104 @@ class CommandePageState extends State<CommandePage> implements LoginContract {
                   ),
                 ),
               ),
-              Positioned(
-                  height: MediaQuery.of(context).size.height / 2,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-//                      color: Color(0x88F9FAFC),
-                      color: Colors.white,
-                      child: new Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0),
-                            child: new Center(
-                              child: Text(
-                                "Commandez vos taxis",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 18.0),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 5.0),
-                            child: new Center(
-                              child: Text(
-                                "Economique, rapide et fiable",
-                                style: TextStyle(
-                                    color: Colors.black26, fontSize: 16.0),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 165.0,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.only(
-                                  left: 5.0,
-                                  right: 5.0,
-                                  top: 10.0,
-                                  bottom: 10.0),
-                              children: <Widget>[
-                                listItem('assets/images/cameroun_flag.png',
-                                    'assets/images/avatar.png', 'Leger', 30, 3),
-                                listItem(
-                                    'assets/images/login_icon.png',
-                                    'assets/images/facebook.png',
-                                    'Eddy',
-                                    30,
-                                    3),
-                                listItem(
-                                    'assets/images/avatar.png',
-                                    'assets/images/google.png',
-                                    'Romuald',
-                                    30,
-                                    3),
-                                listItem(
-                                    'assets/images/facebook.png',
-                                    'assets/images/cameroun_flag.png',
-                                    'Odelphine',
-                                    30,
-                                    3),
-                                listItem(
-                                    'assets/images/google.png',
-                                    'assets/images/login_icon.png',
-                                    'Wilfried',
-                                    30,
-                                    3),
-                              ],
-                            ),
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              RaisedButton(
-                                  color: Color(0xFFDEAC17),
-                                  child: Text(" CONFIRMER ",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20.0)),
-                                  padding: EdgeInsets.only(
-                                      left: 15.0,
-                                      right: 15.0,
-                                      top: 5.0,
-                                      bottom: 5.0),
-                                  onPressed: () {}),
-                              Container(
-                                height: 50.0,
-                                width: 50.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/google.png'),
-                                        fit: BoxFit.cover)),
-                              )
-                            ],
-                          )
-                        ],
-                      ))),
+//              Positioned(
+//                  height: MediaQuery.of(context).size.height / 2,
+//                  bottom: 0,
+//                  left: 0,
+//                  right: 0,
+//                  child: Container(
+////                      color: Color(0x88F9FAFC),
+//                      color: Colors.white,
+//                      child: new Column(
+//                        children: <Widget>[
+//                          Padding(
+//                            padding: EdgeInsets.only(top: 10.0),
+//                            child: new Center(
+//                              child: Text(
+//                                "Commandez vos taxis",
+//                                style: TextStyle(
+//                                    color: Colors.black, fontSize: 18.0),
+//                              ),
+//                            ),
+//                          ),
+//                          Padding(
+//                            padding: EdgeInsets.only(top: 5.0),
+//                            child: new Center(
+//                              child: Text(
+//                                "Economique, rapide et fiable",
+//                                style: TextStyle(
+//                                    color: Colors.black26, fontSize: 16.0),
+//                              ),
+//                            ),
+//                          ),
+//                          Container(
+//                            height: 165.0,
+//                            child: ListView(
+//                              scrollDirection: Axis.horizontal,
+//                              padding: EdgeInsets.only(
+//                                  left: 5.0,
+//                                  right: 5.0,
+//                                  top: 10.0,
+//                                  bottom: 10.0),
+//                              children: <Widget>[
+//                                listItem('assets/images/cameroun_flag.png',
+//                                    'assets/images/avatar.png', 'Leger', 30, 3),
+//                                listItem(
+//                                    'assets/images/login_icon.png',
+//                                    'assets/images/facebook.png',
+//                                    'Eddy',
+//                                    30,
+//                                    3),
+//                                listItem(
+//                                    'assets/images/avatar.png',
+//                                    'assets/images/google.png',
+//                                    'Romuald',
+//                                    30,
+//                                    3),
+//                                listItem(
+//                                    'assets/images/facebook.png',
+//                                    'assets/images/cameroun_flag.png',
+//                                    'Odelphine',
+//                                    30,
+//                                    3),
+//                                listItem(
+//                                    'assets/images/google.png',
+//                                    'assets/images/login_icon.png',
+//                                    'Wilfried',
+//                                    30,
+//                                    3),
+//                              ],
+//                            ),
+//                          ),
+//                          Divider(),
+//                          Row(
+//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                            children: <Widget>[
+//                              RaisedButton(
+//                                  color: Color(0xFFDEAC17),
+//                                  child: Text(" CONFIRMER ",
+//                                      style: TextStyle(
+//                                          color: Colors.white, fontSize: 20.0)),
+//                                  padding: EdgeInsets.only(
+//                                      left: 15.0,
+//                                      right: 15.0,
+//                                      top: 5.0,
+//                                      bottom: 5.0),
+//                                  onPressed: () {}),
+//                              Container(
+//                                height: 50.0,
+//                                width: 50.0,
+//                                decoration: BoxDecoration(
+//                                    borderRadius: BorderRadius.circular(25.0),
+//                                    image: DecorationImage(
+//                                        image: AssetImage(
+//                                            'assets/images/google.png'),
+//                                        fit: BoxFit.cover)),
+//                              )
+//                            ],
+//                          )
+//                        ],
+//                      ))),
             ]));
     }
   }

@@ -73,8 +73,6 @@ class HomePageState extends State<HomePage> implements LoginContract {
             builder: (context) => ServicesPage(
                   destination: destinationModel,
                   position: positiontionModel,
-                  cmdDate: selectedDate,
-                  cmdTime: selectedTime,
                 )),
         ModalRoute.withName(Navigator.defaultRouteName));
   }
@@ -276,9 +274,10 @@ class HomePageState extends State<HomePage> implements LoginContract {
                 ),
               ),
               Positioned(
-                  top: 55.0,
+                  top: 70.0,
                   left: 10.0,
                   right: 10.0,
+                  height: 60.0,
                   child: Card(
                       elevation: 8.0,
                       shape: RoundedRectangleBorder(
@@ -302,7 +301,11 @@ class HomePageState extends State<HomePage> implements LoginContract {
                                           color: Color(0xFFDEAC17)),
                                     ),
                                   ),
-                                  new Text(destination)
+                                  new Text(
+                                    destination,
+                                    style: TextStyle(
+                                        color: Colors.black26, fontSize: 16.0),
+                                  )
                                 ],
                               ),
                             )),
@@ -348,7 +351,11 @@ class HomePageState extends State<HomePage> implements LoginContract {
         pret_a_commander = true;
         position = positiontionModel.terms[0].value;
       });
-      selectDate(context);
+      Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(
+              builder: (context) => ServicesPage(
+                  destination: destinationModel, position: positiontionModel)),
+          ModalRoute.withName(Navigator.defaultRouteName));
     }
   }
 

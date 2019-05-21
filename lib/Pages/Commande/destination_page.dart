@@ -14,14 +14,16 @@ class DestinationPage extends StatefulWidget {
 }
 
 class DestinationPageState extends State<DestinationPage> {
-  TextEditingController _searchLocation;
+  TextEditingController _searchDestination;
+  TextEditingController _searchPosition;
   RestDatasource api = new RestDatasource();
   var _locations = new List<GooglePlacesItem>();
 
   @override
   initState() {
     super.initState();
-    _searchLocation = new TextEditingController();
+    _searchDestination = new TextEditingController();
+    _searchPosition = new TextEditingController();
   }
 
   _findLocation(String input) {
@@ -98,14 +100,14 @@ class DestinationPageState extends State<DestinationPage> {
                             height: 5.0,
                             width: 5.0,
                             decoration: new BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color(0xFFDEAC17)),
+                                shape: BoxShape.circle,
+                                color: Color(0xFF0C60A8)),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: new TextField(
-                            controller: _searchLocation,
+                            controller: _searchDestination,
                             enabled: true,
                             autofocus: true,
                             enableInteractiveSelection: true,
@@ -132,19 +134,83 @@ class DestinationPageState extends State<DestinationPage> {
                                 return;
                               } else {
                                 setState(() {
-                                  _searchLocation.text = "";
+                                  _searchDestination.text = "";
                                 });
                               }
                             },
                           ),
                         ),
-                        _searchLocation.text.isNotEmpty
+                        _searchDestination.text.isNotEmpty
                             ? Expanded(
                                 flex: 0,
                                 child: IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      _searchLocation.text = "";
+                                      _searchDestination.text = "";
+                                    });
+                                  },
+                                  icon: Icon(Icons.clear, color: Colors.black),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+
+                    ///ou allez vous ?
+
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Container(
+                            height: 5.0,
+                            width: 5.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFDEAC17)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: new TextField(
+                            enabled: false,
+                            enableInteractiveSelection: true,
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 19.0,
+                            ),
+                            decoration: new InputDecoration(
+                              contentPadding: EdgeInsets.all(12.0),
+                              hintText: "Ou etes vous ?",
+                              hintStyle: TextStyle(color: Colors.black26),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                            ),
+                            onChanged: (text) {
+                              if (text.isNotEmpty) {
+                                _findLocation(text);
+                                return;
+                              } else {
+                                setState(() {
+                                  _searchPosition.text = "";
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        _searchPosition.text.isNotEmpty
+                            ? Expanded(
+                                flex: 0,
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _searchPosition.text = "";
                                     });
                                   },
                                   icon: Icon(Icons.clear, color: Colors.black),

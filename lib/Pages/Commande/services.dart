@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 class ServicesPage extends StatefulWidget {
   final GooglePlacesItem destination;
   final GooglePlacesItem position;
-  final DateTime cmdDate;
-  final TimeOfDay cmdTime;
-  ServicesPage(
-      {Key key, this.destination, this.position, this.cmdDate, this.cmdTime})
-      : super(key: key);
+
+  ServicesPage({Key key, this.destination, this.position}) : super(key: key);
   @override
   State createState() => ServicesPageState();
 }
 
 class ServicesPageState extends State<ServicesPage> implements ServiceContract {
+  GooglePlacesItem dest;
+  GooglePlacesItem post;
+  Service serviceSelected;
   bool service_selected;
   int stateIndex;
   List<Service> services;
@@ -27,6 +27,8 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
   int curent_service = 0;
   @override
   void initState() {
+    dest = widget.destination;
+    post = widget.position;
     service_selected = false;
     AppSharedPreferences().getToken().then((String token1) {
       if (token1 != '') {
@@ -98,6 +100,7 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
                               curent_service =
                                   this.services[indexItem].serviceid;
                               service_selected = true;
+                              serviceSelected = this.services[indexItem];
                               print("ServiceSelected" +
                                   this
                                       .services[indexItem]
@@ -158,7 +161,11 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
                           onPressed: () {
                             Navigator.of(context).pushAndRemoveUntil(
                                 new MaterialPageRoute(
-                                    builder: (context) => CommandePage()),
+                                    builder: (context) => CommandePage(
+                                          destination: dest,
+                                          position: post,
+                                          service: serviceSelected,
+                                        )),
                                 ModalRoute.withName(
                                     Navigator.defaultRouteName));
                           })
