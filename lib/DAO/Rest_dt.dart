@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:etakesh_client/Models/clients.dart';
+import 'package:etakesh_client/Models/prestataires.dart';
 import 'package:etakesh_client/Models/services.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +19,9 @@ class RestDatasource {
   static final CREATE_USER = BASE_URL + "Users";
   static final GOOGLE_MAP_URL =
       "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  static final PRESTATION = BASE_URL + "prestations";
+  static final ALLPRESTATAIRE = PRESTATION +
+      "?filter[include]=prestataire&filter[include]=vehicule&access_token=";
 
   ///provisoire
   static final FILTER = "&filter=";
@@ -59,6 +63,18 @@ class RestDatasource {
         return (res as List).map((item) => new Service.map(item)).toList();
       else
         return null as List<Service>;
+    }).catchError(
+        (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  Future<List<PrestataireService>> getAllPrestatairesServices(String token) {
+    return _netUtil.get(ALLPRESTATAIRE + token).then((dynamic res) {
+      if (res != null)
+        return (res as List)
+            .map((item) => new PrestataireService.fromJson(item))
+            .toList();
+      else
+        return null as List<PrestataireService>;
     }).catchError(
         (onError) => new Future.error(new Exception(onError.toString())));
   }

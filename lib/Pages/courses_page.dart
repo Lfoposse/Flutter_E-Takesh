@@ -19,7 +19,7 @@ class CoursesPage extends StatelessWidget {
                 tabs: [
                   Tab(
                     child: Text(
-                      "Anciennes",
+                      "Anciènnes",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -43,9 +43,9 @@ class CoursesPage extends StatelessWidget {
                 ListView(
                   children: <Widget>[
                     listItem("Course", "MEA8756", "4h15min", Color(0xFF0C60A8)),
-                    listItem("Depot", "ORA7746", "3h10min", Color(0xFFC72230)),
-                    listItem("Prive", "DAA8740", "1h10min", Color(0xFFDEAC17)),
-                    listItem("Aeropot", "PEA8746", "10min", Color(0xFF33B841))
+                    listItem("Dépot", "ORA7746", "3h10min", Color(0xFFC72230)),
+                    listItem("Privé", "DAA8740", "1h10min", Color(0xFFDEAC17)),
+                    listItem("Aéropot", "PEA8746", "10min", Color(0xFF33B841))
                   ],
                 ),
 
@@ -56,9 +56,9 @@ class CoursesPage extends StatelessWidget {
                 ListView(
                   children: <Widget>[
                     listItem("Course", "MEA8756", "4h15min", Color(0xFF0C60A8)),
-                    listItem("Depot", "ORA7746", "3h10min", Color(0xFFC72230)),
-                    listItem("Prive", "DAA8740", "1h10min", Color(0xFFDEAC17)),
-                    listItem("Aeropot", "PEA8746", "10min", Color(0xFF33B841))
+                    listItem("Dépot", "ORA7746", "3h10min", Color(0xFFC72230)),
+                    listItem("Privé", "DAA8740", "1h10min", Color(0xFFDEAC17)),
+                    listItem("Aéropot", "PEA8746", "10min", Color(0xFF33B841))
                   ],
                 ),
 

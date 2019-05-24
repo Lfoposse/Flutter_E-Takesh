@@ -123,11 +123,15 @@ class DatabaseHelper {
     var tbClient = await db;
     List<Map> list = await tbClient
         .rawQuery('SELECT * FROM Client ORDER BY id DESC LIMIT 1');
+    print("Content DBClient");
+    print(list);
     Client1 client;
-
-    client = new Client1.fromJson2(list[0]);
-
-    return client;
+    if (list.length != 0) {
+      client = new Client1.fromJson2(list[0]);
+      return client;
+    } else {
+      return null;
+    }
   }
 
   Future<Login2> getUser() async {
@@ -135,7 +139,13 @@ class DatabaseHelper {
     List<Map> list =
         await tbUser.rawQuery('SELECT * FROM User ORDER BY id DESC LIMIT 1');
     Login2 user;
-    user = new Login2.fromJson2(list[0]);
-    return user;
+    print("Content DBUser");
+    print(list);
+    if (list.length != 0) {
+      user = new Login2.fromJson2(list[0]);
+      return user;
+    } else {
+      return null;
+    }
   }
 }

@@ -85,7 +85,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                     margin: EdgeInsets.only(bottom: 40.0, top: 50.0),
                     alignment: Alignment.center,
                     child: Text(
-                      "Creez un mot de passe pour votre compte",
+                      "Créez un mot de passe pour votre compte",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       textAlign: TextAlign.center,
@@ -135,7 +135,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
 //              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
                       child: Center(
                         child: Text(
-                          'Probleme survenue , veillez reessayer.',
+                          'Problème survenue , veillez réessayer.',
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
@@ -147,7 +147,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                       child: Center(
                       child: new RichText(
                           text: new TextSpan(
-                        text: 'Desole cette email : ',
+                        text: 'Désole cette email : ',
                         style: TextStyle(color: Colors.red),
                         children: <TextSpan>[
                           new TextSpan(
@@ -159,7 +159,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                           ),
                           new TextSpan(
                               text:
-                                  ' \na deja ete utiliser veuillez utiliser une autre adresse',
+                                  ' \na deja été utiliser veuillez utiliser une autre adresse',
                               style: TextStyle(color: Colors.red)),
                         ],
                       )),
@@ -177,7 +177,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
                     GestureDetector(
                       onTap: () => _setAgreedToTOS(!_agreedToTOS),
                       child: Text(
-                        "J'accepte les conditions d'utilisation \nde l'application E-Takesh",
+                        "J'accèpte les conditions d'utilisation \nde l'application E-Takesh",
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: 15.0,
@@ -199,7 +199,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
     if (value.length == 0) {
       return "Mot de passe obligatoire";
     } else if (value.length < 6) {
-      return "Le Mot de passe doit comporter au moins 6 caracteres";
+      return "Le Mot de passe doit comporter au moins 6 caractères";
     }
     return null;
   }
@@ -208,7 +208,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
     if (value.length == 0) {
       return "Confirmation vide";
     } else if (value != _passwordController.text) {
-      return 'Ne correspond pas avec le mot de passe entre precdement';
+      return 'Ne correspond pas avec le mot de passe entré précdement';
     }
     return null;
   }
@@ -276,6 +276,11 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
           headers: {HttpHeaders.acceptHeader: "application/json"},
         );
         if (response3.statusCode == 200) {
+          setState(() {
+            loading = false;
+            existemail = false;
+            error = false;
+          });
 //          redirige a la page de connexion
           AppSharedPreferences().setAccountCreate(true);
           Navigator.push(

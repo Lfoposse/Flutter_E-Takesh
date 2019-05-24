@@ -138,7 +138,7 @@ class LoginState extends State<Login> implements LoginContract {
                 AppSharedPreferences().setUserToken(login.token);
                 Scaffold.of(context).showSnackBar(new SnackBar(
                   content: new Text(
-                    "Connexion reussite",
+                    "Connexion réussite",
                     style: TextStyle(color: Colors.blue),
                   ),
                 ));

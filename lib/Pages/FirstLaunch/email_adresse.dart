@@ -29,7 +29,7 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
           onPressed: _submittable() ? _submit : null),
       appBar: new AppBar(
         title: new Text(
-          'Donnees personnelles',
+          'Données personnelles',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -50,7 +50,7 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                 child: Container(
                     alignment: Alignment.center,
                     child: Text(
-                      "Informations complementaires pour votre compte",
+                      "Informations complémentaires pour votre compte",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       textAlign: TextAlign.center,
@@ -90,12 +90,12 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
               new TextFormField(
                 controller: _prenomController,
                 decoration: const InputDecoration(
-                  labelText: 'Prenom',
+                  labelText: 'Prénom',
                   icon: Icon(Icons.person, color: Colors.black),
                 ),
                 validator: (String value) {
                   if (value.trim().isEmpty) {
-                    return 'Prenom obligatoire';
+                    return 'Prénom obligatoire';
                   }
                 },
               ),
@@ -114,7 +114,7 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
               new TextFormField(
                 controller: _villeController,
                 decoration: const InputDecoration(
-                    labelText: 'Ville de residence',
+                    labelText: 'Ville de résidence',
                     icon: Icon(Icons.location_city, color: Colors.black)),
                 validator: (String value) {
                   if (value.trim().isEmpty) {
@@ -134,7 +134,7 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                     GestureDetector(
                       onTap: () => _setAgreedToTOS(!_agreedToTOS),
                       child: Text(
-                        "Je certifie avoir ecris , lus \n et valide ces informations ",
+                        "Je certifie avoir écris , lus \n et validé ces informations ",
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: 15.0,

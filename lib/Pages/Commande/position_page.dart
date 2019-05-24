@@ -73,24 +73,26 @@ class PositionPageState extends State<PositionPage> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 60.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.account_circle,
-                                ),
-                                Text(
-                                  "Pour moi",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 19.0),
-                                ),
-                                Icon(Icons.keyboard_arrow_down,
-                                    color: Colors.black),
-                              ],
-                            ),
-                          ),
+
+                          /// mis en commentaire pour le moment
+//                          Padding(
+//                            padding: EdgeInsets.only(left: 60.0),
+//                            child: Row(
+//                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                              children: <Widget>[
+//                                Icon(
+//                                  Icons.account_circle,
+//                                ),
+//                                Text(
+//                                  "Moi même",
+//                                  style: TextStyle(
+//                                      color: Colors.black, fontSize: 14.0),
+//                                ),
+//                                Icon(Icons.keyboard_arrow_down,
+//                                    color: Colors.black),
+//                              ],
+//                            ),
+//                          ),
                         ]),
                     Row(
                       children: <Widget>[
@@ -157,8 +159,8 @@ class PositionPageState extends State<PositionPage> {
                             ),
                             decoration: new InputDecoration(
                               contentPadding: EdgeInsets.all(12.0),
-                              hintText: "Ou etes vous ?",
-                              hintStyle: TextStyle(color: Colors.black26),
+                              hintText: "Où etes vous ?",
+                              hintStyle: TextStyle(color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(

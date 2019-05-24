@@ -62,7 +62,7 @@ class ParametersPageState extends State<ParametersPage>
         return new Scaffold(
             appBar: new AppBar(
               title: new Text(
-                'Parametres du compte',
+                'Paramètres du compte',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.black,
@@ -98,7 +98,7 @@ class ParametersPageState extends State<ParametersPage>
                   ),
                   ListTile(
                     title: new Text("Favoris",
-                        style: TextStyle(color: Colors.grey)),
+                        style: TextStyle(color: Colors.black54)),
                   ),
                   SizedBox(
                     height: 0.0,
@@ -135,11 +135,11 @@ class ParametersPageState extends State<ParametersPage>
                     color: Color(0xFFE2E2E2),
                   ),
                   ListTile(
-                    title: new Text("Parametres de confidentialite",
+                    title: new Text("Paramètres de confidentialite",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
                     subtitle: new Text(
-                      "Gerer les donnees que vous partagez avec nous",
+                      "Gérer les données que vous partagez avec nous",
                       style: TextStyle(
                           color: Colors.grey.withOpacity(0.7), fontSize: 12.0),
                     ),
@@ -149,7 +149,7 @@ class ParametersPageState extends State<ParametersPage>
                     color: Color(0xFFE2E2E2),
                   ),
                   ListTile(
-                    title: new Text("Deconnexion",
+                    title: new Text("Déconnexion",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
                     onTap: () {
@@ -162,7 +162,7 @@ class ParametersPageState extends State<ParametersPage>
                               child: new ListBody(
                                 children: <Widget>[
                                   new Text(
-                                      "Vous etez sur le point de vouloir vous deconnecter"),
+                                      "Vous etez sur le point de vouloir vous déconnecter"),
                                 ],
                               ),
                             ),

@@ -1,5 +1,7 @@
 import 'package:etakesh_client/DAO/Presenters/ServicePresenter.dart';
+import 'package:etakesh_client/DAO/google_maps_requests.dart';
 import 'package:etakesh_client/Models/google_place_item.dart';
+import 'package:etakesh_client/Models/google_place_item_term.dart';
 import 'package:etakesh_client/Models/services.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
@@ -25,8 +27,12 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
   ServicePresenter _presenter;
   String token;
   int curent_service = 0;
+  GoogleMapsServices _googleMapsServices = GoogleMapsServices();
+  LocationModel locposition;
+  LocationModel locdestination;
   @override
   void initState() {
+    _getDestLocation();
     dest = widget.destination;
     post = widget.position;
     service_selected = false;
@@ -39,8 +45,25 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
     }).catchError((err) {
       print("Not get Token " + err.toString());
     });
+    _getPostLocation();
     stateIndex = 0;
     super.initState();
+  }
+
+  _getDestLocation() async {
+    LocationModel destination = await _googleMapsServices
+        .getRoutePlaceById(widget.destination.place_id);
+    setState(() {
+      locdestination = destination;
+    });
+  }
+
+  _getPostLocation() async {
+    LocationModel position =
+        await _googleMapsServices.getRoutePlaceById(widget.position.place_id);
+    setState(() {
+      locposition = position;
+    });
   }
 
   @override
@@ -63,9 +86,9 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w400)),
                           new Text(
-                            "Facture par heure",
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                            "Facturé par heure",
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 12.0),
                           ),
                         ],
                       ),
@@ -82,8 +105,8 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
                           ),
                           new Text(
                             "l'heure",
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 12.0),
                             textAlign: TextAlign.left,
                           ),
                         ],
@@ -165,6 +188,8 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
                                           destination: dest,
                                           position: post,
                                           service: serviceSelected,
+                                          locposition: locposition,
+                                          locdestination: locdestination,
                                         )),
                                 ModalRoute.withName(
                                     Navigator.defaultRouteName));

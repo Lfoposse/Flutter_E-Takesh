@@ -13,8 +13,8 @@ import 'package:etakesh_client/pages/paiements_page.dart';
 import 'package:etakesh_client/pages/parameters_page.dart';
 import 'package:etakesh_client/pages/tarifs_page.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart' as LocationManager;
 
 const kGoogleApiKey = "AIzaSyBNm8cnYw5inbqzgw8LjXyt3rMhFhEVTjY";
 
@@ -35,7 +35,6 @@ class HomePageState extends State<HomePage> implements LoginContract {
   Client1 client;
   LatLng target;
   double mylat, mylng;
-
   HomePageState() {
     _presenter = new LoginPresenter(this);
   }
@@ -46,36 +45,36 @@ class HomePageState extends State<HomePage> implements LoginContract {
   GooglePlacesItem destinationModel = new GooglePlacesItem();
   GooglePlacesItem positiontionModel = new GooglePlacesItem();
 
-  Future<Null> selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(selectedDate.year, 1),
-        lastDate: DateTime(selectedDate.year + 1));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-    selectTime(context);
-  }
-
-  Future<void> selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-    );
-    if (picked != null && picked != selectedTime)
-      setState(() {
-        selectedTime = picked;
-      });
-    Navigator.of(context).pushAndRemoveUntil(
-        new MaterialPageRoute(
-            builder: (context) => ServicesPage(
-                  destination: destinationModel,
-                  position: positiontionModel,
-                )),
-        ModalRoute.withName(Navigator.defaultRouteName));
-  }
+//  Future<Null> _selectDate(BuildContext context) async {
+//    final DateTime picked = await showDatePicker(
+//        context: context,
+//        initialDate: selectedDate,
+//        firstDate: DateTime(selectedDate.year, 1),
+//        lastDate: DateTime(selectedDate.year + 1));
+//    if (picked != null && picked != selectedDate)
+//      setState(() {
+//        selectedDate = picked;
+//      });
+//    _selectTime(context);
+//  }
+//
+//  Future<void> _selectTime(BuildContext context) async {
+//    final TimeOfDay picked = await showTimePicker(
+//      context: context,
+//      initialTime: selectedTime,
+//    );
+//    if (picked != null && picked != selectedTime)
+//      setState(() {
+//        selectedTime = picked;
+//      });
+//    Navigator.of(context).pushAndRemoveUntil(
+//        new MaterialPageRoute(
+//            builder: (context) => ServicesPage(
+//                  destination: destinationModel,
+//                  position: positiontionModel,
+//                )),
+//        ModalRoute.withName(Navigator.defaultRouteName));
+//  }
 
   @override
   void initState() {
@@ -83,8 +82,8 @@ class HomePageState extends State<HomePage> implements LoginContract {
     mylng = 9.748265;
     destination_selected = false;
     pret_a_commander = false;
-    destination = "Ou allez vous ?";
-    position = "Ou etes vous ?";
+    destination = "Où allez vous ?";
+    position = "Où etes vous ?";
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
         print("USER " + l.userId.toString());
@@ -98,17 +97,22 @@ class HomePageState extends State<HomePage> implements LoginContract {
   }
 
   Future<LatLng> getUserLocation() async {
-    var currentLocation = <String, double>{};
-    final location = LocationManager.Location();
+//    var currentLocation = <String, double>{};
+//    final location = LocationManager.Location();
     try {
-      currentLocation = await location.getLocation();
-      var lat = currentLocation["latitude"];
-      var lng = currentLocation["longitude"];
+//      currentLocation = await location.getLocation();
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      var lat = position.latitude;
+      var lng = position.longitude;
       setState(() {
-        mylat = currentLocation["latitude"];
-        mylng = currentLocation["longitude"];
+        mylat = position.latitude;
+        mylng = position.longitude;
         target = LatLng(lat, lng);
-        print("Ma Position1 " + currentLocation.toString());
+        print("Ma Position1 Lat" +
+            position.latitude.toString() +
+            "Lng" +
+            position.longitude.toString());
         markers.add(
           Marker(
             markerId: MarkerId('current position'),
@@ -124,7 +128,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
       });
       return target;
     } on Exception {
-      currentLocation = null;
+//      currentLocation = null;
       return null;
     }
   }
@@ -169,7 +173,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                       backgroundColor: Colors.white,
                     ),
                     title: new Text(client.username + " " + client.lastname,
-                        style: TextStyle(color: Colors.white, fontSize: 18.0)),
+                        style: TextStyle(color: Colors.white, fontSize: 15.0)),
                     subtitle: new Text(client.phone,
                         style: TextStyle(color: Colors.white)),
                   ),
@@ -228,7 +232,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                 ),
                 new ListTile(
                   title: new Text(
-                    'Parametres',
+                    'Paramètres',
                     style: TextStyle(fontSize: 18.0),
                   ),
                   onTap: () {
@@ -250,13 +254,12 @@ class HomePageState extends State<HomePage> implements LoginContract {
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
-                    myLocationEnabled: true,
                     zoomGesturesEnabled: true,
                     scrollGesturesEnabled: true,
                     rotateGesturesEnabled: true,
                     tiltGesturesEnabled: true,
                     initialCameraPosition: CameraPosition(
-                        target: LatLng(mylat, mylng), zoom: 17.0),
+                        target: LatLng(mylat, mylng), zoom: 11.0),
                     markers: markers,
                   )),
               Positioned(
@@ -264,6 +267,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                 left: 5.0,
                 top: 15.0,
                 child: IconButton(
+                  iconSize: 40.0,
                   onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
                   },
@@ -274,7 +278,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                 ),
               ),
               Positioned(
-                  top: 70.0,
+                  top: 85.0,
                   left: 10.0,
                   right: 10.0,
                   height: 60.0,
@@ -287,7 +291,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                         child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 16.0),
                             child: Container(
-                              color: Color(0x88F9FAFC),
+//                              color: Color(0x88F9FAFC),
                               child: Row(
                                 children: <Widget>[
                                   new Padding(
@@ -304,7 +308,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                                   new Text(
                                     destination,
                                     style: TextStyle(
-                                        color: Colors.black26, fontSize: 16.0),
+                                        color: Colors.black54, fontSize: 19.0),
                                   )
                                 ],
                               ),
@@ -346,7 +350,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
             },
             fullscreenDialog: true));
     if (positiontionModel != null) {
-      print("Destination choisie" + positiontionModel.description);
+      print("Position choisie" + positiontionModel.description);
       setState(() {
         pret_a_commander = true;
         position = positiontionModel.terms[0].value;
@@ -354,7 +358,9 @@ class HomePageState extends State<HomePage> implements LoginContract {
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
               builder: (context) => ServicesPage(
-                  destination: destinationModel, position: positiontionModel)),
+                    destination: destinationModel,
+                    position: positiontionModel,
+                  )),
           ModalRoute.withName(Navigator.defaultRouteName));
     }
   }
@@ -412,9 +418,9 @@ class HomePageState extends State<HomePage> implements LoginContract {
       setState(() {
         client = datas;
         stateIndex = 3;
-        DatabaseHelper().getUser().then((Login2 l) {
-          if (l != null) {
-            print("USERExist " + l.userId.toString());
+        DatabaseHelper().getClient().then((Client1 c) {
+          if (c != null) {
+            print("USERExist " + c.user_id.toString());
           } else {
             DatabaseHelper().saveClient(datas);
           }

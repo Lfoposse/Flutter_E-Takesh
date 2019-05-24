@@ -40,7 +40,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
                   padding: EdgeInsets.only(right: 18.0, left: 18.0),
                   alignment: Alignment.center,
                   child: Text(
-                    "Saisissez votre numero de telephone portable",
+                    "Saisissez votre numéro de téléphone portable",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     textAlign: TextAlign.center,
@@ -85,9 +85,9 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
               ],
               validator: (String value) {
                 if (value.trim().isEmpty) {
-                  return "Vous n'avez pas renseigne le numero \n de telephone ";
+                  return "Vous n'avez pas renseigne le numéro \n de telephone ";
                 } else if (value.length < 9) {
-                  return 'Numero de telephone non valide';
+                  return 'Numéro de téléphone non valide';
                 }
               },
             ),
@@ -96,7 +96,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
 //              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
                     child: Center(
                       child: Text(
-                        'Probleme survenue , veillez reessayer.',
+                        'Problème survenue , veillez réessayer.',
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -114,7 +114,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneNumberPage> {
                   GestureDetector(
                       onTap: () => _setAgreedToTOS(!_agreedToTOS),
                       child: Text(
-                        "En continuant vous allez recvoire un \ncode de verification par SMS.\n"
+                        "En continuant vous allez recvoire un \ncode de vérification par SMS.\n"
                             " Vous devez renseigner ce code \na la page suivante.",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,

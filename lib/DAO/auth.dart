@@ -224,10 +224,15 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Future<void> _signInWithPhoneNumber() async {
     final errorMessage = "Nous ne pouvons verifier votre code reessayez !!!";
-    await _auth
-        .signInWithPhoneNumber(
-            verificationId: _verificationId, smsCode: smsCodeController.text)
-        .then((user) async {
+    final AuthCredential credential = PhoneAuthProvider.getCredential(
+      verificationId: _verificationId,
+      smsCode: smsCodeController.text,
+    );
+    final FirebaseUser user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    assert(user.uid == currentUser.uid);
+    if (user != null) {
       await _onCodeVerified(user).then((codeVerified) async {
         this._codeVerified = codeVerified;
         Logger.log(
@@ -240,10 +245,29 @@ class _AuthScreenState extends State<AuthScreen> {
           _showErrorSnackbar(errorMessage);
         }
       });
-    }, onError: (error) {
-      print("Failed to verify SMS code: $error");
+    } else {
       _showErrorSnackbar(errorMessage);
-    });
+    }
+//    await _auth
+//        .signInWithPhoneNumber(
+//            verificationId: _verificationId, smsCode: smsCodeController.text)
+//        .then((user) async {
+//      await _onCodeVerified(user).then((codeVerified) async {
+//        this._codeVerified = codeVerified;
+//        Logger.log(
+//          TAG,
+//          message: "Returning ${this._codeVerified} from _onCodeVerified",
+//        );
+//        if (this._codeVerified) {
+//          await _finishSignIn(user);
+//        } else {
+//          _showErrorSnackbar(errorMessage);
+//        }
+//      });
+//    }, onError: (error) {
+//      print("Failed to verify SMS code: $error");
+//      _showErrorSnackbar(errorMessage);
+//    });
   }
 
   Future<bool> _onCodeVerified(FirebaseUser user) async {

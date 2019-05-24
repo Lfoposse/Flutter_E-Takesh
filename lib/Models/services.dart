@@ -52,17 +52,19 @@ class Service {
   String _code;
   String _intitule;
   int _prix;
-  bool _selected;
+  int _prix_douala;
+  int _prix_yaounde;
 
-  Service(
-      this._serviceid, this._code, this._intitule, this._prix, this._selected);
+  Service(this._serviceid, this._code, this._intitule, this._prix,
+      this._prix_douala, this._prix_yaounde);
 
   Service.empty() {
     this._serviceid = null;
     this._code = null;
     this._intitule = null;
     this._prix = null;
-    this._selected = false;
+    this._prix_douala = null;
+    this._prix_yaounde = null;
   }
 
   Service.map(dynamic obj) {
@@ -70,7 +72,8 @@ class Service {
     this._code = obj["code"];
     this._intitule = obj["intitule"];
     this._prix = obj["prix"];
-    this._selected = false;
+    this._prix_douala = obj["prix_douala"];
+    this._prix_yaounde = obj["prix_yaounde"];
   }
 
   int get prix => _prix;
@@ -97,9 +100,15 @@ class Service {
     _serviceid = value;
   }
 
-  bool get selected => _selected;
+  int get prix_yaounde => _prix_yaounde;
 
-  set selected(bool value) {
-    _selected = value;
+  set prix_yaounde(int value) {
+    _prix_yaounde = value;
+  }
+
+  int get prix_douala => _prix_douala;
+
+  set prix_douala(int value) {
+    _prix_douala = value;
   }
 }

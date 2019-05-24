@@ -59,7 +59,7 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     new Text(
-                      "Yaounde",
+                      "Yaoundé",
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -108,7 +108,7 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w400)),
                           new Text(
-                            "Facture par heure",
+                            "Facturé par heure",
                             style:
                                 TextStyle(color: Colors.grey, fontSize: 12.0),
                           ),
@@ -121,7 +121,8 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           new Text(
-                            services[indexItem].prix.toString() + " XAF",
+                            services[indexItem].prix_yaounde.toString() +
+                                " XAF",
                             style: TextStyle(
                                 fontSize: 16.0, fontWeight: FontWeight.w400),
                           ),
@@ -140,7 +141,7 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           new Text(
-                            services[indexItem].prix.toString() + " XAF",
+                            services[indexItem].prix_douala.toString() + " XAF",
                             style: TextStyle(
                                 fontSize: 16.0, fontWeight: FontWeight.w400),
                           ),

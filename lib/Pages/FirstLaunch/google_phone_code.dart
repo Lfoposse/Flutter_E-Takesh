@@ -211,24 +211,24 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
         ));
   }
 
-  signIn(BuildContext context) {
+  signIn(BuildContext context) async {
     setState(() {
       loading = true;
       error = false;
     });
-    FirebaseAuth.instance
-        .signInWithPhoneNumber(
-            verificationId: widget.ververId, smsCode: _codeController.text)
-        .then((user) {
+    final AuthCredential credential = PhoneAuthProvider.getCredential(
+      verificationId: widget.ververId,
+      smsCode: _codeController.text,
+    );
+    final FirebaseUser user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    assert(user.uid == currentUser.uid);
+    setState(() {
       if (user != null) {
-        GoogleSignInAccount user1 = googleSignIn.currentUser;
         print('FirebaseUser ' + user.toString());
-        print('GoogleUser2 ' + user1.toString());
-        print('GoogleUser1 ' + this.widget.user.toString());
-        print('PhoneNumber ' + this.widget.phone_n);
 
         ///        Start registration
-
         setState(() {
           loading = true;
           existemail = false;
@@ -243,13 +243,34 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
           error = true;
         });
       }
-    }).catchError((e) {
-      setState(() {
-        loading = false;
-        error = true;
-      });
-      print('Bad code' + e.toString());
     });
+//    FirebaseAuth.instance
+//        .signInWithPhoneNumber(
+//            verificationId: widget.ververId, smsCode: _codeController.text)
+//        .then((user) {
+//      if (user != null) {
+//        ///        Start registration
+//        setState(() {
+//          loading = true;
+//          existemail = false;
+//          error = false;
+//        });
+////    on creer le User
+//        createUser();
+//      } else {
+//        print('Bad code' + user.toString());
+//        setState(() {
+//          loading = false;
+//          error = true;
+//        });
+//      }
+//    }).catchError((e) {
+//      setState(() {
+//        loading = false;
+//        error = true;
+//      });
+//      print('Bad code' + e.toString());
+//    });
   }
 
   Future createUser() async {

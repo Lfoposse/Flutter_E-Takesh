@@ -34,7 +34,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneCodePage> {
             backgroundColor: Color(0xFF0C60A8),
             foregroundColor: Colors.white,
             child: Icon(Icons.arrow_forward),
-            tooltip: "Donnees personnelles",
+            tooltip: "Données personnelles",
             onPressed: () {
               FirebaseAuth.instance.currentUser().then((user) {
                 if (user != null) {
@@ -77,7 +77,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneCodePage> {
                             alignment: Alignment.center,
 //                        padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
                             child: Text(
-                              "Saisissez le code a 6 chiffres recu au numero " +
+                              "Saisissez le code a 6 chiffres reçu au numéro " +
                                   widget.phone_n,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 3,
@@ -157,7 +157,7 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneCodePage> {
 //              padding: const EdgeInsets.only(left: 20, right: 20, top: 30.0, bottom: 15.0),
                       child: Center(
                         child: Text(
-                          'Code invalide , veillez reessayer.',
+                          'Code invalide , veillez réessayer.',
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
@@ -168,15 +168,20 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneCodePage> {
         ));
   }
 
-  signIn(BuildContext context) {
+  signIn(BuildContext context) async {
     setState(() {
       loading = true;
       error = false;
     });
-    FirebaseAuth.instance
-        .signInWithPhoneNumber(
-            verificationId: widget.ververId, smsCode: _codeController.text)
-        .then((user) {
+    final AuthCredential credential = PhoneAuthProvider.getCredential(
+      verificationId: widget.ververId,
+      smsCode: _codeController.text,
+    );
+    final FirebaseUser user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    assert(user.uid == currentUser.uid);
+    setState(() {
       if (user != null) {
         print('FirebaseUser ' + user.toString());
         setState(() {
@@ -195,12 +200,35 @@ class _EnterPhoneNumberPageState extends State<EnterPhoneCodePage> {
           error = true;
         });
       }
-    }).catchError((e) {
-      setState(() {
-        loading = false;
-        error = true;
-      });
-      print('Bad code' + e);
     });
   }
+//    FirebaseAuth.instance
+//        . signInWithPhoneNumber(
+//            verificationId: widget.ververId, smsCode: _codeController.text)
+//        .then((user) {
+//      if (user != null) {
+//        print('FirebaseUser ' + user.toString());
+//        setState(() {
+//          loading = false;
+//          error = false;
+//        });
+//        Navigator.push(
+//          context,
+//          new MaterialPageRoute(
+//              builder: (context) => EnterEmailPage(phone_n: widget.phone_n)),
+//        );
+//      } else {
+//        print('Bad code' + user.toString());
+//        setState(() {
+//          loading = false;
+//          error = true;
+//        });
+//      }
+//    }).catchError((e) {
+//      setState(() {
+//        loading = false;
+//        error = true;
+//      });
+//      print('Bad code' + e);
+//    });
 }
