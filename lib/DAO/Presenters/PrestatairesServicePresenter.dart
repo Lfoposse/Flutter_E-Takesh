@@ -14,9 +14,9 @@ class PresetataireServicePresenter {
 
   PresetataireServicePresenter(this._view);
 
-  loadPrestataires(String token) {
+  loadPrestataires(String token, int serviceId) {
     api
-        .getAllPrestatairesServices(token)
+        .getAllPrestatairesServices(token, serviceId)
         .then((List<PrestataireService> prestataires) {
       print(prestataires);
       if (prestataires != null) {
