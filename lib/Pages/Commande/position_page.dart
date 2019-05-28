@@ -159,7 +159,7 @@ class PositionPageState extends State<PositionPage> {
                             ),
                             decoration: new InputDecoration(
                               contentPadding: EdgeInsets.all(12.0),
-                              hintText: "Où etes vous ?",
+                              hintText: "Où etes-vous ?",
                               hintStyle: TextStyle(color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),

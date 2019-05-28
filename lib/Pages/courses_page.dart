@@ -1,76 +1,132 @@
+import 'package:etakesh_client/DAO/Presenters/CoursesPresenter.dart';
+import 'package:etakesh_client/Database/DatabaseHelper.dart';
+import 'package:etakesh_client/Models/clients.dart';
+import 'package:etakesh_client/Models/commande.dart';
+import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
+import 'package:etakesh_client/Utils/Loading.dart';
 import 'package:flutter/material.dart';
 
-//class TarifsPage extends StatefulWidget {
-//  @override
-//  State createState() => TarifsPageState();
-//}
-//
-//class TarifsPageState extends State<TarifsPage> implements ServiceContract {}
-
-class CoursesPage extends StatelessWidget {
+class CoursesPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-            appBar: new AppBar(
-              bottom: TabBar(
-                indicatorColor: Color(0xFF2773A1),
-                tabs: [
-                  Tab(
-                    child: Text(
-                      "Anciènnes",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      "A venir",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-              title: new Text(
-                'Mes courses',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-              iconTheme: IconThemeData(color: Colors.white),
-            ),
-            body: TabBarView(
-              children: [
-                ListView(
-                  children: <Widget>[
-                    listItem("Course", "MEA8756", "4h15min", Color(0xFF0C60A8)),
-                    listItem("Dépot", "ORA7746", "3h10min", Color(0xFFC72230)),
-                    listItem("Privé", "DAA8740", "1h10min", Color(0xFFDEAC17)),
-                    listItem("Aéropot", "PEA8746", "10min", Color(0xFF33B841))
-                  ],
-                ),
+  State createState() => CoursesPageState();
+}
 
-                ///si on n'a pas encore effectuer une course
-//                Center(
-//                  child: Text("Vous n'avez pas encore effectue de course"),
-//                ),
-                ListView(
-                  children: <Widget>[
-                    listItem("Course", "MEA8756", "4h15min", Color(0xFF0C60A8)),
-                    listItem("Dépot", "ORA7746", "3h10min", Color(0xFFC72230)),
-                    listItem("Privé", "DAA8740", "1h10min", Color(0xFFDEAC17)),
-                    listItem("Aéropot", "PEA8746", "10min", Color(0xFF33B841))
-                  ],
-                ),
-
-                ///si on n'a pas aucune course programmee
-//                Center(
-//                  child: Text("Vous n'avez aucune course planifiee"),
-//                )
-              ],
-            )));
+class CoursesPageState extends State<CoursesPage> implements CoursesContract {
+//class CoursesPage extends StatelessWidget {
+  String _token;
+  int _stateIndex;
+  List<CommandeDetail> _cmds;
+  CoursesPresenter _presenter;
+  bool _ncourses, _ocourses;
+  Client1 client;
+  @override
+  void initState() {
+    _ncourses = false;
+    _ocourses = false;
+    AppSharedPreferences().getToken().then((String token1) {
+      if (token1 != '') {
+        _token = token1;
+        DatabaseHelper().getClient().then((Client1 c) {
+          if (c != null) {
+            client = c;
+            _presenter = new CoursesPresenter(this);
+            _presenter.loadCmd(token1, c.client_id);
+          }
+        });
+      }
+    }).catchError((err) {
+      print("Not get Token " + err.toString());
+    });
+    _stateIndex = 0;
+    super.initState();
   }
 
-  Widget listItem(String title, String cmd, String time, Color color) {
+  @override
+  Widget build(BuildContext context) {
+    switch (_stateIndex) {
+      case 0:
+        return ShowLoadingView();
+
+      case 2:
+        return ShowConnectionErrorView(_onRetryClick);
+
+      default:
+        return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+                appBar: new AppBar(
+                  bottom: TabBar(
+                    indicatorColor: Color(0xFF2773A1),
+                    tabs: [
+                      Tab(
+                        child: Text(
+                          "A venir",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "Anciènnes",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  title: new Text(
+                    'Mes courses',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.black,
+                  iconTheme: IconThemeData(color: Colors.white),
+                ),
+                body: TabBarView(
+                  children: [
+                    _ncourses
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(0.0),
+                            scrollDirection: Axis.vertical,
+                            itemCount: _cmds.length,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                              return getItem(index);
+                            })
+                        :
+
+                        ///si on n'a pas encore effectuer une course
+                        Center(
+                            child: Text(
+                                "Vous n'avez pas encore planifié de course",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                    color: Colors.black)),
+                          ),
+                    _ocourses
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(0.0),
+                            scrollDirection: Axis.vertical,
+                            itemCount: _cmds.length,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                              return getItem(index);
+                            })
+                        :
+
+                        ///si on n'a pas aucune course programmee
+                        Center(
+                            child: Text(
+                                "Vous n'avez pas encore effectué de course",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                    color: Colors.black)),
+                          )
+                  ],
+                )));
+    }
+  }
+
+  Widget getItem(indexItem) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Container(
@@ -82,8 +138,8 @@ class CoursesPage extends StatelessWidget {
                 child: new Container(
                   height: 12.0,
                   width: 12.0,
-                  decoration:
-                      new BoxDecoration(shape: BoxShape.circle, color: color),
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFFDEAC17)),
                 ),
               ),
               new Expanded(
@@ -91,7 +147,7 @@ class CoursesPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Text(
-                      title,
+                      _cmds[indexItem].prestation.service.intitule,
                       style: new TextStyle(
                           fontSize: 18.0, color: Color(0xFF9FA0A2)),
                     ),
@@ -99,7 +155,7 @@ class CoursesPage extends StatelessWidget {
                       height: 7.0,
                     ),
                     new Text(
-                      'Commande No ' + cmd,
+                      'Commande No ' + _cmds[indexItem].commandeid.toString(),
                       style: new TextStyle(
                           fontSize: 12.0,
                           color: Color(0xFF9FA0A2).withOpacity(0.5)),
@@ -123,7 +179,8 @@ class CoursesPage extends StatelessWidget {
                       height: 7.0,
                     ),
                     new Text(
-                      "il y'a 20 " + time,
+                      "il y'a 20 " +
+                          _cmds[indexItem].prestation.service.duree.toString(),
                       style: new TextStyle(
                           fontSize: 12.0, color: Color(0xFF93BFD8)),
                     )
@@ -133,5 +190,41 @@ class CoursesPage extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  void _onRetryClick() {
+    setState(() {
+      _stateIndex = 0;
+      _presenter.loadCmd(_token, client.client_id);
+    });
+  }
+
+  ///soucis de connexion internet
+  @override
+  void onConnectionError() {
+    setState(() {
+      _stateIndex = 2;
+    });
+  }
+
+  ///en cas de soucis
+  @override
+  void onLoadingError() {
+    setState(() {
+      _stateIndex = 1;
+    });
+  }
+
+  ///si tout ce passe bien
+  @override
+  void onLoadingSuccess(List<CommandeDetail> cmds) {
+    if (cmds.length != 0)
+      setState(() {
+        print("Cmds");
+        print(cmds);
+        _ncourses = true;
+        this._cmds = cmds.reversed.toList();
+        _stateIndex = 3;
+      });
   }
 }

@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:etakesh_client/DAO/Presenters/PrestatairesServicePresenter.dart';
+import 'package:etakesh_client/DAO/Rest_dt.dart';
 import 'package:etakesh_client/DAO/google_maps_requests.dart';
 import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
+import 'package:etakesh_client/Models/commande.dart';
 import 'package:etakesh_client/Models/google_place_item.dart';
 import 'package:etakesh_client/Models/google_place_item_term.dart';
 import 'package:etakesh_client/Models/prestataires.dart';
@@ -39,11 +41,13 @@ class CommandePageState extends State<CommandePage>
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
   PresetataireServicePresenter _presenter;
 
+  Commande cmd;
   int stateIndex;
   Login2 login;
   Client1 client;
   LatLng target;
   List<PrestataireService> listprestataires;
+
   CommandePageState() {
     _presenter = new PresetataireServicePresenter(this);
   }
@@ -59,17 +63,18 @@ class CommandePageState extends State<CommandePage>
   LocationModel position, destination;
   int _selectedIndex = -1;
   PrestataireService _prestataireselect;
+  RestDatasource api = new RestDatasource();
+  bool loading;
+
   @override
   void initState() {
-//    _prestataireselect = new PrestataireService();
-    print("Testprest");
-    print(_prestataireselect);
+    loading = false;
     _addMarkerPosition(widget.position.place_id);
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
         print("USER " + l.userId.toString());
         login = l;
-        _presenter.loadPrestataires(l.token);
+        _presenter.loadPrestataires(l.token, widget.service.serviceid);
       }
     });
     _addMarkerDestination(widget.destination.place_id);
@@ -295,7 +300,6 @@ class CommandePageState extends State<CommandePage>
                   left: 0,
                   right: 0,
                   child: Container(
-//                      color: Color(0x88F9FAFC),
                       color: Colors.white,
                       child: new Column(
                         children: <Widget>[
@@ -321,26 +325,58 @@ class CommandePageState extends State<CommandePage>
                           ),
                           Container(
                             height: 165.0,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.only(
-                                    left: 5.0,
-                                    right: 5.0,
-                                    top: 10.0,
-                                    bottom: 10.0),
-                                itemCount: listprestataires.length,
-                                itemBuilder: (BuildContext ctxt, int index) {
-                                  return InkWell(
-                                    child: Container(child: getItem(index)),
-                                    onTap: () {
-                                      _onSelected(index);
-                                      setState(() {
-                                        _prestataireselect =
-                                            listprestataires[index];
-                                      });
-                                    },
-                                  );
-                                }),
+                            child: loading
+                                ? Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        top: 30.0,
+                                        bottom: 15.0),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+//                                            padding: EdgeInsets.all(20.0),
+                                            child: CircularProgressIndicator(
+                                              backgroundColor:
+                                                  Color(0xFF0C60A8),
+                                            ),
+                                          ),
+                                          Text(
+                                            "Chargement...",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16.0,
+                                                color: Colors.black),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    padding: EdgeInsets.only(
+                                        left: 5.0,
+                                        right: 5.0,
+                                        top: 10.0,
+                                        bottom: 10.0),
+                                    itemCount: listprestataires.length,
+                                    itemBuilder:
+                                        (BuildContext ctxt, int index) {
+                                      return InkWell(
+                                        child: Container(child: getItem(index)),
+                                        onTap: () {
+                                          _onSelected(index);
+                                          setState(() {
+                                            _prestataireselect =
+                                                listprestataires[index];
+                                          });
+                                        },
+                                      );
+                                    }),
                           ),
                           Divider(),
                           _prestataireselect != null
@@ -368,26 +404,72 @@ class CommandePageState extends State<CommandePage>
                                                     top: 10.0,
                                                     bottom: 10.0),
                                                 onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pushAndRemoveUntil(
-                                                          new MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      HomePage()),
-                                                          ModalRoute.withName(
-                                                              Navigator
-                                                                  .defaultRouteName));
-                                                  print("Commande");
-                                                  print("CLient : " +
-                                                      client.client_id
-                                                          .toString());
-                                                  print("Prestation : " +
-                                                      _prestataireselect
-                                                          .prestationid
-                                                          .toString());
-                                                  print("Prix : " +
-                                                      _prestataireselect.montant
-                                                          .toString());
+                                                  setState(() {
+                                                    loading = true;
+                                                  });
+                                                  api
+                                                      .savePosition(
+                                                          widget.locdestination
+                                                              .lat,
+                                                          widget.locdestination
+                                                              .lng,
+                                                          widget.destination
+                                                              .description,
+                                                          login.token)
+                                                      .then(
+                                                          (PositionModel dest) {
+                                                    if (dest != null) {
+                                                      print(" DestPost" +
+                                                          dest.positionid
+                                                              .toString());
+                                                      api
+                                                          .savePosition(
+                                                              widget.locposition
+                                                                  .lat,
+                                                              widget.locposition
+                                                                  .lng,
+                                                              widget.position
+                                                                  .description,
+                                                              login.token)
+                                                          .then((PositionModel
+                                                              post) {
+                                                        if (post != null) {
+                                                          print(" PostPost" +
+                                                              post.positionid
+                                                                  .toString());
+                                                          api
+                                                              .saveCmd(
+                                                                  widget.service
+                                                                      .prix,
+                                                                  post
+                                                                      .positionid,
+                                                                  dest
+                                                                      .positionid,
+                                                                  client
+                                                                      .client_id,
+                                                                  _prestataireselect
+                                                                      .prestationid,
+                                                                  login.token)
+                                                              .then((Commande
+                                                                  cmdCreate) {
+                                                            if (cmdCreate !=
+                                                                null)
+                                                              setState(() {
+                                                                loading = false;
+                                                              });
+                                                            Navigator.of(context).pushAndRemoveUntil(
+                                                                new MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            HomePage()),
+                                                                ModalRoute.withName(
+                                                                    Navigator
+                                                                        .defaultRouteName));
+                                                          });
+                                                        }
+                                                      });
+                                                    }
+                                                  });
                                                 }))),
                                     Container(
                                       height: 50.0,
@@ -485,7 +567,7 @@ class CommandePageState extends State<CommandePage>
   void _onRetryClick() {
     setState(() {
       stateIndex = 0;
-      _presenter.loadPrestataires(login.token);
+      _presenter.loadPrestataires(login.token, widget.service.serviceid);
     });
   }
 

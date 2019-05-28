@@ -23,12 +23,17 @@ class RestDatasource {
   static final GOOGLE_MAP_URL =
       "https://maps.googleapis.com/maps/api/place/autocomplete/json";
   static final PRESTATION = BASE_URL + "prestations";
-  static final ALLPRESTATAIRE = PRESTATION +
-      "?filter[include]=prestataire&filter[include]=vehicule&access_token=";
+  static final ALLPRESTATAIRE =
+      PRESTATION + "?filter[include]=prestataire&filter[include]=vehicule";
+  static final CMD_PRESTATION =
+      CMD_URL + "?filter[include][prestation]=service";
 
   ///provisoire
   static final FILTER = "&filter=";
+  static final FILTERSERVICE = "&filter[where][serviceId]=";
+  static final FILTERCLIENT = "&filter[where][clientId]=";
   static final TOKEN1 = "?access_token=";
+  static final TOKEN2 = "&access_token=";
 
   ///retourne les informations(token) d'un compte client a partir de ses identifiants
   Future<Login2> login(String username, String password) {
@@ -65,21 +70,41 @@ class RestDatasource {
   Future<List<Service>> getService(String token) {
     return _netUtil.get(SERVICE_URL + TOKEN1 + token).then((dynamic res) {
       if (res != null)
-        return (res as List).map((item) => new Service.map(item)).toList();
+        return (res as List).map((item) => new Service.fromJson(item)).toList();
       else
         return null as List<Service>;
     }).catchError(
         (onError) => new Future.error(new Exception(onError.toString())));
   }
 
+  ///Liste des commandes en cours (courses) du client
+  Future<List<CommandeDetail>> getCmdClient(String token, int clientId) {
+    return _netUtil
+        .get(CMD_PRESTATION +
+            FILTERCLIENT +
+            clientId.toString() +
+            TOKEN2 +
+            token)
+        .then((dynamic res) {
+      if (res != null)
+        return (res as List)
+            .map((item) => new CommandeDetail.fromJson(item))
+            .toList();
+      else
+        return null as List<CommandeDetail>;
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
   /// liste des prestataires avec leur vehicules
   Future<List<PrestataireService>> getAllPrestatairesServices(
       String token, int serviceId) {
-    var filter = """{
-      "where": {"serviceId": $serviceId}
-    }""";
     return _netUtil
-        .get(ALLPRESTATAIRE + token + FILTER + filter)
+        .get(ALLPRESTATAIRE +
+            FILTERSERVICE +
+            serviceId.toString() +
+            TOKEN2 +
+            token)
         .then((dynamic res) {
       if (res != null)
         return (res as List)

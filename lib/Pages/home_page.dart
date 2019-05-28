@@ -82,7 +82,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
     mylng = 9.748265;
     destination_selected = false;
     pret_a_commander = false;
-    destination = "Où allez vous ?";
+    destination = "Où allez-vous ?";
     position = "Où etes vous ?";
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
@@ -267,7 +267,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                 left: 5.0,
                 top: 15.0,
                 child: IconButton(
-                  iconSize: 40.0,
+                  iconSize: 35.0,
                   onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
                   },
@@ -278,7 +278,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                 ),
               ),
               Positioned(
-                  top: 85.0,
+                  top: 80.0,
                   left: 10.0,
                   right: 10.0,
                   height: 60.0,

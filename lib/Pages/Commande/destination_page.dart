@@ -120,7 +120,7 @@ class DestinationPageState extends State<DestinationPage> {
                             ),
                             decoration: new InputDecoration(
                               contentPadding: EdgeInsets.all(12.0),
-                              hintText: "Où allez vous ?",
+                              hintText: "Où allez-vous ?",
                               hintStyle: TextStyle(color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -184,7 +184,7 @@ class DestinationPageState extends State<DestinationPage> {
                             ),
                             decoration: new InputDecoration(
                               contentPadding: EdgeInsets.all(12.0),
-                              hintText: "Où etes vous ?",
+                              hintText: "Où etes-vous ?",
                               hintStyle: TextStyle(color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),

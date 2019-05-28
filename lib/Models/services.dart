@@ -1,18 +1,27 @@
-class Service1 {
+class Service {
   final int serviceid;
   final String code;
   final String intitule;
   final int prix;
+  final int prix_douala;
+  final int prix_yaounde;
 
-  Service1({this.serviceid, this.code, this.intitule, this.prix});
+  Service(
+      {this.serviceid,
+      this.code,
+      this.intitule,
+      this.prix,
+      this.prix_douala,
+      this.prix_yaounde});
 
-  factory Service1.fromJson(Map<String, dynamic> json) {
-    return Service1(
-      serviceid: json['serviceid'],
-      code: json['code'],
-      intitule: json['intitule'],
-      prix: json['prix'],
-    );
+  factory Service.fromJson(Map<String, dynamic> json) {
+    return Service(
+        serviceid: json['serviceid'],
+        code: json['code'],
+        intitule: json['intitule'],
+        prix: json['prix'],
+        prix_douala: json["prix_douala"],
+        prix_yaounde: json["prix_yaounde"]);
   }
 }
 
@@ -33,82 +42,68 @@ class Login {
   }
 }
 
-class UserCreate {
-  final int id;
-  final String email;
-
-  UserCreate({
-    this.id,
-    this.email,
-  });
-
-  factory UserCreate.fromJson(Map<String, dynamic> json) {
-    return UserCreate(id: json['id'], email: json['ttl']);
-  }
-}
-
-class Service {
-  int _serviceid;
-  String _code;
-  String _intitule;
-  int _prix;
-  int _prix_douala;
-  int _prix_yaounde;
-
-  Service(this._serviceid, this._code, this._intitule, this._prix,
-      this._prix_douala, this._prix_yaounde);
-
-  Service.empty() {
-    this._serviceid = null;
-    this._code = null;
-    this._intitule = null;
-    this._prix = null;
-    this._prix_douala = null;
-    this._prix_yaounde = null;
-  }
-
-  Service.map(dynamic obj) {
-    this._serviceid = obj["serviceid"];
-    this._code = obj["code"];
-    this._intitule = obj["intitule"];
-    this._prix = obj["prix"];
-    this._prix_douala = obj["prix_douala"];
-    this._prix_yaounde = obj["prix_yaounde"];
-  }
-
-  int get prix => _prix;
-
-  set prix(int value) {
-    _prix = value;
-  }
-
-  String get intitule => _intitule;
-
-  set intitule(String value) {
-    _intitule = value;
-  }
-
-  String get code => _code;
-
-  set code(String value) {
-    _code = value;
-  }
-
-  int get serviceid => _serviceid;
-
-  set serviceid(int value) {
-    _serviceid = value;
-  }
-
-  int get prix_yaounde => _prix_yaounde;
-
-  set prix_yaounde(int value) {
-    _prix_yaounde = value;
-  }
-
-  int get prix_douala => _prix_douala;
-
-  set prix_douala(int value) {
-    _prix_douala = value;
-  }
-}
+//class Service {
+//  int _serviceid;
+//  String _code;
+//  String _intitule;
+//  int _prix;
+//  int _prix_douala;
+//  int _prix_yaounde;
+//
+//  Service(this._serviceid, this._code, this._intitule, this._prix,
+//      this._prix_douala, this._prix_yaounde);
+//
+//  Service.empty() {
+//    this._serviceid = null;
+//    this._code = null;
+//    this._intitule = null;
+//    this._prix = null;
+//    this._prix_douala = null;
+//    this._prix_yaounde = null;
+//  }
+//
+//  Service.map(dynamic obj) {
+//    this._serviceid = obj["serviceid"];
+//    this._code = obj["code"];
+//    this._intitule = obj["intitule"];
+//    this._prix = obj["prix"];
+//    this._prix_douala = obj["prix_douala"];
+//    this._prix_yaounde = obj["prix_yaounde"];
+//  }
+//
+//  int get prix => _prix;
+//
+//  set prix(int value) {
+//    _prix = value;
+//  }
+//
+//  String get intitule => _intitule;
+//
+//  set intitule(String value) {
+//    _intitule = value;
+//  }
+//
+//  String get code => _code;
+//
+//  set code(String value) {
+//    _code = value;
+//  }
+//
+//  int get serviceid => _serviceid;
+//
+//  set serviceid(int value) {
+//    _serviceid = value;
+//  }
+//
+//  int get prix_yaounde => _prix_yaounde;
+//
+//  set prix_yaounde(int value) {
+//    _prix_yaounde = value;
+//  }
+//
+//  int get prix_douala => _prix_douala;
+//
+//  set prix_douala(int value) {
+//    _prix_douala = value;
+//  }
+//}

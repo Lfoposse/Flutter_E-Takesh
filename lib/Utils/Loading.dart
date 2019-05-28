@@ -20,7 +20,7 @@ class ShowLoadingView extends StatelessWidget {
               ),
             ),
             Text(
-              "Chargement",
+              "Chargement...",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
