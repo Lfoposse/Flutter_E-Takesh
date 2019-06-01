@@ -4,6 +4,7 @@ import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Models/commande.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
+import 'package:etakesh_client/pages/Commande/details_cmd.dart';
 import 'package:flutter/material.dart';
 
 class CoursesPage extends StatefulWidget {
@@ -15,7 +16,8 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
 //class CoursesPage extends StatelessWidget {
   String _token;
   int _stateIndex;
-  List<CommandeDetail> _cmds;
+  List<CommandeDetail> _ncmds;
+  List<CommandeDetail> _ocmds;
   CoursesPresenter _presenter;
   bool _ncourses, _ocourses;
   Client1 client;
@@ -86,9 +88,18 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                             shrinkWrap: true,
                             padding: EdgeInsets.all(0.0),
                             scrollDirection: Axis.vertical,
-                            itemCount: _cmds.length,
+                            itemCount: _ncmds.length,
                             itemBuilder: (BuildContext ctxt, int index) {
-                              return getItem(index);
+                              return InkWell(
+                                  child: Container(child: getItemNew(index)),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailsCmdPage(
+                                                  commande: _ncmds[index],
+                                                )));
+                                  });
                             })
                         :
 
@@ -106,9 +117,9 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                             shrinkWrap: true,
                             padding: EdgeInsets.all(0.0),
                             scrollDirection: Axis.vertical,
-                            itemCount: _cmds.length,
+                            itemCount: _ocmds.length,
                             itemBuilder: (BuildContext ctxt, int index) {
-                              return getItem(index);
+                              return getItemOld(index);
                             })
                         :
 
@@ -126,7 +137,7 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
     }
   }
 
-  Widget getItem(indexItem) {
+  Widget getItemNew(indexItem) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Container(
@@ -139,7 +150,8 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                   height: 12.0,
                   width: 12.0,
                   decoration: new BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xFFDEAC17)),
+                      shape: BoxShape.circle,
+                      color: getStatusCommandValueColor(_ncmds[indexItem])),
                 ),
               ),
               new Expanded(
@@ -147,7 +159,7 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Text(
-                      _cmds[indexItem].prestation.service.intitule,
+                      _ncmds[indexItem].prestation.service.intitule,
                       style: new TextStyle(
                           fontSize: 18.0, color: Color(0xFF9FA0A2)),
                     ),
@@ -155,7 +167,7 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                       height: 7.0,
                     ),
                     new Text(
-                      'Commande No ' + _cmds[indexItem].commandeid.toString(),
+                      'Rèf ' + _ncmds[indexItem].code,
                       style: new TextStyle(
                           fontSize: 12.0,
                           color: Color(0xFF9FA0A2).withOpacity(0.5)),
@@ -180,7 +192,73 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                     ),
                     new Text(
                       "il y'a 20 " +
-                          _cmds[indexItem].prestation.service.duree.toString(),
+                          _ncmds[indexItem].prestation.service.duree.toString(),
+                      style: new TextStyle(
+                          fontSize: 12.0, color: Color(0xFF93BFD8)),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Widget getItemOld(indexItem) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Container(
+          color: Color(0x88F9FAFC),
+          child: Row(
+            children: <Widget>[
+              new Padding(
+                padding: new EdgeInsets.symmetric(horizontal: 32.0 - 12.0 / 2),
+                child: new Container(
+                  height: 12.0,
+                  width: 12.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFF33B841)),
+                ),
+              ),
+              new Expanded(
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      _ocmds[indexItem].prestation.service.intitule,
+                      style: new TextStyle(
+                          fontSize: 18.0, color: Color(0xFF9FA0A2)),
+                    ),
+                    SizedBox(
+                      height: 7.0,
+                    ),
+                    new Text(
+                      'Rèf ' + _ocmds[indexItem].code,
+                      style: new TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xFF9FA0A2).withOpacity(0.5)),
+                    )
+                  ],
+                ),
+              ),
+              new Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    new Text(
+                      "Aujourd'hui",
+                      style: new TextStyle(
+                        fontSize: 14.0,
+                        color: Color(0xFF50AED8),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 7.0,
+                    ),
+                    new Text(
+                      "il y'a 20 " +
+                          _ocmds[indexItem].prestation.service.duree.toString(),
                       style: new TextStyle(
                           fontSize: 12.0, color: Color(0xFF93BFD8)),
                     )
@@ -217,14 +295,34 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
 
   ///si tout ce passe bien
   @override
-  void onLoadingSuccess(List<CommandeDetail> cmds) {
-    if (cmds.length != 0)
+  void onLoadingSuccess(
+      List<CommandeDetail> ncmds, List<CommandeDetail> ocmds) {
+    setState(() {
+      _stateIndex = 3;
+    });
+    if (ncmds.length != 0)
       setState(() {
-        print("Cmds");
-        print(cmds);
         _ncourses = true;
-        this._cmds = cmds.reversed.toList();
-        _stateIndex = 3;
+        this._ncmds = ncmds.reversed.toList();
       });
+    if (ocmds.length != 0)
+      setState(() {
+        _ocourses = true;
+        this._ocmds = ocmds.reversed.toList();
+      });
+  }
+
+  Color getStatusCommandValueColor(CommandeDetail cmd) {
+    if (cmd.is_created == true &&
+        cmd.is_accepted == false &&
+        cmd.is_refused == false) return Color(0xFFDEAC17);
+    if (cmd.is_accepted == true &&
+        cmd.is_created == true &&
+        cmd.is_refused == false) return Color(0xFF0C60A8);
+    if (cmd.is_refused == true &&
+        cmd.is_created == true &&
+        cmd.is_accepted == false) return Color(0xFFC72230);
+    if (cmd.is_terminated == true && cmd.is_created == true)
+      return Color(0xFF33B841);
   }
 }

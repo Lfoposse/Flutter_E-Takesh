@@ -315,6 +315,14 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
             "nom": this.widget.user.displayName,
             "prenom": this.widget.user.displayName,
             "telephone": this.widget.phone_n,
+            "date_creation": DateTime.now().toString(),
+            "code": "ET" +
+                DateTime.now().month.toString() +
+                DateTime.now().day.toString() +
+                DateTime.now().hour.toString() +
+                DateTime.now().second.toString() +
+                "CLT" +
+                DateTime.now().year.toString(),
             "ville": "Douala",
             "date_naissance": "1990-01-01",
             "status": "Creer",

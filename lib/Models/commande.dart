@@ -105,14 +105,20 @@ class CommandeDetail {
   String duree_client_prestataire;
   String date_acceptation;
   String date_prise_en_charge;
-  String position_prise_en_charge;
-  String position_destination;
+  String position_priseId;
+  String position_destId;
   String rate_comment;
   String rate_date;
   int rate_value;
   int prestationId;
   Prestation prestation;
   String clientId;
+
+  String code;
+  bool is_created;
+  bool is_accepted;
+  bool is_refused;
+  bool is_terminated;
 
   CommandeDetail(
       {this.commandeid,
@@ -125,20 +131,26 @@ class CommandeDetail {
       this.duree_client_prestataire,
       this.date_acceptation,
       this.date_prise_en_charge,
-      this.position_prise_en_charge,
-      this.position_destination,
+      this.position_priseId,
+      this.position_destId,
       this.rate_comment,
       this.rate_date,
       this.rate_value,
       this.prestationId,
       this.prestation,
-      this.clientId});
+      this.clientId,
+      this.code,
+      this.is_accepted,
+      this.is_created,
+      this.is_refused,
+      this.is_terminated});
 
   factory CommandeDetail.fromJson(Map<String, dynamic> obj) {
     return CommandeDetail(
       commandeid: obj["commandeid"],
       date_debut: obj["date_debut"],
       date_fin: obj["date_fin"],
+      code: obj["code"],
       date: obj["date"],
       montant: obj["montant"],
       status: obj["status"],
@@ -146,14 +158,18 @@ class CommandeDetail {
       duree_client_prestataire: obj["duree_client_prestataire"],
       date_acceptation: obj["date_acceptation"],
       date_prise_en_charge: obj["date_prise_en_charge"],
-      position_prise_en_charge: obj["position_prise_en_charge"],
-      position_destination: obj["position_destination"],
+      position_priseId: obj["position_priseId"],
+      position_destId: obj["position_destId"],
       rate_comment: obj["rate_comment"],
       rate_date: obj["rate_date"],
       rate_value: obj["rate_value"],
       prestationId: obj["prestationId"],
       prestation: Prestation.fromJson(obj["prestation"]),
       clientId: obj["clientId"],
+      is_accepted: obj["is_accepted"],
+      is_created: obj["is_created"],
+      is_refused: obj["is_refused"],
+      is_terminated: obj["is_terminated"],
     );
   }
 }

@@ -32,6 +32,9 @@ class RestDatasource {
   static final FILTER = "&filter=";
   static final FILTERSERVICE = "&filter[where][serviceId]=";
   static final FILTERCLIENT = "&filter[where][clientId]=";
+  static final CMDCREATE =
+      "&filter[where][is_created]=true&filter[where][is_terminated]=false";
+  static final CMDOLD = "&filter[where][is_terminated]=true";
   static final TOKEN1 = "?access_token=";
   static final TOKEN2 = "&access_token=";
 
@@ -77,12 +80,33 @@ class RestDatasource {
         (onError) => new Future.error(new Exception(onError.toString())));
   }
 
-  ///Liste des commandes en cours (courses) du client
-  Future<List<CommandeDetail>> getCmdClient(String token, int clientId) {
+  ///Liste les commandes nouvellements passees par client
+  Future<List<CommandeDetail>> getNewCmdClient(String token, int clientId) {
     return _netUtil
         .get(CMD_PRESTATION +
             FILTERCLIENT +
             clientId.toString() +
+            CMDCREATE +
+            TOKEN2 +
+            token)
+        .then((dynamic res) {
+      if (res != null)
+        return (res as List)
+            .map((item) => new CommandeDetail.fromJson(item))
+            .toList();
+      else
+        return null as List<CommandeDetail>;
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Liste les anciennes commandes deja effectuees par client
+  Future<List<CommandeDetail>> getOldCmdClient(String token, int clientId) {
+    return _netUtil
+        .get(CMD_PRESTATION +
+            FILTERCLIENT +
+            clientId.toString() +
+            CMDOLD +
             TOKEN2 +
             token)
         .then((dynamic res) {
@@ -137,15 +161,29 @@ class RestDatasource {
       int montant, int post, int dest, int client, int prest, String token) {
     return _netUtil.post(CMD_URL + TOKEN1 + token, body: {
       "montant": montant.toString(),
+      "date": DateTime.now().toString(),
       "date_debut": DateTime.now().toString(),
       "date_fin": DateTime.now().toString(),
-      "status": "Created",
-      "distance_client_prestataire": "3",
-      "duree_client_prestataire": "30",
+      "status": "CREATED",
       "position_prise_en_charge": post.toString(),
       "position_destination": dest.toString(),
+      "code": "ET" +
+          DateTime.now().month.toString() +
+          DateTime.now().day.toString() +
+          DateTime.now().hour.toString() +
+          DateTime.now().second.toString() +
+          "CMD" +
+          DateTime.now().year.toString(),
+      "distance_client_prestataire": "3",
+      "duree_client_prestataire": "30",
+      "position_priseId": post.toString(),
+      "position_destId": dest.toString(),
       "rate_comment": "No",
       "rate_value": "0",
+      "is_created": true.toString(),
+      "is_accepted": false.toString(),
+      "is_refused": false.toString(),
+      "is_terminated": false.toString(),
       "clientId": client.toString(),
       "prestationId": prest.toString()
     }).then((dynamic res) {
