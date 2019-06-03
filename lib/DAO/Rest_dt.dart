@@ -25,8 +25,10 @@ class RestDatasource {
   static final PRESTATION = BASE_URL + "prestations";
   static final ALLPRESTATAIRE =
       PRESTATION + "?filter[include]=prestataire&filter[include]=vehicule";
-  static final CMD_PRESTATION =
-      CMD_URL + "?filter[include][prestation]=service";
+  static final CMD_PRESTATION = CMD_URL +
+      "?filter[include][prestation]=service&filter[include][prestation]=vehicule&filter[include][prestation]=prestataire";
+  static final CMD_PRESTATION_DETAIL =
+      "?filter[include][prestation]=service&filter[include][prestation]=vehicule&filter[include][prestation]=prestataire";
 
   ///provisoire
   static final FILTER = "&filter=";
@@ -34,6 +36,10 @@ class RestDatasource {
   static final FILTERCLIENT = "&filter[where][clientId]=";
   static final CMDCREATE =
       "&filter[where][is_created]=true&filter[where][is_terminated]=false";
+  static final CMDVALIDE =
+      "&filter[where][is_accepted]=true&filter[where][is_terminated]=false";
+  static final CMDTERMINE =
+      "&filter[where][is_accepted]=true&filter[where][is_terminated]=true";
   static final CMDOLD = "&filter[where][is_terminated]=true";
   static final TOKEN1 = "?access_token=";
   static final TOKEN2 = "&access_token=";
@@ -80,7 +86,7 @@ class RestDatasource {
         (onError) => new Future.error(new Exception(onError.toString())));
   }
 
-  ///Liste les commandes nouvellements passees par client
+  ///Liste toutes les commandes passees par client
   Future<List<CommandeDetail>> getNewCmdClient(String token, int clientId) {
     return _netUtil
         .get(CMD_PRESTATION +
@@ -96,6 +102,44 @@ class RestDatasource {
             .toList();
       else
         return null as List<CommandeDetail>;
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Liste toutes les commandes acceptee du client
+  Future<List<CommandeDetail>> getCmdValideClient(String token, int clientId) {
+    return _netUtil
+        .get(CMD_PRESTATION +
+            FILTERCLIENT +
+            clientId.toString() +
+            CMDVALIDE +
+            TOKEN2 +
+            token)
+        .then((dynamic res) {
+      if (res != null)
+        return (res as List)
+            .map((item) => new CommandeDetail.fromJson(item))
+            .toList();
+      else
+        return null as List<CommandeDetail>;
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Details sur ume commande
+  Future<CommandeDetail> getCmdClient(String token, int clientId, int cmdId) {
+    return _netUtil
+        .get(CMD_URL +
+            "/" +
+            cmdId.toString() +
+            CMD_PRESTATION_DETAIL +
+            FILTERCLIENT +
+            clientId.toString() +
+            CMDVALIDE +
+            TOKEN2 +
+            token)
+        .then((dynamic res) {
+      if (res != null) return new CommandeDetail.fromJson(res);
     }).catchError(
             (onError) => new Future.error(new Exception(onError.toString())));
   }

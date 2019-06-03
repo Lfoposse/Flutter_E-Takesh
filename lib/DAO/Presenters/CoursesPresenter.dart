@@ -24,3 +24,35 @@ class CoursesPresenter {
     });
   }
 }
+
+class CommandeNotifPresenter {
+  RestDatasource api = new RestDatasource();
+
+  ///commandes validees
+  Future<List<CommandeDetail>> getCmdValideClient(String token, int clientId) {
+    return api
+        .getNewCmdClient(token, clientId)
+        .then((List<CommandeDetail> commandes) {
+      if (commandes != null)
+        return commandes;
+      else
+        return null;
+    }).catchError((onError) {
+      print("Erreur liste cmd");
+    });
+  }
+
+  ///detail sur une commande
+  Future<CommandeDetail> loadCmdDetail(String token, int clientId, int cmdId) {
+    return api
+        .getCmdClient(token, clientId, cmdId)
+        .then((CommandeDetail commande) {
+      if (commande != null) {
+        return commande;
+      } else
+        return null;
+    }).catchError((onError) {
+      print("Erreur get one cmd");
+    });
+  }
+}

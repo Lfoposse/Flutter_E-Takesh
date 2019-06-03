@@ -27,7 +27,7 @@ class ParametersPageState extends State<ParametersPage>
     stateIndex = 0;
     _presenter.datasClient();
     super.initState();
-    this.loading = false;
+    loading = false;
     err = false;
   }
 
@@ -163,6 +163,11 @@ class ParametersPageState extends State<ParametersPage>
                                 children: <Widget>[
                                   new Text(
                                       "Vous etez sur le point de vouloir vous déconnecter"),
+                                  Center(
+                                    child: loading
+                                        ? CircularProgressIndicator()
+                                        : Container(),
+                                  )
                                 ],
                               ),
                             ),
@@ -178,7 +183,9 @@ class ParametersPageState extends State<ParametersPage>
                                 child: new Text("CONFIRMER",
                                     style: TextStyle(color: Colors.blue)),
                                 onPressed: () {
-                                  print("LogOut");
+                                  setState(() {
+                                    loading = true;
+                                  });
                                   AppSharedPreferences()
                                       .getToken()
                                       .then((String token) {
@@ -205,9 +212,11 @@ class ParametersPageState extends State<ParametersPage>
                                                           LoginPage()),
                                                   ModalRoute.withName(Navigator
                                                       .defaultRouteName));
+                                          setState(() {
+                                            loading = false;
+                                          });
                                         } else {
                                           Navigator.of(context).pop();
-                                          this.loading = true;
                                           print("Probleme deconnexion");
 
                                           // If that call was not successful, throw an error.

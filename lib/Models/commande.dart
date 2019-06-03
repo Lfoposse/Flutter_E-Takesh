@@ -94,6 +94,32 @@ class PositionModel {
   }
 }
 
+//Create to get the local information about order
+class CommandeLocal {
+  int clientId;
+  int prestataireId;
+  int commandeId;
+  int prestationId;
+  String date;
+
+  CommandeLocal(
+      {this.clientId,
+      this.prestataireId,
+      this.commandeId,
+      this.prestationId,
+      this.date});
+
+  factory CommandeLocal.fromJson(Map<String, dynamic> obj) {
+    return CommandeLocal(
+      clientId: obj["clientId"],
+      prestataireId: obj["prestataireId"],
+      commandeId: obj["cmdId"],
+      prestationId: obj["prestationId"],
+      date: obj["date"],
+    );
+  }
+}
+
 class CommandeDetail {
   int commandeid;
   String date_debut;
@@ -183,6 +209,8 @@ class Prestation {
   String date;
   String prestataireId;
   Service1 service;
+  Prestataire prestataire;
+  Vehicule vehicule;
 
   Prestation(
       {this.prestationid,
@@ -192,6 +220,8 @@ class Prestation {
       this.montant,
       this.date,
       this.service,
+      this.prestataire,
+      this.vehicule,
       this.prestataireId});
 
   factory Prestation.fromJson(Map<String, dynamic> json) {
@@ -199,7 +229,9 @@ class Prestation {
       prestationid: json["prestationid"],
       vehiculeId: json["vehiculeId"],
       status: json["status"],
+      vehicule: Vehicule.fromJson(json["vehicule"]),
       service: Service1.fromJson(json["service"]),
+      prestataire: Prestataire.fromJson(json["prestataire"]),
       serviceId: json["serviceId"],
       montant: json["montant"],
       date: json["date"],
@@ -224,6 +256,99 @@ class Service1 {
       duree: json['duree'],
       intitule: json['intitule'],
       prix: json['prix'],
+    );
+  }
+}
+
+class Prestataire {
+  int prestataireid;
+  String cni;
+  String date_naissance;
+  String date_creation;
+  String email;
+  String nom;
+  String prenom;
+  String pays;
+  String image;
+  String status;
+  String telephone;
+  String ville;
+  String positionId;
+  int UserId;
+
+  Prestataire({
+    this.prestataireid,
+    this.cni,
+    this.date_creation,
+    this.date_naissance,
+    this.email,
+    this.nom,
+    this.prenom,
+    this.pays,
+    this.image,
+    this.status,
+    this.telephone,
+    this.ville,
+    this.positionId,
+    this.UserId,
+  });
+
+  factory Prestataire.fromJson(Map<String, dynamic> json) {
+    return Prestataire(
+      prestataireid: json["prestataireid"],
+      cni: json["cni"],
+      date_naissance: json["date_naissance"],
+      date_creation: json["date_creation"],
+      email: json["email"],
+      nom: json["nom"],
+      prenom: json["prenom"],
+      pays: json["pays"],
+      image: json["image"],
+      status: json["status"],
+      telephone: json["telephone"],
+      ville: json["ville"],
+      positionId: json["positionId"],
+      UserId: json["UserId"],
+    );
+  }
+}
+
+class Vehicule {
+  int vehiculeid;
+  String couleur;
+  String status;
+  String marque;
+  String immatriculation;
+  int nombre_places;
+  String date;
+  String image;
+  String categorievehiculeId;
+  String prestataireId;
+
+  Vehicule(
+      {this.vehiculeid,
+      this.couleur,
+      this.status,
+      this.immatriculation,
+      this.marque,
+      this.nombre_places,
+      this.date,
+      this.image,
+      this.categorievehiculeId,
+      this.prestataireId});
+
+  factory Vehicule.fromJson(Map<String, dynamic> json) {
+    return Vehicule(
+      vehiculeid: json["vehiculeid"],
+      couleur: json["couleur"],
+      status: json["status"],
+      immatriculation: json["immatriculation"],
+      marque: json["marque"],
+      nombre_places: json["nombre_places"],
+      date: json["date"],
+      image: json["image"],
+      categorievehiculeId: json["categorievehiculeId"],
+      prestataireId: json["prestataireId"],
     );
   }
 }

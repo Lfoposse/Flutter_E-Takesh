@@ -5,6 +5,7 @@ import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Models/google_place_item.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
+import 'package:etakesh_client/Utils/notification_util.dart';
 import 'package:etakesh_client/pages/Commande/destination_page.dart';
 import 'package:etakesh_client/pages/Commande/position_page.dart';
 import 'package:etakesh_client/pages/Commande/services.dart';
@@ -44,6 +45,10 @@ class HomePageState extends State<HomePage> implements LoginContract {
   TimeOfDay selectedTime = TimeOfDay.now();
   GooglePlacesItem destinationModel = new GooglePlacesItem();
   GooglePlacesItem positiontionModel = new GooglePlacesItem();
+  //Add for notification
+  var notifCmd = new NotificationUtil();
+
+  Timer timer;
 
 //  Future<Null> _selectDate(BuildContext context) async {
 //    final DateTime picked = await showDatePicker(
@@ -83,16 +88,17 @@ class HomePageState extends State<HomePage> implements LoginContract {
     destination_selected = false;
     pret_a_commander = false;
     destination = "Où allez-vous ?";
-    position = "Où etes vous ?";
+    timer = Timer.periodic(
+        Duration(seconds: 5), (Timer t) => notifCmd.init(context));
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
-        print("USER " + l.userId.toString());
         login = l;
         _presenter.detailClient(l.userId, l.token);
       }
     });
     stateIndex = 0;
     getUserLocation();
+
     super.initState();
   }
 

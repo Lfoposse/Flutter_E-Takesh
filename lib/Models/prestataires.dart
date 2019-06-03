@@ -6,6 +6,7 @@ class Prestataires {
   String email;
   String nom;
   String prenom;
+  String image;
   String pays;
   String status;
   String telephone;
@@ -21,6 +22,7 @@ class Prestataires {
     this.email,
     this.nom,
     this.prenom,
+    this.image,
     this.pays,
     this.status,
     this.telephone,
@@ -42,6 +44,7 @@ class Prestataires {
       status: json["status"],
       telephone: json["telephone"],
       ville: json["ville"],
+      image: json["image"],
       positionId: json["positionId"],
       UserId: json["UserId"],
     );
@@ -71,6 +74,7 @@ class Vehicule {
   String couleur;
   String status;
   String marque;
+  String image;
   String immatriculation;
   int nombre_places;
   String date;
@@ -84,6 +88,7 @@ class Vehicule {
       this.immatriculation,
       this.marque,
       this.nombre_places,
+      this.image,
       this.date,
       this.categorievehiculeId,
       this.prestataireId});
@@ -97,6 +102,7 @@ class Vehicule {
       marque: json["marque"],
       nombre_places: json["nombre_places"],
       date: json["date"],
+      image: json["image"],
       categorievehiculeId: json["categorievehiculeId"],
       prestataireId: json["prestataireId"],
     );

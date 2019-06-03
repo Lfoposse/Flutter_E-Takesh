@@ -481,7 +481,7 @@ class CommandePageState extends State<CommandePage>
                                           image: DecorationImage(
                                               image: NetworkImage(
                                                   _prestataireselect
-                                                      .prestataire.pays),
+                                                      .prestataire.image),
                                               fit: BoxFit.cover)),
                                     )
                                   ],
@@ -505,7 +505,7 @@ class CommandePageState extends State<CommandePage>
                   borderRadius: BorderRadius.circular(37.5),
                   image: DecorationImage(
                       image: NetworkImage(
-                          listprestataires[indexItem].vehicule.status),
+                          listprestataires[indexItem].vehicule.image),
                       fit: BoxFit.cover)),
             ),
             Positioned(
@@ -519,7 +519,7 @@ class CommandePageState extends State<CommandePage>
                     borderRadius: BorderRadius.circular(12.5),
                     image: DecorationImage(
                         image: NetworkImage(
-                            listprestataires[indexItem].prestataire.pays),
+                            listprestataires[indexItem].prestataire.image),
                         fit: BoxFit.cover)),
               ),
             ),
