@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:etakesh_client/Models/commande.dart';
 import 'package:etakesh_client/Models/google_place_item_term.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,6 +11,16 @@ class GoogleMapsServices {
       LocationModel post, LocationModel dest) async {
     String url =
         "https://maps.googleapis.com/maps/api/directions/json?origin=${post.lat},${post.lng}&destination=${dest.lat},${dest.lng}&key=$apiKey";
+    http.Response response = await http.get(url);
+    Map values = jsonDecode(response.body);
+    return values["routes"][0]["overview_polyline"]["points"];
+  }
+
+// pour le tracking
+  Future<String> getRouteCoordinates2(
+      PositionModel post, PositionModel dest) async {
+    String url =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${post.latitude},${post.longitude}&destination=${dest.latitude},${dest.longitude}&key=$apiKey";
     http.Response response = await http.get(url);
     Map values = jsonDecode(response.body);
     return values["routes"][0]["overview_polyline"]["points"];

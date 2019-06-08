@@ -105,6 +105,7 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           new Text(services[indexItem].intitule,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w400)),
                           new Text(
@@ -167,31 +168,30 @@ class TarifsPageState extends State<TarifsPage> implements ServiceContract {
 
       default:
         return new Scaffold(
-          appBar: new AppBar(
-            title: new Text(
-              'Tarifs des services',
-              style: TextStyle(color: Colors.white),
+            appBar: new AppBar(
+              title: new Text(
+                'Tarifs des services',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.black,
+              iconTheme: IconThemeData(color: Colors.white),
             ),
-            backgroundColor: Colors.black,
-            iconTheme: IconThemeData(color: Colors.white),
-          ),
-          body: Container(
-              child: SingleChildScrollView(
-                  child: Column(
-            children: <Widget>[
-              header(),
-              Divider(),
-              ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(0.0),
-                  scrollDirection: Axis.vertical,
-                  itemCount: services.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return getItem(index);
-                  }),
-            ],
-          ))),
-        );
+            body: Stack(
+              children: <Widget>[
+                header(),
+                Divider(),
+                Container(
+                    margin: EdgeInsets.only(top: 50.0),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(0.0),
+                        scrollDirection: Axis.vertical,
+                        itemCount: services.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          return getItem(index);
+                        })),
+              ],
+            ));
     }
   }
 

@@ -146,18 +146,17 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
 
       default:
         return new Scaffold(
-          appBar: new AppBar(
-            title: new Text(
-              'Services',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.black,
+            appBar: new AppBar(
+              title: new Text(
+                'Services',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.black,
 //            iconTheme: IconThemeData(color: Colors.white),
-          ),
-          body: Container(
-              child: SingleChildScrollView(
-                  child: Column(
-            children: <Widget>[
+            ),
+            body: Stack(children: <Widget>[
+//                  Column(
+//                    children: <Widget>[
               Divider(),
               ListView.builder(
                   shrinkWrap: true,
@@ -167,49 +166,54 @@ class ServicesPageState extends State<ServicesPage> implements ServiceContract {
                   itemBuilder: (BuildContext ctxt, int index) {
                     return getItem(index);
                   }),
-              Padding(
-                padding: EdgeInsets.only(top: 100.0),
-                child: Center(
-                  child: service_selected
-                      ? RaisedButton(
-                          padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                          color: Color(0xFFDEAC17),
-                          child: Text(
-                            "OK",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 21.0),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                new MaterialPageRoute(
-                                    builder: (context) => CommandePage(
-                                          destination: dest,
-                                          position: post,
-                                          service: serviceSelected,
-                                          locposition: locposition,
-                                          locdestination: locdestination,
-                                        )),
-                                ModalRoute.withName(
-                                    Navigator.defaultRouteName));
-                          })
-                      : RaisedButton(
-                          padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                          color: Colors.grey,
-                          child: Text(
-                            "OK",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 21.0),
-                          ),
-                          onPressed: () {}),
+              Positioned(
+                bottom: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 100.0),
+                  child: Center(
+                    child: service_selected
+                        ? RaisedButton(
+                            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                            color: Color(0xFFDEAC17),
+                            child: Text(
+                              "OK",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 21.0),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  new MaterialPageRoute(
+                                      builder: (context) => CommandePage(
+                                            destination: dest,
+                                            position: post,
+                                            service: serviceSelected,
+                                            locposition: locposition,
+                                            locdestination: locdestination,
+                                          )),
+                                  ModalRoute.withName(
+                                      Navigator.defaultRouteName));
+                            })
+                        : RaisedButton(
+                            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                            color: Colors.grey,
+                            child: Text(
+                              "OK",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 21.0),
+                            ),
+                            onPressed: () {}),
+                  ),
+//                      ),
+//                    ],
                 ),
-              ),
-            ],
-          ))),
-        );
+              )
+            ]));
     }
   }
 

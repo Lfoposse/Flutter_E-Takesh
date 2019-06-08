@@ -20,6 +20,7 @@ class RestDatasource {
   static final POSITIONS_URL = BASE_URL + "positions";
   static final SERVICE_URL = BASE_URL + "services";
   static final CREATE_USER = BASE_URL + "Users";
+  static final PRESTATAIRE_URL = BASE_URL + "prestataires";
   static final GOOGLE_MAP_URL =
       "https://maps.googleapis.com/maps/api/place/autocomplete/json";
   static final PRESTATION = BASE_URL + "prestations";
@@ -37,9 +38,9 @@ class RestDatasource {
   static final CMDCREATE =
       "&filter[where][is_created]=true&filter[where][is_terminated]=false";
   static final CMDVALIDE =
-      "&filter[where][is_accepted]=true&filter[where][is_terminated]=false";
-  static final CMDTERMINE =
-      "&filter[where][is_accepted]=true&filter[where][is_terminated]=true";
+      "&filter[where][status]=CREATED&filter[where][is_accepted]=true&filter[where][is_terminated]=false";
+  static final CMDTREFUSEE =
+      "&filter[where][status]=CREATED&filter[where][is_refused]=true";
   static final CMDOLD = "&filter[where][is_terminated]=true";
   static final TOKEN1 = "?access_token=";
   static final TOKEN2 = "&access_token=";
@@ -64,7 +65,6 @@ class RestDatasource {
     return _netUtil
         .getOne(
       ONE_USER + TOKEN1 + token + FILTER + filter,
-//      headers: {HttpHeaders.acceptHeader: "application/json"},
     )
         .then((dynamic res) {
       if (res != null)
@@ -126,6 +126,26 @@ class RestDatasource {
             (onError) => new Future.error(new Exception(onError.toString())));
   }
 
+  ///Liste toutes les commandes refusee du client
+  Future<List<CommandeDetail>> getCmdRefuseClient(String token, int clientId) {
+    return _netUtil
+        .get(CMD_PRESTATION +
+            FILTERCLIENT +
+            clientId.toString() +
+            CMDTREFUSEE +
+            TOKEN2 +
+            token)
+        .then((dynamic res) {
+      if (res != null)
+        return (res as List)
+            .map((item) => new CommandeDetail.fromJson(item))
+            .toList();
+      else
+        return null as List<CommandeDetail>;
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
   ///Details sur ume commande
   Future<CommandeDetail> getCmdClient(String token, int clientId, int cmdId) {
     return _netUtil
@@ -140,6 +160,32 @@ class RestDatasource {
             token)
         .then((dynamic res) {
       if (res != null) return new CommandeDetail.fromJson(res);
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Retourne la position de prise en charge du client
+  Future<PositionModel> getPositionById(String token, String postId) {
+    return _netUtil
+        .get(POSITIONS_URL + "/" + postId + TOKEN1 + token)
+        .then((dynamic res) {
+      if (res != null) return new PositionModel.fromJson(res);
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Retourne la position du prestatire
+  Future<PositionModel> getPositionPrestatire(String token, int prestataireId) {
+    return _netUtil
+        .get(PRESTATAIRE_URL +
+            "/" +
+            prestataireId.toString() +
+            "/" +
+            "position" +
+            TOKEN1 +
+            token)
+        .then((dynamic res) {
+      if (res != null) return new PositionModel.fromJson(res);
     }).catchError(
             (onError) => new Future.error(new Exception(onError.toString())));
   }
@@ -202,15 +248,26 @@ class RestDatasource {
 
   ///Enregistre une commande dans le serveur
   Future<Commande> saveCmd(
-      int montant, int post, int dest, int client, int prest, String token) {
+      int montant,
+      int post,
+      int dest,
+      int client,
+      int prestation,
+      int prestataire,
+      String posit,
+      String desti,
+      String token) {
     return _netUtil.post(CMD_URL + TOKEN1 + token, body: {
       "montant": montant.toString(),
       "date": DateTime.now().toString(),
       "date_debut": DateTime.now().toString(),
       "date_fin": DateTime.now().toString(),
+      "date_acceptation": DateTime.now().toString(),
+      "date_prise_en_charge": DateTime.now().toString(),
+      "rate_date": DateTime.now().toString(),
       "status": "CREATED",
-      "position_prise_en_charge": post.toString(),
-      "position_destination": dest.toString(),
+      "position_prise_en_charge": posit,
+      "position_destination": desti,
       "code": "ET" +
           DateTime.now().month.toString() +
           DateTime.now().day.toString() +
@@ -229,10 +286,46 @@ class RestDatasource {
       "is_refused": false.toString(),
       "is_terminated": false.toString(),
       "clientId": client.toString(),
-      "prestationId": prest.toString()
+      "prestationId": prestation.toString(),
+      "prestataireId": prestataire.toString()
     }).then((dynamic res) {
       if (res != null) {
         print("Save Cmd");
+        return Commande.fromJson(json.decode(res));
+      } else
+        return null;
+    }).catchError(
+        (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Modifie le status d'une commande a deja vue par le client
+  Future<Commande> updateCmdStatus(CommandeDetail cmd, String token) {
+    return _netUtil.put(CMD_URL + TOKEN1 + token, body: {
+      "commandeid": cmd.commandeid.toString(),
+      "montant": cmd.montant.toString(),
+      "date": cmd.date,
+      "date_debut": cmd.date_debut,
+      "date_fin": cmd.date_fin,
+      "status": "READ",
+      "position_prise_en_charge": cmd.position_prise_en_charge,
+      "position_destination": cmd.position_destination,
+      "code": cmd.code,
+      "distance_client_prestataire": cmd.distance_client_prestataire,
+      "duree_client_prestataire": cmd.duree_client_prestataire,
+      "position_priseId": cmd.position_priseId,
+      "position_destId": cmd.position_destId,
+      "rate_comment": cmd.rate_comment,
+      "rate_value": cmd.rate_value.toString(),
+      "is_created": cmd.is_created.toString(),
+      "is_accepted": cmd.is_accepted.toString(),
+      "is_refused": cmd.is_refused.toString(),
+      "is_terminated": cmd.is_terminated.toString(),
+      "clientId": cmd.clientId,
+      "prestationId": cmd.prestationId.toString(),
+      "prestataireId": cmd.prestation.prestataire.prestataireid.toString()
+    }).then((dynamic res) {
+      if (res != null) {
+        print("Update Cmd");
         return Commande.fromJson(json.decode(res));
       } else
         return null;

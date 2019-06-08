@@ -62,12 +62,21 @@ class DatabaseHelper {
     // create table cmdvalide where store the validated orders
     await db.execute("CREATE TABLE CmdVal("
         "id INTEGER PRIMARY KEY, "
-        "clientId INTEGER NOT NULL UNIQUE, "
+        "clientId INTEGER NOT NULL, "
         "prestataireId INTEGER NOT NULL, "
         "cmdId INTEGER NOT NULL UNIQUE, "
         "prestationId INTEGER NOT NULL, "
         "date TEXT "
         ")");
+    // create table cmdvalide where store the validated orders
+//    await db.execute("CREATE TABLE CmdRef("
+//        "id INTEGER PRIMARY KEY, "
+//        "clientId INTEGER NOT NULL, "
+//        "prestataireId INTEGER NOT NULL, "
+//        "cmdId INTEGER NOT NULL UNIQUE, "
+//        "prestationId INTEGER NOT NULL, "
+//        "date TEXT "
+//        ")");
   }
 
   Future<int> clearClient() async {
@@ -82,11 +91,18 @@ class DatabaseHelper {
     return res;
   }
 
-  Future<int> clearCmdVal() async {
+  Future<int> clearCmdVal(int cmdi) async {
     var tbCmd = await db;
-    int res = await tbCmd.rawDelete('DELETE FROM CmdVal');
+    int res = await tbCmd
+        .rawDelete('DELETE FROM CmdVal WHERE cmdId = ' + cmdi.toString());
     return res;
   }
+//
+//  Future<int> clearCmdRef() async {
+//    var tbCmd = await db;
+//    int res = await tbCmd.rawDelete('DELETE FROM CmdRef');
+//    return res;
+//  }
 
   Future<int> saveUser(Login2 l) async {
     var tbUser = await db;
@@ -146,9 +162,28 @@ class DatabaseHelper {
             cmd.date +
             '\')';
     await tbClient.rawInsert(sql);
-    print("saved client infos " + sql.toString());
+    print("saved cmd valide " + sql.toString());
     return 0;
   }
+
+//  Future<int> saveCmdRef(CommandeDetail cmd) async {
+//    var tbClient = await db;
+//    String sql =
+//        'INSERT INTO CmdRef(clientId, prestataireId, cmdId, prestationId, date) VALUES(' +
+//            cmd.clientId +
+//            ',\'' +
+//            cmd.prestation.prestataire.prestataireid.toString() +
+//            '\',\'' +
+//            cmd.commandeid.toString() +
+//            '\',\'' +
+//            cmd.prestationId.toString() +
+//            '\',\'' +
+//            cmd.date +
+//            '\')';
+//    await tbClient.rawInsert(sql);
+//    print("saved cmd valide " + sql.toString());
+//    return 0;
+//  }
 //  Future<int> addClient(Client t) async {
 //    var tbClient = await db;
 //    int res = await tbClient.insert("Client", t.toMap());
@@ -205,4 +240,24 @@ class DatabaseHelper {
       return null as List<CommandeLocal>;
     }
   }
+//
+//  Future<List<CommandeLocal>> getCmdRef() async {
+//    var tbCmd = await db;
+//    List<Map> list =
+//        await tbCmd.rawQuery('SELECT * FROM CmdRef ORDER BY id DESC LIMIT 1');
+//
+//    print("Content DBCmdRef");
+//    print(list);
+//    if (list.length != 0) {
+//      print("Cmd ref loc db:" + list.toString());
+//      List<CommandeLocal> cmds = new List();
+//      for (int i = 0; i < list.length; i++) {
+//        var cmd = new CommandeLocal.fromJson(list[0]);
+//        cmds.add(cmd);
+//      }
+//      return cmds;
+//    } else {
+//      return null as List<CommandeLocal>;
+//    }
+//  }
 }

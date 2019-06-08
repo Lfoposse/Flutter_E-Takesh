@@ -9,12 +9,15 @@ class Commande {
   String duree_client_prestataire;
   String date_acceptation;
   String date_prise_en_charge;
-  int position_prise_en_charge;
-  int position_destination;
+  String position_prise_en_charge;
+  String position_destination;
+  int position_priseId;
+  int position_destId;
   String rate_comment;
   String rate_date;
   int prestationId;
   int clientId;
+  int prestataireId;
 
   Commande(
       {this.commandeid,
@@ -29,30 +32,35 @@ class Commande {
       this.date_prise_en_charge,
       this.position_prise_en_charge,
       this.position_destination,
+      this.position_priseId,
+      this.position_destId,
       this.rate_comment,
       this.rate_date,
       this.prestationId,
-      this.clientId});
+      this.clientId,
+      this.prestataireId});
 
   factory Commande.fromJson(Map<String, dynamic> obj) {
     return Commande(
-      commandeid: obj["commandeid"],
-      date_debut: obj["date_debut"],
-      date_fin: obj["date_fin"],
-      date: obj["date"],
-      montant: obj["montant"],
-      status: obj["status"],
-      distance_client_prestataire: obj["distance_client_prestataire"],
-      duree_client_prestataire: obj["duree_client_prestataire"],
-      date_acceptation: obj["date_acceptation"],
-      date_prise_en_charge: obj["date_prise_en_charge"],
-      position_prise_en_charge: obj["position_prise_en_charge"],
-      position_destination: obj["position_destination"],
-      rate_comment: obj["rate_comment"],
-      rate_date: obj["rate_date"],
-      prestationId: obj["prestationId"],
-      clientId: obj["clientId"],
-    );
+        commandeid: obj["commandeid"],
+        date_debut: obj["date_debut"],
+        date_fin: obj["date_fin"],
+        date: obj["date"],
+        position_priseId: obj["position_priseId"],
+        position_destId: obj["position_destId"],
+        montant: obj["montant"],
+        status: obj["status"],
+        distance_client_prestataire: obj["distance_client_prestataire"],
+        duree_client_prestataire: obj["duree_client_prestataire"],
+        date_acceptation: obj["date_acceptation"],
+        date_prise_en_charge: obj["date_prise_en_charge"],
+        position_prise_en_charge: obj["position_prise_en_charge"],
+        position_destination: obj["position_destination"],
+        rate_comment: obj["rate_comment"],
+        rate_date: obj["rate_date"],
+        prestationId: obj["prestationId"],
+        clientId: obj["clientId"],
+        prestataireId: obj["prestataireId"]);
   }
   factory Commande.fromJson2(Map<String, dynamic> obj) {
     return Commande(
@@ -127,6 +135,8 @@ class CommandeDetail {
   String date;
   int montant;
   String status;
+  String position_prise_en_charge;
+  String position_destination;
   String distance_client_prestataire;
   String duree_client_prestataire;
   String date_acceptation;
@@ -153,6 +163,8 @@ class CommandeDetail {
       this.date,
       this.montant,
       this.status,
+      this.position_prise_en_charge,
+      this.position_destination,
       this.distance_client_prestataire,
       this.duree_client_prestataire,
       this.date_acceptation,
@@ -180,6 +192,8 @@ class CommandeDetail {
       date: obj["date"],
       montant: obj["montant"],
       status: obj["status"],
+      position_prise_en_charge: obj["position_prise_en_charge"],
+      position_destination: obj["position_destination"],
       distance_client_prestataire: obj["distance_client_prestataire"],
       duree_client_prestataire: obj["duree_client_prestataire"],
       date_acceptation: obj["date_acceptation"],

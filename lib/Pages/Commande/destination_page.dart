@@ -73,26 +73,6 @@ class DestinationPageState extends State<DestinationPage> {
                               ),
                             ),
                           ),
-
-                          /// mis en commentaire pour le moment
-//                          Padding(
-//                            padding: EdgeInsets.only(left: 60.0),
-//                            child: Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                              children: <Widget>[
-//                                Icon(
-//                                  Icons.account_circle,
-//                                ),
-//                                Text(
-//                                  "Moi même",
-//                                  style: TextStyle(
-//                                      color: Colors.black, fontSize: 14.0),
-//                                ),
-//                                Icon(Icons.keyboard_arrow_down,
-//                                    color: Colors.black),
-//                              ],
-//                            ),
-//                          ),
                         ]),
                     Row(
                       children: <Widget>[

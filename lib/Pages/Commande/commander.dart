@@ -394,7 +394,8 @@ class CommandePageState extends State<CommandePage>
                                                 child: Text(
                                                     " CONFIRMER " +
                                                         _prestataireselect
-                                                            .prestataire.prenom,
+                                                            .prestataire.prenom
+                                                            .toUpperCase(),
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 20.0)),
@@ -449,6 +450,15 @@ class CommandePageState extends State<CommandePage>
                                                                       .client_id,
                                                                   _prestataireselect
                                                                       .prestationid,
+                                                                  _prestataireselect
+                                                                      .prestataire
+                                                                      .prestataireid,
+                                                                  widget
+                                                                      .position
+                                                                      .description,
+                                                                  widget
+                                                                      .destination
+                                                                      .description,
                                                                   login.token)
                                                               .then((Commande
                                                                   cmdCreate) {

@@ -31,7 +31,7 @@ class CommandeNotifPresenter {
   ///commandes validees
   Future<List<CommandeDetail>> getCmdValideClient(String token, int clientId) {
     return api
-        .getNewCmdClient(token, clientId)
+        .getCmdValideClient(token, clientId)
         .then((List<CommandeDetail> commandes) {
       if (commandes != null)
         return commandes;
@@ -53,6 +53,20 @@ class CommandeNotifPresenter {
         return null;
     }).catchError((onError) {
       print("Erreur get one cmd");
+    });
+  }
+
+  ///commandes refusees
+  Future<List<CommandeDetail>> getCmdRefuseClient(String token, int clientId) {
+    return api
+        .getCmdRefuseClient(token, clientId)
+        .then((List<CommandeDetail> commandes) {
+      if (commandes != null)
+        return commandes;
+      else
+        return null;
+    }).catchError((onError) {
+      print("Erreur liste cmd");
     });
   }
 }
