@@ -118,7 +118,7 @@ class _DetailsCmdTerminePageState extends State<DetailsCmdTerminePage> {
                     child: ListTile(
                       title: Text("Commande terminée",
                           style: TextStyle(color: Colors.white)),
-                      subtitle: Text(widget.commande.date,
+                      subtitle: Text(widget.commande.date.toString(),
                           style: TextStyle(color: Colors.white)),
                       trailing: Text(
                           widget.commande.prestation.service.prix.toString() +

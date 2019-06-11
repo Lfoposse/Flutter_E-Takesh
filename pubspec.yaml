@@ -37,6 +37,7 @@ dependencies:
   #flutter_google_places: ^0.2.2
   positioned_tap_detector: ^1.0.2
   flutter_local_notifications: 0.6.0
+  intl: ^0.15.8
 
 
 dev_dependencies:
@@ -69,6 +70,7 @@ flutter:
    - assets/images/google.png
    - assets/images/facebook.png
    - assets/images/cameroun_flag.png
+   - assets/images/taxi_icon.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

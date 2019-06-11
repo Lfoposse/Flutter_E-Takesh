@@ -29,7 +29,7 @@ class TrackingPageState extends State<TrackingPage>
   Set<Marker> markers = Set();
   Set<Polyline> _polyLines = Set();
   GoogleMapController mapController;
-
+  BitmapDescriptor _markerIcon;
   LatLng _mypositio = new LatLng(4.0922421, 9.748265);
   PositionModel position, destination;
 
@@ -48,8 +48,13 @@ class TrackingPageState extends State<TrackingPage>
             widget.commande.prestation.prestataire.prestataireid);
       }
     });
-
-    _sendRequest();
+    BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(40, 40)),
+            'assets/images/taxi_icon.jpg')
+        .then((onValue) {
+      setState(() {
+        _markerIcon = onValue;
+      });
+    });
     super.initState();
   }
 
@@ -124,21 +129,21 @@ class TrackingPageState extends State<TrackingPage>
       markers.add(Marker(
           markerId: MarkerId(destination.positionid.toString()),
           position: LatLng(destination.latitude, destination.longitude),
-          infoWindow:
-              InfoWindow(title: destination.libelle, snippet: "Prestataire"),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueGreen)));
+          infoWindow: InfoWindow(
+              title: "Votre prestataire", snippet: destination.libelle),
+          icon: _markerIcon));
     });
   }
 
   void _addMarkerPosition() async {
     setState(() {
       markers.add(Marker(
-          markerId: MarkerId(position.positionid.toString()),
-          position: LatLng(position.latitude, position.longitude),
-          infoWindow: InfoWindow(title: position.libelle, snippet: "Position"),
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+        markerId: MarkerId(position.positionid.toString()),
+        position: LatLng(position.latitude, position.longitude),
+        infoWindow: InfoWindow(
+            title: "Point de prise en charge", snippet: position.libelle),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+      ));
     });
   }
 
@@ -175,9 +180,9 @@ class TrackingPageState extends State<TrackingPage>
                     },
                     compassEnabled: true,
                     initialCameraPosition:
-                        CameraPosition(target: _mypositio, zoom: 9.0),
-//                    markers: markers,
-//                    polylines: _polyLines,
+                        CameraPosition(target: _mypositio, zoom: 13.0),
+                    markers: markers,
+                    polylines: _polyLines,
                   )),
 //              Positioned(
 //                height: 50.0,
@@ -223,16 +228,23 @@ class TrackingPageState extends State<TrackingPage>
   @override
   void onLoadingSuccess(
       PositionModel position, PositionModel positionPrestataire) async {
-    setState(() {
-      stateIndex = 3;
-    });
     if (position != null)
       setState(() {
         this.position = position;
+        _addMarkerPosition();
+        print("Position");
+        print(position.libelle);
       });
     if (positionPrestataire != null)
       setState(() {
         this.destination = positionPrestataire;
+        _addMarkerDestination();
+        print("Prestataire");
+        print(destination.libelle);
       });
+    _sendRequest();
+    setState(() {
+      stateIndex = 3;
+    });
   }
 }

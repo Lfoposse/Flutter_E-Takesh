@@ -267,6 +267,8 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
             "password": _passwordController.text,
             "nom": this.widget.nom,
             "prenom": this.widget.prenom,
+            "adresse": "RAS",
+            "image": "NONE",
             "date_creation": DateTime.now().toString(),
             "code": "ET" +
                 DateTime.now().month.toString() +
@@ -278,7 +280,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
             "telephone": this.widget.phone_n,
             "ville": this.widget.ville,
             "date_naissance": "1990-01-01",
-            "status": "Creer",
+            "status": "CREATED",
             "pays": "Cameroun"
           },
           headers: {HttpHeaders.acceptHeader: "application/json"},

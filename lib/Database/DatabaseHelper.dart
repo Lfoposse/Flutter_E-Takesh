@@ -41,13 +41,20 @@ class DatabaseHelper {
         "id INTEGER PRIMARY KEY, "
         "client_id INTEGER NOT NULL UNIQUE, "
         "user_id INTEGER NOT NULL UNIQUE, "
-        "username TEXT, "
-        "lastname TEXT, "
+        "nom TEXT, "
+        "prenom TEXT, "
         "email TEXT NOT NULL, "
         "phone TEXT, "
         "date_naissance TEXT, "
         "pays TEXT, "
-        "ville TEXT "
+        "ville TEXT, "
+        "date_creation TEXT, "
+        "image TEXT, "
+        "code TEXT, "
+        "status TEXT, "
+        "positionId TEXT, "
+        "adresse TEXT, "
+        "UserId INTEGER "
         ")");
 
     // create table client where store the connected account informations
@@ -123,14 +130,14 @@ class DatabaseHelper {
   Future<int> saveClient(Client1 c) async {
     var tbClient = await db;
     String sql =
-        'INSERT INTO Client(client_id, user_id, username, lastname, email, phone, date_naissance, pays, ville) VALUES(' +
+        'INSERT INTO Client(client_id, user_id, nom, prenom, email, phone, date_naissance, pays, ville, date_creation, image, code, status, positionId, UserId, adresse) VALUES(' +
             c.client_id.toString() +
             ',\'' +
             c.user_id.toString() +
             '\',\'' +
-            c.username +
+            c.nom +
             '\',\'' +
-            c.lastname +
+            c.prenom +
             '\',\'' +
             c.email +
             '\',\'' +
@@ -141,10 +148,32 @@ class DatabaseHelper {
             c.pays +
             '\',\'' +
             c.ville +
+            '\',\'' +
+            c.date_creation +
+            '\',\'' +
+            c.image +
+            '\',\'' +
+            c.code +
+            '\',\'' +
+            c.status +
+            '\',\'' +
+            c.positionId +
+            '\',\'' +
+            c.password +
+            '\',\'' +
+            c.adresse +
             '\')';
     await tbClient.rawInsert(sql);
     print("saved client infos " + sql.toString());
     return 0;
+  }
+
+  Future<bool> updateClient(Client1 client) async {
+    print("update client  = " + client.toMap().toString());
+    var dbClient = await db;
+    int res = await dbClient.update("Client", client.toMap(),
+        where: "client_id = ?", whereArgs: <int>[client.client_id]);
+    return res > 0;
   }
 
   Future<int> saveCmdVal(CommandeDetail cmd) async {
@@ -159,7 +188,7 @@ class DatabaseHelper {
             '\',\'' +
             cmd.prestationId.toString() +
             '\',\'' +
-            cmd.date +
+            cmd.date.toString() +
             '\')';
     await tbClient.rawInsert(sql);
     print("saved cmd valide " + sql.toString());

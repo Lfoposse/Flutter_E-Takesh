@@ -62,8 +62,11 @@ class NetworkUtil {
         .put(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
       if (response.statusCode != 200) {
+        print("PB_Update");
         return new Future.error(new Exception("Erreur de connexion"));
       }
+      print("Update Good");
+      print(response.body);
       return response.body;
     }).catchError(
             (onError) => new Future.error(new Exception(onError.toString())));

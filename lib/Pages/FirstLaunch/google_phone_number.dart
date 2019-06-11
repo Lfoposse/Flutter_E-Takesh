@@ -119,7 +119,7 @@ class _EnterGooglePhoneNumberPageState
                   GestureDetector(
                       onTap: () => _setAgreedToTOS(!_agreedToTOS),
                       child: Text(
-                        "En continuant vous allez recvoire un \ncode de vérification par SMS.\n"
+                        "En continuant vous allez recevoire un \ncode de vérification par SMS.\n"
                             " Vous devez renseigner ce code \na la page suivante.",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,

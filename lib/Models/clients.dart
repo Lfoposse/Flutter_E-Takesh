@@ -115,49 +115,98 @@ class Client1 {
   int client_id;
   int user_id;
   String email;
-  String username;
-  String lastname;
+  String nom;
+  String prenom;
   String phone;
   String date_naissance;
   String pays;
   String ville;
 
-  Client1({
-    this.client_id,
-    this.user_id,
-    this.email,
-    this.username,
-    this.lastname,
-    this.phone,
-    this.date_naissance,
-    this.pays,
-    this.ville,
-  });
+  String date_creation;
+  String image;
+  String code;
+  String status;
+  String positionId;
+  String password;
+  String adresse;
+
+  Client1(
+      {this.client_id,
+      this.user_id,
+      this.email,
+      this.nom,
+      this.prenom,
+      this.phone,
+      this.date_naissance,
+      this.pays,
+      this.ville,
+      this.date_creation,
+      this.image,
+      this.code,
+      this.status,
+      this.positionId,
+      this.password,
+      this.adresse});
   factory Client1.fromJson(Map<String, dynamic> obj) {
     return Client1(
         client_id: obj["clientid"],
         user_id: obj["UserId"],
         email: obj["email"],
-        username: obj["nom"],
-        lastname: obj["prenom"],
+        nom: obj["nom"],
+        prenom: obj["prenom"],
         phone: obj["telephone"],
         date_naissance: obj["date_naissance"],
         pays: obj["pays"],
-        ville: obj["ville"]);
+        ville: obj["ville"],
+        date_creation: obj["date_creation"],
+        image: obj["image"],
+        code: obj["code"],
+        status: obj["status"],
+        positionId: obj["positionId"],
+        password: obj["password"],
+        adresse: obj["adresse"]);
   }
 
   factory Client1.fromJson2(Map<String, dynamic> obj) {
     return Client1(
-      client_id: obj["client_id"],
-      user_id: obj["user_id"],
-      email: obj["email"],
-      username: obj["username"],
-      lastname: obj["lastname"],
-      phone: obj["phone"],
-      date_naissance: obj["date_naissance"],
-      pays: obj["pays"],
-      ville: obj["ville"],
-    );
+        client_id: obj["client_id"],
+        user_id: obj["user_id"],
+        email: obj["email"],
+        nom: obj["nom"],
+        prenom: obj["prenom"],
+        phone: obj["phone"],
+        date_naissance: obj["date_naissance"],
+        pays: obj["pays"],
+        ville: obj["ville"],
+        date_creation: obj["date_creation"],
+        image: obj["image"],
+        code: obj["code"],
+        status: obj["status"],
+        positionId: obj["positionId"],
+        password: obj["password"],
+        adresse: obj["adresse"]);
+  }
+
+  Map<String, dynamic> toMap() {
+    var obj = new Map<String, dynamic>();
+    obj["client_id"] = client_id;
+    obj["user_id"] = user_id;
+    obj["email"] = email;
+    obj["nom"] = nom;
+    obj["prenom"] = prenom;
+    obj["phone"] = phone;
+    obj["date_naissance"] = date_naissance;
+    obj["pays"] = pays;
+    obj["ville"] = ville;
+    obj["date_creation"] = date_creation;
+    obj["image"] = image;
+    obj["code"] = code;
+    obj["status"] = status;
+    obj["positionId"] = positionId;
+    obj["password"] = password;
+    obj["adresse"] = adresse;
+
+    return obj;
   }
 }
 

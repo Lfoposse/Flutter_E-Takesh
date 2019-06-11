@@ -13,6 +13,7 @@ import 'package:etakesh_client/pages/courses_page.dart';
 import 'package:etakesh_client/pages/paiements_page.dart';
 import 'package:etakesh_client/pages/parameters_page.dart';
 import 'package:etakesh_client/pages/tarifs_page.dart';
+import 'package:etakesh_client/pages/update_account.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -89,7 +90,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
     pret_a_commander = false;
     destination = "Où allez-vous ?";
     timer = Timer.periodic(
-        Duration(seconds: 5), (Timer t) => notifCmd.init(context));
+        Duration(seconds: 15), (Timer t) => notifCmd.init(context));
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
         login = l;
@@ -172,16 +173,68 @@ class HomePageState extends State<HomePage> implements LoginContract {
               children: <Widget>[
                 new DrawerHeader(
                   child: ListTile(
-                    leading: new CircleAvatar(
-                      child: new Image.asset("assets/images/avatar.png",
-                          width: 30.0, height: 30.0),
-                      radius: 32.0,
-                      backgroundColor: Colors.white,
+                    leading: Stack(
+                      children: <Widget>[
+                        Container(
+                          height: 70.0,
+                          width: 70.0,
+                          margin: EdgeInsets.only(top: 10.0, left: 2.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(35.0),
+                              image: DecorationImage(
+                                  image: AssetImage("assets/images/avatar.png"),
+                                  fit: BoxFit.cover),
+                              boxShadow: [
+                                BoxShadow(blurRadius: 7.0, color: Colors.black)
+                              ]),
+                        ),
+                        Positioned(
+                          bottom: 10.0,
+                          right: 15.0,
+                          child: Container(
+                            height: 30.0,
+                            width: 30.0,
+                            padding: EdgeInsets.all(1.0),
+                            child: IconButton(
+                                icon: new Icon(
+                                  Icons.edit,
+                                  color: Color(0xFF0C60A8),
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => UpdateAccountPage(
+                                              token: login.token,
+                                            )),
+                                  );
+                                }),
+//                              decoration: BoxDecoration(
+//                                  color: Colors.white,
+//                                  borderRadius: BorderRadius.circular(15.0),
+//                                  boxShadow: [
+//                                    BoxShadow(
+//                                        blurRadius: 2.0, color: Colors.black)
+//                                  ])
+                          ),
+                        ),
+                      ],
                     ),
-                    title: new Text(client.username + " " + client.lastname,
+//                    new CircleAvatar(
+//                      child: new Image.asset("assets/images/avatar.png",
+//                          width: 30.0, height: 30.0),
+//                      radius: 32.0,
+//                      backgroundColor: Colors.white,
+//                    ),
+
+                    title: new Text(client.nom + " " + client.prenom,
+                        maxLines: 1,
                         style: TextStyle(color: Colors.white, fontSize: 15.0)),
                     subtitle: new Text(client.phone,
-                        style: TextStyle(color: Colors.white)),
+                        maxLines: 1, style: TextStyle(color: Colors.white)),
                   ),
 //                  ),
                   decoration: new BoxDecoration(color: Colors.black),
@@ -420,7 +473,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
   @override
   void onLoginSuccess(Client1 datas) async {
     if (datas != null) {
-      print(" CLIENT" + datas.lastname);
+      print(" CLIENT" + datas.prenom);
       setState(() {
         client = datas;
         stateIndex = 3;

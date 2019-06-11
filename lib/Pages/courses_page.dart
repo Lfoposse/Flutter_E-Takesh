@@ -5,7 +5,9 @@ import 'package:etakesh_client/Models/commande.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
 import 'package:etakesh_client/pages/Commande/details_cmd.dart';
+import 'package:etakesh_client/pages/Commande/details_cmd_terminees.dart';
 import 'package:flutter/material.dart';
+//import 'package:intl/intl.dart';
 
 class CoursesPage extends StatefulWidget {
   @override
@@ -93,6 +95,7 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                               return InkWell(
                                   child: Container(child: getItemNew(index)),
                                   onTap: () {
+                                    print("travail sur les dates");
                                     Navigator.of(context).push(
                                         new MaterialPageRoute(
                                             builder: (context) =>
@@ -119,7 +122,16 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                             scrollDirection: Axis.vertical,
                             itemCount: _ocmds.length,
                             itemBuilder: (BuildContext ctxt, int index) {
-                              return getItemOld(index);
+                              return InkWell(
+                                  child: Container(child: getItemOld(index)),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailsCmdTerminePage(
+                                                  commande: _ncmds[index],
+                                                )));
+                                  });
                             })
                         :
 

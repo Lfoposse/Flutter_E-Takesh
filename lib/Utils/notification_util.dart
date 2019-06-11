@@ -89,6 +89,8 @@ class NotificationUtil extends StatefulWidget {
                   child:
                       Text("Mr " + this.cmdToSend.prestation.prestataire.nom),
                 ),
+                Text("Service : " + this.cmdToSend.prestation.service.intitule),
+                Text("Heure : " + this.cmdToSend.date),
                 this._etat1
                     ? (this._etat2
                         ? Text("Commande Terminée",
@@ -165,7 +167,7 @@ class NotificationUtil extends StatefulWidget {
       'ETakesh',
       'Commande acceptée',
       platformChannelSpecifics,
-      payload: 'Custom_Sound',
+      payload: this.cmdToSend == null ? null : 'Datas',
     );
   }
 
@@ -186,7 +188,7 @@ class NotificationUtil extends StatefulWidget {
       'ETakesh',
       'Commande terminée',
       platformChannelSpecifics,
-      payload: 'Custom_Sound',
+      payload: this.cmdToSend == null ? null : 'Datas',
     );
   }
 
@@ -207,7 +209,7 @@ class NotificationUtil extends StatefulWidget {
       'ETakesh',
       'Commande non validée',
       platformChannelSpecifics,
-      payload: 'Custom_Sound',
+      payload: this.cmdToSend == null ? null : 'Datas',
     );
   }
 

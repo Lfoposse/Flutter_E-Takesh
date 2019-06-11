@@ -190,7 +190,7 @@ class _DetailsCmdPageState extends State<DetailsCmdPage> {
                     child: ListTile(
                       title: Text(getStatusCommand((widget.commande)),
                           style: TextStyle(color: Colors.white)),
-                      subtitle: Text(widget.commande.date,
+                      subtitle: Text(widget.commande.date.toString(),
                           style: TextStyle(color: Colors.white)),
                       trailing: Text(
                           widget.commande.prestation.service.prix.toString() +

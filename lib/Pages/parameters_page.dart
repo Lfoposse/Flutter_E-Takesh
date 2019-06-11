@@ -18,6 +18,8 @@ class ParametersPageState extends State<ParametersPage>
   bool err = false;
   Client1 client;
   int stateIndex;
+  final GlobalKey<ScaffoldState> _mScaffoldState =
+      new GlobalKey<ScaffoldState>();
   ParameterPresenter _presenter;
   ParametersPageState() {
     _presenter = new ParameterPresenter(this);
@@ -31,23 +33,16 @@ class ParametersPageState extends State<ParametersPage>
     err = false;
   }
 
-  Widget LoadingIndicator() {
-    Container(
-      height: 400.0,
-//      height: MediaQuery.of(context).size.height,
-//      width: MediaQuery.of(context).size.width,
-      color: Colors.grey[700],
-      child: Center(
-        child: SizedBox(
-          height: 50.0,
-          width: 50.0,
-          child: CircularProgressIndicator(
-            strokeWidth: 0.7,
-            backgroundColor: Color(0xFF0C60A8),
-          ),
-        ),
+  void _showErrSnackBar() {
+    var snackBar = SnackBar(
+      content: Text(
+        "Impossible de se deconnecter",
+        style: TextStyle(color: Colors.red),
       ),
+      backgroundColor: Color(0xFF0C60A8),
+      action: SnackBarAction(label: "OK", onPressed: () {}),
     );
+    _mScaffoldState.currentState.showSnackBar(snackBar);
   }
 
   @override
@@ -60,6 +55,7 @@ class ParametersPageState extends State<ParametersPage>
 
       default:
         return new Scaffold(
+            key: _mScaffoldState,
             appBar: new AppBar(
               title: new Text(
                 'Paramètres du compte',
@@ -80,7 +76,7 @@ class ParametersPageState extends State<ParametersPage>
                         radius: 32.0,
                         backgroundColor: Color(0xFFE2E2E2),
                       ),
-                      title: new Text(client.username + " " + client.lastname,
+                      title: new Text(client.nom + " " + client.prenom,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
@@ -152,6 +148,11 @@ class ParametersPageState extends State<ParametersPage>
                     title: new Text("Déconnexion",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
+                    trailing: loading
+                        ? CircularProgressIndicator(
+                            backgroundColor: Color(0xFF0C60A8),
+                          )
+                        : Text(""),
                     onTap: () {
                       showDialog<bool>(
                         context: context,
@@ -163,11 +164,6 @@ class ParametersPageState extends State<ParametersPage>
                                 children: <Widget>[
                                   new Text(
                                       "Vous etez sur le point de vouloir vous déconnecter"),
-                                  Center(
-                                    child: loading
-                                        ? CircularProgressIndicator()
-                                        : Container(),
-                                  )
                                 ],
                               ),
                             ),
@@ -183,6 +179,7 @@ class ParametersPageState extends State<ParametersPage>
                                 child: new Text("CONFIRMER",
                                     style: TextStyle(color: Colors.blue)),
                                 onPressed: () {
+                                  Navigator.of(context).pop();
                                   setState(() {
                                     loading = true;
                                   });
@@ -198,14 +195,14 @@ class ParametersPageState extends State<ParametersPage>
                                                   token),
                                         );
                                         if (response1.statusCode == 204) {
-                                          Navigator.of(context).pop();
                                           AppSharedPreferences()
                                               .setAppLoggedIn(false);
                                           AppSharedPreferences()
                                               .setUserToken('');
                                           DatabaseHelper().clearUser();
                                           DatabaseHelper().clearClient();
-                                          Navigator.of(context)
+                                          Navigator.of(_mScaffoldState
+                                                  .currentContext)
                                               .pushAndRemoveUntil(
                                                   new MaterialPageRoute(
                                                       builder: (context) =>
@@ -216,9 +213,10 @@ class ParametersPageState extends State<ParametersPage>
                                             loading = false;
                                           });
                                         } else {
-                                          Navigator.of(context).pop();
-                                          print("Probleme deconnexion");
-
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          _showErrSnackBar();
                                           // If that call was not successful, throw an error.
                                           throw Exception(
                                               'Erreur de connexion du client' +
@@ -227,10 +225,16 @@ class ParametersPageState extends State<ParametersPage>
                                       });
                                     } else {
                                       Navigator.of(context).pop();
-                                      print("Not get Token " + token);
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      _showErrSnackBar();
                                     }
                                   }).catchError((error) {
-                                    Navigator.of(context).pop();
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    _showErrSnackBar();
                                     print("Not get Token " + error.toString());
                                   });
                                 },

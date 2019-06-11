@@ -20,6 +20,7 @@ class RestDatasource {
   static final POSITIONS_URL = BASE_URL + "positions";
   static final SERVICE_URL = BASE_URL + "services";
   static final CREATE_USER = BASE_URL + "Users";
+  static final CLIENT = BASE_URL + "clients";
   static final PRESTATAIRE_URL = BASE_URL + "prestataires";
   static final GOOGLE_MAP_URL =
       "https://maps.googleapis.com/maps/api/place/autocomplete/json";
@@ -155,7 +156,6 @@ class RestDatasource {
             CMD_PRESTATION_DETAIL +
             FILTERCLIENT +
             clientId.toString() +
-            CMDVALIDE +
             TOKEN2 +
             token)
         .then((dynamic res) {
@@ -331,6 +331,38 @@ class RestDatasource {
         return null;
     }).catchError(
         (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Modifie les donnees d'un client
+  Future<Client1> updateClient(Client1 clt, String token) {
+    print(clt.adresse);
+    return _netUtil
+        .put(CLIENT + "/" + clt.client_id.toString() + TOKEN1 + token, body: {
+      "clientid": clt.client_id.toString(),
+      "adresse": clt.adresse,
+      "date_creation": clt.date_creation,
+      "date_naissance": clt.date_naissance,
+      "email": clt.email,
+      "image": clt.image,
+      "code": clt.code,
+      "nom": clt.nom,
+      "password": clt.password,
+      "pays": clt.pays,
+      "prenom": clt.prenom,
+      "status": clt.status,
+      "telephone": clt.phone,
+      "ville": clt.ville,
+      "positionId": clt.positionId,
+      "UserId": clt.user_id.toString()
+    }).then((dynamic res) {
+      if (res != null) {
+        print("Update Client");
+        print(res);
+        return Client1.fromJson(json.decode(res));
+      } else
+        return null;
+    }).catchError(
+            (onError) => new Future.error(new Exception(onError.toString())));
   }
 
   Future findLocation(String keyword, String lang, double lat, double lng) {

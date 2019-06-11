@@ -315,7 +315,9 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
             "nom": this.widget.user.displayName,
             "prenom": this.widget.user.displayName,
             "telephone": this.widget.phone_n,
+            "adresse": "RAS",
             "date_creation": DateTime.now().toString(),
+            "image": "NONE",
             "code": "ET" +
                 DateTime.now().month.toString() +
                 DateTime.now().day.toString() +
@@ -325,7 +327,7 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
                 DateTime.now().year.toString(),
             "ville": "Douala",
             "date_naissance": "1990-01-01",
-            "status": "Creer",
+            "status": "CREATED",
             "pays": "Cameroun"
           },
           headers: {HttpHeaders.acceptHeader: "application/json"},
