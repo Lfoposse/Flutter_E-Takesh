@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:etakesh_client/DAO/Presenters/UpdateAcountPresenter.dart';
 import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:positioned_tap_detector/positioned_tap_detector.dart';
 
 class UpdateAccountPage extends StatefulWidget {
@@ -24,8 +27,16 @@ class UpdateAccountPageState extends State<UpdateAccountPage>
   final phoneKey = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   UpdateAccountPresenter _presenter;
-
+  File _image;
   String _nom, _prenom, _adresse, _phone;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print(" Image select :" + image.path);
+    setState(() {
+      _image = image;
+    });
+  }
 
   UpdateAccountPageState() {
     _presenter = new UpdateAccountPresenter(this);
@@ -56,7 +67,7 @@ class UpdateAccountPageState extends State<UpdateAccountPage>
         .showSnackBar(new SnackBar(content: new Text(text)));
   }
 
-  void _submit() {
+  void _submit() async {
     nomKey.currentState.save();
     prenomKey.currentState.save();
     adresseKey.currentState.save();
@@ -76,7 +87,6 @@ class UpdateAccountPageState extends State<UpdateAccountPage>
       setState(() {
         _isLoading = true;
       });
-
       _presenter.updateAccountDatas(client, widget.token);
     }
   }
@@ -238,12 +248,19 @@ class UpdateAccountPageState extends State<UpdateAccountPage>
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(top: 40.0),
-                    child: Image.asset(
-                      'assets/images/avatar.png',
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.contain,
-                    ),
+                    child: _image == null
+                        ? Image.asset(
+                            'assets/images/avatar.png',
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.contain,
+                          )
+                        : Image.file(
+                            _image,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.contain,
+                          ),
                   ),
                   Container(
                     color: Color.fromARGB(0, 0, 255, 0),
@@ -263,6 +280,7 @@ class UpdateAccountPageState extends State<UpdateAccountPage>
                             child: PositionedTapDetector(
                               onTap: (position) {
                                 print("Select Image");
+                                getImage();
                               },
                               child: Icon(Icons.photo_camera),
                             ),

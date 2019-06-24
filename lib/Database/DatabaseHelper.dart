@@ -52,9 +52,9 @@ class DatabaseHelper {
         "image TEXT, "
         "code TEXT, "
         "status TEXT, "
-        "positionId TEXT, "
-        "adresse TEXT, "
-        "UserId INTEGER "
+        "password TEXT, "
+        "positionId INTEGER, "
+        "adresse TEXT "
         ")");
 
     // create table client where store the connected account informations
@@ -130,7 +130,7 @@ class DatabaseHelper {
   Future<int> saveClient(Client1 c) async {
     var tbClient = await db;
     String sql =
-        'INSERT INTO Client(client_id, user_id, nom, prenom, email, phone, date_naissance, pays, ville, date_creation, image, code, status, positionId, UserId, adresse) VALUES(' +
+        'INSERT INTO Client(client_id, user_id, nom, prenom, email, phone, date_naissance, pays, ville, date_creation, image, code, status, password, positionId, adresse) VALUES(' +
             c.client_id.toString() +
             ',\'' +
             c.user_id.toString() +
@@ -157,9 +157,9 @@ class DatabaseHelper {
             '\',\'' +
             c.status +
             '\',\'' +
-            c.positionId +
-            '\',\'' +
             c.password +
+            '\',\'' +
+            c.positionId.toString() +
             '\',\'' +
             c.adresse +
             '\')';

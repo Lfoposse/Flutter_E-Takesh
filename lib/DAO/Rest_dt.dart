@@ -338,7 +338,7 @@ class RestDatasource {
     print(clt.adresse);
     return _netUtil
         .put(CLIENT + "/" + clt.client_id.toString() + TOKEN1 + token, body: {
-      "clientid": clt.client_id.toString(),
+//      "clientid": clt.client_id.toString(),
       "adresse": clt.adresse,
       "date_creation": clt.date_creation,
       "date_naissance": clt.date_naissance,
@@ -346,15 +346,16 @@ class RestDatasource {
       "image": clt.image,
       "code": clt.code,
       "nom": clt.nom,
-      "password": clt.password,
+      "password": clt.password.toString(),
       "pays": clt.pays,
       "prenom": clt.prenom,
       "status": clt.status,
-      "telephone": clt.phone,
+      "telephone": clt.phone.toString(),
       "ville": clt.ville,
-      "positionId": clt.positionId,
+      "positionId": clt.positionId.toString(),
       "UserId": clt.user_id.toString()
     }).then((dynamic res) {
+      print(res);
       if (res != null) {
         print("Update Client");
         print(res);

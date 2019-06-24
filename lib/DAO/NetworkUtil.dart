@@ -56,17 +56,15 @@ class NetworkUtil {
             (onError) => new Future.error(new Exception(onError.toString())));
   }
 
-  Future<dynamic> put(String url, {Map headers, body, encoding}) {
+  Future<dynamic> put(String url, {Map headers, body}) {
     print(url);
     return http
-        .put(url, body: body, headers: headers, encoding: encoding)
+        .put(url, body: body, headers: headers)
         .then((http.Response response) {
       if (response.statusCode != 200) {
         print("PB_Update");
         return new Future.error(new Exception("Erreur de connexion"));
       }
-      print("Update Good");
-      print(response.body);
       return response.body;
     }).catchError(
             (onError) => new Future.error(new Exception(onError.toString())));

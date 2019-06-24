@@ -162,7 +162,7 @@ class Client1 {
         image: obj["image"],
         code: obj["code"],
         status: obj["status"],
-        positionId: obj["positionId"],
+        positionId: obj["positionId"].toString(),
         password: obj["password"],
         adresse: obj["adresse"]);
   }
@@ -182,7 +182,7 @@ class Client1 {
         image: obj["image"],
         code: obj["code"],
         status: obj["status"],
-        positionId: obj["positionId"],
+        positionId: obj["positionId"].toString(),
         password: obj["password"],
         adresse: obj["adresse"]);
   }
