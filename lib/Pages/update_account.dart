@@ -249,8 +249,8 @@ class UpdateAccountPageState extends State<UpdateAccountPage>
                   Container(
                     padding: EdgeInsets.only(top: 40.0),
                     child: _image == null
-                        ? Image.asset(
-                            'assets/images/avatar.png',
+                        ? Image.network(
+                            client.image,
                             width: double.infinity,
                             height: double.infinity,
                             fit: BoxFit.contain,

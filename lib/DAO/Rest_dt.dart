@@ -13,7 +13,7 @@ const kGoogleApiKey = "AIzaSyBNm8cnYw5inbqzgw8LjXyt3rMhFhEVTjY";
 
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
-  static final BASE_URL = "http://api.e-takesh.com:26960/api/";
+  static final BASE_URL = "http://192.168.100.49:26960/api/";
   static final LOGIN_URL = BASE_URL + "Users/login";
   static final ONE_USER = BASE_URL + "clients/findOne";
   static final CMD_URL = BASE_URL + "commandes";

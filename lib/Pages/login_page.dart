@@ -116,7 +116,7 @@ class LoginState extends State<Login> implements LoginContract {
             Future.delayed(Duration(seconds: 2), () async {
               //connecte le user 10 ans (token)
               final response1 = await http.post(
-                Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+                Uri.encodeFull("http://192.168.100.49:26960/api/Users/login"),
                 body: {
                   "email": _emailController.text,
                   "password": _passwordController.text,

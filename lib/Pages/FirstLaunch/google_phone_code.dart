@@ -281,7 +281,7 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
     });
 //    on creer le User
     final response1 = await http.post(
-      Uri.encodeFull("http://api.e-takesh.com:26960/api/Users"),
+      Uri.encodeFull("192.168.100.49:26960/api/Users"),
       body: {"email": this.widget.user.email, "password": pwd},
       headers: {HttpHeaders.acceptHeader: "application/json"},
     );
@@ -293,7 +293,7 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
       print(convertDataToJson1["id"]);
 //    on connecte le User pour avoir le Token
       final response2 = await http.post(
-        Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+        Uri.encodeFull("192.168.100.49/api/Users/login"),
         body: {"email": this.widget.user.email, "password": pwd},
         headers: {HttpHeaders.acceptHeader: "application/json"},
       );
@@ -305,9 +305,8 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
         print("Token");
         print(convertDataToJson2["id"]);
         final response3 = await http.post(
-          Uri.encodeFull(
-              "http://api.e-takesh.com:26960/api/clients?access_token=" +
-                  convertDataToJson2["id"]),
+          Uri.encodeFull("192.168.100.49:26960/api/clients?access_token=" +
+              convertDataToJson2["id"]),
           body: {
             "UserId": convertDataToJson1["id"].toString(),
             "email": this.widget.user.email,
@@ -317,7 +316,8 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
             "telephone": this.widget.phone_n,
             "adresse": "RAS",
             "date_creation": DateTime.now().toString(),
-            "image": "NONE",
+            "image":
+                "https://www.bl-agents.fr/images/DELUXE/avatar-generic.png",
             "code": "ET" +
                 DateTime.now().month.toString() +
                 DateTime.now().day.toString() +
@@ -335,7 +335,7 @@ class _EnterGooglePhoneCodePageState extends State<EnterGooglePhoneCodePage> {
         if (response3.statusCode == 200) {
           //connecte le user 10 ans (token)
           final response4 = await http.post(
-            Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+            Uri.encodeFull("192.168.100.49:26960/api/Users/login"),
             body: {
               "email": this.widget.user.email,
               "password": pwd,

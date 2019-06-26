@@ -231,7 +231,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
     });
 //    on creer le User
     final response1 = await http.post(
-      Uri.encodeFull("http://api.e-takesh.com:26960/api/Users"),
+      Uri.encodeFull("http://192.168.100.49:26960/api/Users"),
       body: {"email": this.widget.email, "password": _passwordController.text},
       headers: {HttpHeaders.acceptHeader: "application/json"},
     );
@@ -243,7 +243,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
       print(convertDataToJson1["id"]);
 //    on connecte le User pour avoir le Token
       final response2 = await http.post(
-        Uri.encodeFull("http://api.e-takesh.com:26960/api/Users/login"),
+        Uri.encodeFull("http://192.168.100.49:26960/api/Users/login"),
         body: {
           "email": this.widget.email,
           "password": _passwordController.text
@@ -259,7 +259,7 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
         print(convertDataToJson2["id"]);
         final response3 = await http.post(
           Uri.encodeFull(
-              "http://api.e-takesh.com:26960/api/clients?access_token=" +
+              "http://192.168.100.49:26960/api/clients?access_token=" +
                   convertDataToJson2["id"]),
           body: {
             "UserId": convertDataToJson1["id"].toString(),
@@ -268,7 +268,8 @@ class _CreatePassWordPageState extends State<CreatePassWordPage> {
             "nom": this.widget.nom,
             "prenom": this.widget.prenom,
             "adresse": "RAS",
-            "image": "NONE",
+            "image":
+                "https://www.bl-agents.fr/images/DELUXE/avatar-generic.png",
             "date_creation": DateTime.now().toString(),
             "code": "ET" +
                 DateTime.now().month.toString() +

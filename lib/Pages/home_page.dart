@@ -5,6 +5,7 @@ import 'package:etakesh_client/Database/DatabaseHelper.dart';
 import 'package:etakesh_client/Models/clients.dart';
 import 'package:etakesh_client/Models/google_place_item.dart';
 import 'package:etakesh_client/Utils/Loading.dart';
+import 'package:etakesh_client/Utils/Scan_qr_code.dart';
 import 'package:etakesh_client/Utils/notification_util.dart';
 import 'package:etakesh_client/pages/Commande/destination_page.dart';
 import 'package:etakesh_client/pages/Commande/position_page.dart';
@@ -183,7 +184,7 @@ class HomePageState extends State<HomePage> implements LoginContract {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(35.0),
                               image: DecorationImage(
-                                  image: AssetImage("assets/images/avatar.png"),
+                                  image: NetworkImage(client.image),
                                   fit: BoxFit.cover),
                               boxShadow: [
                                 BoxShadow(blurRadius: 7.0, color: Colors.black)
@@ -376,6 +377,24 @@ class HomePageState extends State<HomePage> implements LoginContract {
                           showDestinationPlaces();
                         },
                       ))),
+              Positioned(
+                height: 50.0,
+                right: 5.0,
+                bottom: 5.0,
+                child: IconButton(
+                  iconSize: 35.0,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      new MaterialPageRoute(builder: (context) => ScanScreen()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.settings_overscan,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
             ]));
     }
   }

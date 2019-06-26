@@ -22,6 +22,18 @@ buildscript {
                         && !details.requested.name.contains('androidx') ) {
                     details.useVersion "1.0.1"
                 }
+                if (details.requested.group == 'androidx.appcompat') {
+                    details.useVersion "1.0.1"
+                }
+//                if (details.requested.group == 'androidx.lifecycle') {
+//                    details.useVersion "2.0.0"
+//                }
+//                if (details.requested.group == 'androidx.versionedparcelable') {
+//                    details.useVersion "1.0.0"
+//                }
+//                if (details.requested.group == 'androidx.fragment') {
+//                    details.useVersion "1.0.0"
+//                }
             }
         }
     }

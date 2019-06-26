@@ -70,8 +70,8 @@ class ParametersPageState extends State<ParametersPage>
               child: Column(
                 children: <Widget>[
                   new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Image.asset("assets/images/avatar.png",
+                      leading: CircleAvatar(
+                        child: Image.network(client.image,
                             width: 30.0, height: 30.0),
                         radius: 32.0,
                         backgroundColor: Color(0xFFE2E2E2),
@@ -191,7 +191,7 @@ class ParametersPageState extends State<ParametersPage>
                                           () async {
                                         final response1 = await http.post(
                                           Uri.encodeFull(
-                                              "http://api.e-takesh.com:26960/api/Users/logout?access_token=" +
+                                              "192.168.100.49:26960/api/Users/logout?access_token=" +
                                                   token),
                                         );
                                         if (response1.statusCode == 204) {
