@@ -285,6 +285,7 @@ class RestDatasource {
       "is_accepted": false.toString(),
       "is_refused": false.toString(),
       "is_terminated": false.toString(),
+      "is_started": false.toString(),
       "clientId": client.toString(),
       "prestationId": prestation.toString(),
       "prestataireId": prestataire.toString()
@@ -298,7 +299,7 @@ class RestDatasource {
         (onError) => new Future.error(new Exception(onError.toString())));
   }
 
-  ///Modifie le status d'une commande a deja vue par le client
+  ///Modifie le status d'une commande deja vue par le client
   Future<Commande> updateCmdStatus(CommandeDetail cmd, String token) {
     return _netUtil.put(CMD_URL + TOKEN1 + token, body: {
       "commandeid": cmd.commandeid.toString(),
@@ -306,6 +307,9 @@ class RestDatasource {
       "date": cmd.date,
       "date_debut": cmd.date_debut,
       "date_fin": cmd.date_fin,
+      "date_acceptation": cmd.date_acceptation,
+      "date_prise_en_charge": cmd.date_prise_en_charge,
+      "rate_date": cmd.rate_date,
       "status": "READ",
       "position_prise_en_charge": cmd.position_prise_en_charge,
       "position_destination": cmd.position_destination,
@@ -320,9 +324,49 @@ class RestDatasource {
       "is_accepted": cmd.is_accepted.toString(),
       "is_refused": cmd.is_refused.toString(),
       "is_terminated": cmd.is_terminated.toString(),
+      "is_started": cmd.is_started.toString(),
       "clientId": cmd.clientId,
       "prestationId": cmd.prestationId.toString(),
       "prestataireId": cmd.prestation.prestataire.prestataireid.toString()
+    }).then((dynamic res) {
+      if (res != null) {
+        print("Update Cmd");
+        return Commande.fromJson(json.decode(res));
+      } else
+        return null;
+    }).catchError(
+        (onError) => new Future.error(new Exception(onError.toString())));
+  }
+
+  ///Modifie le status d'une commande pret a etre demarre
+  Future<Commande> updateCmdStatusToStart(CommandeLocal cmd, String token) {
+    return _netUtil.put(CMD_URL + TOKEN1 + token, body: {
+      "commandeid": cmd.commandeId.toString(),
+      "montant": cmd.montant.toString(),
+      "date": cmd.date,
+      "date_debut": cmd.date_debut,
+      "date_fin": cmd.date_fin,
+      "date_acceptation": cmd.date_acceptation,
+      "date_prise_en_charge": cmd.date_prise_en_charge,
+      "rate_date": cmd.rate_date,
+      "status": "STARTED",
+      "position_prise_en_charge": cmd.position_prise_en_charge,
+      "position_destination": cmd.position_destination,
+      "code": cmd.code,
+      "distance_client_prestataire": cmd.distance_client_prestataire,
+      "duree_client_prestataire": cmd.duree_client_prestataire,
+      "position_priseId": cmd.position_priseId,
+      "position_destId": cmd.position_destId,
+      "rate_comment": cmd.rate_comment,
+      "rate_value": cmd.rate_value.toString(),
+      "is_created": cmd.is_created.toString(),
+      "is_accepted": cmd.is_accepted.toString(),
+      "is_refused": cmd.is_refused.toString(),
+      "is_terminated": cmd.is_terminated.toString(),
+      "is_started": true.toString(),
+      "clientId": cmd.clientId,
+      "prestationId": cmd.prestationId.toString(),
+      "prestataireId": cmd.prestataireId.toString()
     }).then((dynamic res) {
       if (res != null) {
         print("Update Cmd");

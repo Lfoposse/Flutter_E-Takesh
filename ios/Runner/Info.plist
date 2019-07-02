@@ -41,14 +41,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
 	<key>NSLocationWhenInUseUsageDescription</key>
     <string>Votre Localisation doit etre activer pour cette application</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <sting>Votre Localisation doit etre activer pour cette application</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>This app needs access to location when open and in the background.</string>
-
     <string>Votre Lallery doit etre accessible pour cette application</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Votre Camera doit etre accessible pour cette application</string>

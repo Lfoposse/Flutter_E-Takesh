@@ -6,6 +6,7 @@ import 'package:etakesh_client/Models/commande.dart';
 import 'package:etakesh_client/Utils/AppSharedPreferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 
 class NotificationUtil extends StatefulWidget {
   BuildContext context;
@@ -90,7 +91,83 @@ class NotificationUtil extends StatefulWidget {
                       Text("Mr " + this.cmdToSend.prestation.prestataire.nom),
                 ),
                 Text("Service : " + this.cmdToSend.prestation.service.intitule),
-                Text("Heure : " + this.cmdToSend.date),
+                this._etat1
+                    ? (this._etat2
+                        ? Text("Le " +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_fin.toString())
+                                .day
+                                .toString() +
+                            "/" +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_fin.toString())
+                                .month
+                                .toString() +
+                            "/" +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_fin.toString())
+                                .year
+                                .toString() +
+                            " à " +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_fin.toString())
+                                .hour
+                                .toString() +
+                            ":" +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_fin.toString())
+                                .minute
+                                .toString())
+                        : Text("Le " +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_acceptation.toString())
+                                .day
+                                .toString() +
+                            "/" +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_acceptation.toString())
+                                .month
+                                .toString() +
+                            "/" +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_acceptation.toString())
+                                .year
+                                .toString() +
+                            " à " +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_acceptation.toString())
+                                .hour
+                                .toString() +
+                            ":" +
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .parse(cmdToSend.date_acceptation.toString())
+                                .minute
+                                .toString()))
+                    : Text("Le " +
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                            .parse(cmdToSend.date_acceptation.toString())
+                            .day
+                            .toString() +
+                        "/" +
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                            .parse(cmdToSend.date_acceptation.toString())
+                            .month
+                            .toString() +
+                        "/" +
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                            .parse(cmdToSend.date_acceptation.toString())
+                            .year
+                            .toString() +
+                        " à " +
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                            .parse(cmdToSend.date_acceptation.toString())
+                            .hour
+                            .toString() +
+                        ":" +
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                            .parse(cmdToSend.date_acceptation.toString())
+                            .minute
+                            .toString()),
                 this._etat1
                     ? (this._etat2
                         ? Text("Commande Terminée",
@@ -119,33 +196,6 @@ class NotificationUtil extends StatefulWidget {
             ),
           ),
         );
-//          AlertDialog(
-//          title: Text('La commande N :',
-//              style: new TextStyle(
-//                color: Colors.blue[900],
-//                fontSize: 14.0,
-//                fontWeight: FontWeight.bold,
-//              )),
-//          content: Container(
-//            width: double.maxFinite,
-//            height: 120.0,
-//            child: Column(
-//              children: <Widget>[
-//                new Divider(
-//                  height: 5,
-//                ),
-//              ],
-//            ),
-//          ),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text('OK'),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            )
-//          ],
-//        );
       },
     );
   }
@@ -266,7 +316,8 @@ class NotificationUtil extends StatefulWidget {
                           this._etat2 = true;
                           this.cmdToSend = cmd;
                           _showNotificationCmdLV();
-                          DatabaseHelper().clearCmdVal(cmdlocal[j].commandeId);
+                          DatabaseHelper().clearCmdVal();
+//                          cmdlocal[j].commandeId
                         }
                       });
                     }
@@ -275,7 +326,6 @@ class NotificationUtil extends StatefulWidget {
                 });
               } else {
                 ///               si on a pas de cmd valide
-
                 new DatabaseHelper()
                     .getCmdVal()
                     .then((List<CommandeLocal> cmdlocal) {
@@ -295,7 +345,8 @@ class NotificationUtil extends StatefulWidget {
                           this._etat2 = true;
                           this.cmdToSend = cmd;
                           _showNotificationCmdLV();
-                          DatabaseHelper().clearCmdVal(cmdlocal[j].commandeId);
+                          DatabaseHelper().clearCmdVal();
+//                          cmdlocal[j].commandeId
                         }
                       });
                     }
@@ -310,10 +361,6 @@ class NotificationUtil extends StatefulWidget {
               .then((List<CommandeDetail> cmdfs) {
             if (cmdfs != null && cmdfs.length > 0) {
               print("Cmd Refusee" + cmdfs.toString());
-//              new DatabaseHelper()
-//                  .getCmdRef()
-//                  .then((List<CommandeLocal> cmdlocal) {
-//                if (cmdlocal == null) {
               this._etat1 = true;
               this._etat2 = false;
               for (int i = 0; i < cmdfs.length; i++) {
@@ -324,19 +371,6 @@ class NotificationUtil extends StatefulWidget {
                   print("cmd refusee mise a jour");
                 });
               }
-//                } else {
-//                  if (cmdfs.length > cmdlocal.length) {
-//                    DatabaseHelper().clearCmdRef();
-//                    for (int i = 0; i < cmdfs.length; i++) {
-//                      this._etat1 = true;
-//                      this._etat2 = false;
-//                      this.cmdToSend = cmdfs[cmdfs.length - 1];
-//                      new DatabaseHelper().saveCmdRef(cmdfs[i]);
-//                      _showNotificationCmdRe();
-//                    }
-//                  }
-//                }
-//              });
             }
           });
         });

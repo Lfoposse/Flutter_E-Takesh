@@ -73,17 +73,29 @@ class DatabaseHelper {
         "prestataireId INTEGER NOT NULL, "
         "cmdId INTEGER NOT NULL UNIQUE, "
         "prestationId INTEGER NOT NULL, "
-        "date TEXT "
+        "date_debut TEXT, "
+        "date_fin TEXT, "
+        "date TEXT, "
+        "montant INTEGER, "
+        "status TEXT, "
+        "position_prise_en_charge TEXT, "
+        "position_destination TEXT, "
+        "distance_client_prestataire TEXT, "
+        "duree_client_prestataire TEXT, "
+        "date_acceptation TEXT, "
+        "date_prise_en_charge TEXT, "
+        "position_priseId TEXT, "
+        "position_destId TEXT, "
+        "rate_comment TEXT, "
+        "rate_date TEXT, "
+        "rate_value INTEGER, "
+        "code TEXT, "
+        "is_created TEXT, "
+        "is_accepted TEXT, "
+        "is_refused TEXT, "
+        "is_terminated TEXT, "
+        "is_started TEXT "
         ")");
-    // create table cmdvalide where store the validated orders
-//    await db.execute("CREATE TABLE CmdRef("
-//        "id INTEGER PRIMARY KEY, "
-//        "clientId INTEGER NOT NULL, "
-//        "prestataireId INTEGER NOT NULL, "
-//        "cmdId INTEGER NOT NULL UNIQUE, "
-//        "prestationId INTEGER NOT NULL, "
-//        "date TEXT "
-//        ")");
   }
 
   Future<int> clearClient() async {
@@ -98,18 +110,11 @@ class DatabaseHelper {
     return res;
   }
 
-  Future<int> clearCmdVal(int cmdi) async {
+  Future<int> clearCmdVal() async {
     var tbCmd = await db;
-    int res = await tbCmd
-        .rawDelete('DELETE FROM CmdVal WHERE cmdId = ' + cmdi.toString());
+    int res = await tbCmd.rawDelete('DELETE FROM CmdVal');
     return res;
   }
-//
-//  Future<int> clearCmdRef() async {
-//    var tbCmd = await db;
-//    int res = await tbCmd.rawDelete('DELETE FROM CmdRef');
-//    return res;
-//  }
 
   Future<int> saveUser(Login2 l) async {
     var tbUser = await db;
@@ -179,7 +184,10 @@ class DatabaseHelper {
   Future<int> saveCmdVal(CommandeDetail cmd) async {
     var tbClient = await db;
     String sql =
-        'INSERT INTO CmdVal(clientId, prestataireId, cmdId, prestationId, date) VALUES(' +
+        'INSERT INTO CmdVal(clientId, prestataireId, cmdId, prestationId, date_debut, date_fin, date, montant, status, '
+            'position_prise_en_charge, position_destination, distance_client_prestataire, '
+            'duree_client_prestataire, date_acceptation, date_prise_en_charge,'
+            ' position_priseId, position_destId, rate_comment, rate_date, rate_value, code, is_created, is_accepted, is_refused, is_terminated, is_started) VALUES(' +
             cmd.clientId +
             ',\'' +
             cmd.prestation.prestataire.prestataireid.toString() +
@@ -188,37 +196,54 @@ class DatabaseHelper {
             '\',\'' +
             cmd.prestationId.toString() +
             '\',\'' +
+            cmd.date_debut.toString() +
+            '\',\'' +
+            cmd.date_fin.toString() +
+            '\',\'' +
             cmd.date.toString() +
+            '\',\'' +
+            cmd.montant.toString() +
+            '\',\'' +
+            cmd.status.toString() +
+            '\',\'' +
+            cmd.position_prise_en_charge.toString() +
+            '\',\'' +
+            cmd.position_destination.toString() +
+            '\',\'' +
+            cmd.distance_client_prestataire.toString() +
+            '\',\'' +
+            cmd.duree_client_prestataire.toString() +
+            '\',\'' +
+            cmd.date_acceptation.toString() +
+            '\',\'' +
+            cmd.date_prise_en_charge.toString() +
+            '\',\'' +
+            cmd.position_priseId.toString() +
+            '\',\'' +
+            cmd.position_destId.toString() +
+            '\',\'' +
+            cmd.rate_comment.toString() +
+            '\',\'' +
+            cmd.rate_date.toString() +
+            '\',\'' +
+            cmd.rate_value.toString() +
+            '\',\'' +
+            cmd.code.toString() +
+            '\',\'' +
+            cmd.is_created.toString() +
+            '\',\'' +
+            cmd.is_accepted.toString() +
+            '\',\'' +
+            cmd.is_refused.toString() +
+            '\',\'' +
+            cmd.is_terminated.toString() +
+            '\',\'' +
+            cmd.is_started.toString() +
             '\')';
     await tbClient.rawInsert(sql);
     print("saved cmd valide " + sql.toString());
     return 0;
   }
-
-//  Future<int> saveCmdRef(CommandeDetail cmd) async {
-//    var tbClient = await db;
-//    String sql =
-//        'INSERT INTO CmdRef(clientId, prestataireId, cmdId, prestationId, date) VALUES(' +
-//            cmd.clientId +
-//            ',\'' +
-//            cmd.prestation.prestataire.prestataireid.toString() +
-//            '\',\'' +
-//            cmd.commandeid.toString() +
-//            '\',\'' +
-//            cmd.prestationId.toString() +
-//            '\',\'' +
-//            cmd.date +
-//            '\')';
-//    await tbClient.rawInsert(sql);
-//    print("saved cmd valide " + sql.toString());
-//    return 0;
-//  }
-//  Future<int> addClient(Client t) async {
-//    var tbClient = await db;
-//    int res = await tbClient.insert("Client", t.toMap());
-//    print("client " + t.email + "has add succesful to the database");
-//    return res;
-//  }
 
   Future<Client1> getClient() async {
     var tbClient = await db;

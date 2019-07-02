@@ -7,7 +7,7 @@ import 'package:etakesh_client/Utils/Loading.dart';
 import 'package:etakesh_client/pages/Commande/details_cmd.dart';
 import 'package:etakesh_client/pages/Commande/details_cmd_terminees.dart';
 import 'package:flutter/material.dart';
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 class CoursesPage extends StatefulWidget {
   @override
@@ -193,18 +193,38 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     new Text(
-                      "Aujourd'hui",
+                      DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ncmds[indexItem].date)
+                              .day
+                              .toString() +
+                          "/" +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ncmds[indexItem].date)
+                              .month
+                              .toString() +
+                          "/" +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ncmds[indexItem].date)
+                              .year
+                              .toString(),
                       style: new TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xFF50AED8),
-                      ),
+                          fontSize: 12.0, color: Color(0xFF93BFD8)),
                     ),
                     SizedBox(
                       height: 7.0,
                     ),
                     new Text(
-                      "il y'a 20 " +
-                          _ncmds[indexItem].prestation.service.duree.toString(),
+                      " à " +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ncmds[indexItem].date)
+                              .hour
+                              .toString() +
+                          "h : " +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ncmds[indexItem].date)
+                              .minute
+                              .toString() +
+                          "min",
                       style: new TextStyle(
                           fontSize: 12.0, color: Color(0xFF93BFD8)),
                     )
@@ -259,18 +279,38 @@ class CoursesPageState extends State<CoursesPage> implements CoursesContract {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     new Text(
-                      "Aujourd'hui",
+                      DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ocmds[indexItem].date)
+                              .day
+                              .toString() +
+                          "/" +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ocmds[indexItem].date)
+                              .month
+                              .toString() +
+                          "/" +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ocmds[indexItem].date)
+                              .year
+                              .toString(),
                       style: new TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xFF50AED8),
-                      ),
+                          fontSize: 12.0, color: Color(0xFF93BFD8)),
                     ),
                     SizedBox(
                       height: 7.0,
                     ),
                     new Text(
-                      "il y'a 20 " +
-                          _ocmds[indexItem].prestation.service.duree.toString(),
+                      " à " +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ocmds[indexItem].date)
+                              .hour
+                              .toString() +
+                          "h : " +
+                          DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                              .parse(_ocmds[indexItem].date)
+                              .minute
+                              .toString() +
+                          "min",
                       style: new TextStyle(
                           fontSize: 12.0, color: Color(0xFF93BFD8)),
                     )

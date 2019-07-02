@@ -108,14 +108,56 @@ class CommandeLocal {
   int prestataireId;
   int commandeId;
   int prestationId;
+  String date_debut;
+  String date_fin;
   String date;
+  int montant;
+  String status;
+  String position_prise_en_charge;
+  String position_destination;
+  String distance_client_prestataire;
+  String duree_client_prestataire;
+  String date_acceptation;
+  String date_prise_en_charge;
+  String position_priseId;
+  String position_destId;
+  String rate_comment;
+  String rate_date;
+  int rate_value;
+  String code;
+  String is_created;
+  String is_accepted;
+  String is_refused;
+  String is_terminated;
+  String is_started;
 
   CommandeLocal(
       {this.clientId,
       this.prestataireId,
       this.commandeId,
       this.prestationId,
-      this.date});
+      this.date_debut,
+      this.date_fin,
+      this.date,
+      this.montant,
+      this.status,
+      this.position_prise_en_charge,
+      this.position_destination,
+      this.distance_client_prestataire,
+      this.duree_client_prestataire,
+      this.date_acceptation,
+      this.date_prise_en_charge,
+      this.position_priseId,
+      this.position_destId,
+      this.rate_comment,
+      this.rate_date,
+      this.rate_value,
+      this.code,
+      this.is_accepted,
+      this.is_created,
+      this.is_refused,
+      this.is_terminated,
+      this.is_started});
 
   factory CommandeLocal.fromJson(Map<String, dynamic> obj) {
     return CommandeLocal(
@@ -123,7 +165,28 @@ class CommandeLocal {
       prestataireId: obj["prestataireId"],
       commandeId: obj["cmdId"],
       prestationId: obj["prestationId"],
+      date_debut: obj["date_debut"],
+      date_fin: obj["date_fin"],
+      code: obj["code"],
       date: obj["date"],
+      montant: obj["montant"],
+      status: obj["status"],
+      position_prise_en_charge: obj["position_prise_en_charge"],
+      position_destination: obj["position_destination"],
+      distance_client_prestataire: obj["distance_client_prestataire"],
+      duree_client_prestataire: obj["duree_client_prestataire"],
+      date_acceptation: obj["date_acceptation"],
+      date_prise_en_charge: obj["date_prise_en_charge"],
+      position_priseId: obj["position_priseId"],
+      position_destId: obj["position_destId"],
+      rate_comment: obj["rate_comment"],
+      rate_date: obj["rate_date"],
+      rate_value: obj["rate_value"],
+      is_accepted: obj["is_accepted"],
+      is_created: obj["is_created"],
+      is_refused: obj["is_refused"],
+      is_terminated: obj["is_terminated"],
+      is_started: obj["is_started"],
     );
   }
 }
@@ -149,12 +212,12 @@ class CommandeDetail {
   int prestationId;
   Prestation prestation;
   String clientId;
-
   String code;
   bool is_created;
   bool is_accepted;
   bool is_refused;
   bool is_terminated;
+  bool is_started;
 
   CommandeDetail(
       {this.commandeid,
@@ -181,7 +244,8 @@ class CommandeDetail {
       this.is_accepted,
       this.is_created,
       this.is_refused,
-      this.is_terminated});
+      this.is_terminated,
+      this.is_started});
 
   factory CommandeDetail.fromJson(Map<String, dynamic> obj) {
     return CommandeDetail(
@@ -210,6 +274,7 @@ class CommandeDetail {
       is_created: obj["is_created"],
       is_refused: obj["is_refused"],
       is_terminated: obj["is_terminated"],
+      is_started: obj["is_started"],
     );
   }
 }

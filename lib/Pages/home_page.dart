@@ -90,8 +90,10 @@ class HomePageState extends State<HomePage> implements LoginContract {
     destination_selected = false;
     pret_a_commander = false;
     destination = "Où allez-vous ?";
+
     timer = Timer.periodic(
         Duration(seconds: 15), (Timer t) => notifCmd.init(context));
+
     DatabaseHelper().getUser().then((Login2 l) {
       if (l != null) {
         login = l;
@@ -105,8 +107,6 @@ class HomePageState extends State<HomePage> implements LoginContract {
   }
 
   Future<LatLng> getUserLocation() async {
-//    var currentLocation = <String, double>{};
-//    final location = LocationManager.Location();
     try {
 //      currentLocation = await location.getLocation();
       Position position = await Geolocator()
@@ -176,20 +176,32 @@ class HomePageState extends State<HomePage> implements LoginContract {
                   child: ListTile(
                     leading: Stack(
                       children: <Widget>[
-                        Container(
-                          height: 70.0,
-                          width: 70.0,
-                          margin: EdgeInsets.only(top: 10.0, left: 2.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(35.0),
-                              image: DecorationImage(
-                                  image: NetworkImage(client.image),
-                                  fit: BoxFit.cover),
-                              boxShadow: [
-                                BoxShadow(blurRadius: 7.0, color: Colors.black)
-                              ]),
-                        ),
+                        GestureDetector(
+                            child: Container(
+                              height: 70.0,
+                              width: 70.0,
+                              margin: EdgeInsets.only(top: 10.0, left: 2.0),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(35.0),
+                                  image: DecorationImage(
+                                      image: NetworkImage(client.image),
+                                      fit: BoxFit.cover),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 7.0, color: Colors.black)
+                                  ]),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => UpdateAccountPage(
+                                          token: login.token,
+                                        )),
+                              );
+                            }),
                         Positioned(
                           bottom: 10.0,
                           right: 15.0,
@@ -203,34 +215,11 @@ class HomePageState extends State<HomePage> implements LoginContract {
                                   color: Color(0xFF0C60A8),
                                   size: 30.0,
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => UpdateAccountPage(
-                                              token: login.token,
-                                            )),
-                                  );
-                                }),
-//                              decoration: BoxDecoration(
-//                                  color: Colors.white,
-//                                  borderRadius: BorderRadius.circular(15.0),
-//                                  boxShadow: [
-//                                    BoxShadow(
-//                                        blurRadius: 2.0, color: Colors.black)
-//                                  ])
+                                onPressed: () {}),
                           ),
                         ),
                       ],
                     ),
-//                    new CircleAvatar(
-//                      child: new Image.asset("assets/images/avatar.png",
-//                          width: 30.0, height: 30.0),
-//                      radius: 32.0,
-//                      backgroundColor: Colors.white,
-//                    ),
-
                     title: new Text(client.nom + " " + client.prenom,
                         maxLines: 1,
                         style: TextStyle(color: Colors.white, fontSize: 15.0)),

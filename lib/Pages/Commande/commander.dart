@@ -504,73 +504,78 @@ class CommandePageState extends State<CommandePage>
   }
 
   Widget getItem(indexItem) {
-    return Column(
-      children: <Widget>[
-        Stack(
-          children: <Widget>[
-            Container(
-              height: 75.0,
-              width: 75.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(37.5),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          listprestataires[indexItem].vehicule.image),
-                      fit: BoxFit.cover)),
-            ),
-            Positioned(
-              bottom: 50.0,
-              left: 50.0,
-              child: Container(
-                height: 25.0,
-                width: 25.0,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12.5),
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            listprestataires[indexItem].prestataire.image),
-                        fit: BoxFit.cover)),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10.0),
-        Center(
-          child: Text(
-            listprestataires[indexItem].prestataire.prenom,
-            style: TextStyle(color: Colors.black, fontSize: 20.0),
-          ),
-        ),
-        SizedBox(height: 5.0),
-        Container(
-          margin: EdgeInsets.only(right: 10.0),
-          padding: EdgeInsets.only(right: 5.0, left: 5.0),
-          color: _selectedIndex != -1 && _selectedIndex == indexItem
-              ? Color(0xFF0C60A8)
-              : Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return listprestataires[indexItem].prestataire.status == "ONLINE"
+        ? Column(
             children: <Widget>[
-              Text("15 Min pour arriver",
-                  style: TextStyle(
-                      color: _selectedIndex != -1 && _selectedIndex == indexItem
-                          ? Colors.white
-                          : Colors.black54,
-                      fontSize: 14.0)),
-              SizedBox(height: 0),
-              Text("1 Km de vous",
-                  style: TextStyle(
-                    color: _selectedIndex != -1 && _selectedIndex == indexItem
-                        ? Colors.white
-                        : Colors.black54,
-                    fontSize: 14.0,
-                  )),
+              Stack(
+                children: <Widget>[
+                  Container(
+                    height: 75.0,
+                    width: 75.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(37.5),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                listprestataires[indexItem].vehicule.image),
+                            fit: BoxFit.cover)),
+                  ),
+                  Positioned(
+                    bottom: 50.0,
+                    left: 50.0,
+                    child: Container(
+                      height: 25.0,
+                      width: 25.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.5),
+                          image: DecorationImage(
+                              image: NetworkImage(listprestataires[indexItem]
+                                  .prestataire
+                                  .image),
+                              fit: BoxFit.cover)),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.0),
+              Center(
+                child: Text(
+                  listprestataires[indexItem].prestataire.prenom,
+                  style: TextStyle(color: Colors.black, fontSize: 20.0),
+                ),
+              ),
+              SizedBox(height: 5.0),
+              Container(
+                margin: EdgeInsets.only(right: 10.0),
+                padding: EdgeInsets.only(right: 5.0, left: 5.0),
+                color: _selectedIndex != -1 && _selectedIndex == indexItem
+                    ? Color(0xFF0C60A8)
+                    : Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("15 Min pour arriver",
+                        style: TextStyle(
+                            color: _selectedIndex != -1 &&
+                                    _selectedIndex == indexItem
+                                ? Colors.white
+                                : Colors.black54,
+                            fontSize: 14.0)),
+                    SizedBox(height: 0),
+                    Text("1 Km de vous",
+                        style: TextStyle(
+                          color: _selectedIndex != -1 &&
+                                  _selectedIndex == indexItem
+                              ? Colors.white
+                              : Colors.black54,
+                          fontSize: 14.0,
+                        )),
+                  ],
+                ),
+              )
             ],
-          ),
-        )
-      ],
-    );
+          )
+        : null;
   }
 
   ///relance le service en cas d'echec de connexion internet
